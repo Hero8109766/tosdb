@@ -12,13 +12,7 @@ REPATCH=0
 if [ $# -ge 1 ];then
     REPATCH=$1
 fi
-cd ${BASEDIR}/tos-build
-rm -R ./dist/*
-cp -Rf ../skeleton_distbuild/* ./dist/
 
-cd ${BASEDIR}/tos-web
-rm -R ./dist/*
-cp -Rf ../skeleton_distweb/* ./dist/
 cd ${BASEDIR}
 for region in ${REGIONS[@]}
 do
