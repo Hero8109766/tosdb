@@ -87,7 +87,7 @@ class TOSAttackType(TOSEnum):
     MELEE_THRUST = 10
     TRUE = 11
     UNKNOWN = 12
-
+    RESPONSIVE = 13
     @staticmethod
     def to_string(value):
         return {
@@ -103,6 +103,7 @@ class TOSAttackType(TOSEnum):
             TOSAttackType.MELEE_STRIKE: 'Strike',
             TOSAttackType.MELEE_THRUST: 'Thrust',
             TOSAttackType.TRUE: 'True Damage',
+            TOSAttackType.RESPONSIVE: 'Responsive',
             TOSAttackType.UNKNOWN: '',
         }[value]
 
@@ -121,5 +122,6 @@ class TOSAttackType(TOSEnum):
             'STRIKE': TOSAttackType.MELEE_STRIKE,
             'THRUST': TOSAttackType.MELEE_THRUST,
             'TRUEDAMAGE': TOSAttackType.TRUE,
+            'RESPONSIVE':TOSAttackType.RESPONSIVE,
             '': TOSAttackType.UNKNOWN
         }[string.upper()]
