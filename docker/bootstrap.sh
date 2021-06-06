@@ -10,6 +10,6 @@ ng build --prod
 
 # copy
 echo "Copying"
-cp -Rn ../tos-build/dist ./dist
+cp -Rf ../tos-build/dist ./dist
 
 echo "Done."
