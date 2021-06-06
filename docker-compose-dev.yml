@@ -1,0 +1,10 @@
+version: '3'
+services: 
+    tosdev:
+        build: .
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./input:/var/www/base/tos-parser/input/
+         
+            
