@@ -4,6 +4,7 @@ LABEL author ebisuke
 # ENVs
 ENV LANG=en_EN.UTF-8
 ENV PYTHONIOENCODING=utf-8
+
 # avoid apt-get blocking
 RUN apt-get update && apt-get install -y -q tzdata
 ENV TZ=Asia/Tokyo 
@@ -19,18 +20,30 @@ RUN pip3 install pillow lupa unicodecsv pydevd-pycharm~=211.7442
 ENV GYP_DEFINES="javalibdir=/usr/lib/jvm/java-1.8.0-openjdk-amd64/lib/server"
 ENV JAVA_HOME ="/usr/lib/jvm/java-1.8.0-openjdk-amd64/"
 ENV PATH $PATH:/usr/lib/jvm/java-1.8.0-openjdk-amd64/bin
-
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 RUN npm -g i n && n 16 
 RUN npm install -g @angular/cli 
 
+RUN mkdir /var/www/base
+# apply chmod
+WORKDIR /var/www/base
+RUN chown -R www-data:www-data ./
+RUN chmod -R 755 ./
+
 # copy databases
-WORKDIR /root
+WORKDIR /var/www/base
+COPY ./tos-web ./tos-web
+WORKDIR /var/www/base/tos-web
+RUN npm ci -std=c++17 --force
+WORKDIR /var/www/base
 
 COPY ./ipf_unpacker ./ipf_unpacker
 # make ipfunpack
-WORKDIR /root/ipf_unpacker
+WORKDIR /var/www/base/ipf_unpacker
 RUN make clean && make release
-WORKDIR /root
+WORKDIR /var/www/base
+
+COPY ./skeleton_distweb ./skeleton_distweb
 COPY ./tos-parser ./tos-parser
 COPY ./tos-build ./tos-build
 COPY ./tos-html ./tos-html
@@ -38,16 +51,14 @@ COPY ./tos-html ./tos-html
 COPY ./tos-search ./tos-search
 COPY ./tos-sitemap ./tos-sitemap
 COPY ./tos-sw ./tos-sw
-COPY ./tos-web ./tos-web
+
 COPY ./tos-web-rest ./tos-web-rest
-COPY ./docker/build.sh   ./build.sh
-COPY ./docker/entrypoint.sh   ./entrypoint.sh
+COPY ./docker/*   ./
 # copy http server conf
 COPY ./httpserver/http.conf /etc/nginx/conf.d/http.conf
-RUN ls
-
 # expose http server
 EXPOSE 8000
 
+
 # freqently change ENVs
-ENTRYPOINT ["/bin/sh","/root/entrypoint.sh","jTOS"  ]
+ENTRYPOINT ["/bin/sh","/var/www/base/entrypoint.sh","jTOS"  ]
