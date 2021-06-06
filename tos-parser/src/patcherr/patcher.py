@@ -112,9 +112,9 @@ def patch_process(patch_file, patch_name, patch_unpack, patch_url):
     if filesize == 0:
         logging.warning('Filesize is ZERO %s...', patch_file)
     else:
-        logging.debug('OK')
-        # Extract patch
-        patch_unpack(patch_name)
+        pass
+    # Extract patch
+    patch_unpack(patch_name)
 
     # Delete patch
     #os.remove(patch_file)
