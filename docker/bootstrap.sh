@@ -10,9 +10,6 @@ BASEDIR=$(cd $(dirname $0); pwd)
 cd ${BASEDIR}/tos-web/
 ng build --prod
 
-# insert skeleton
-cd ${BASEDIR}/tos-web/
-cp -Rn ../tos-build/dist/* ./dist/
 
 # copy
 echo "Copying"
