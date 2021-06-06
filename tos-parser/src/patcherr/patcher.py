@@ -73,7 +73,13 @@ def patch_partial(patch_path, patch_url, patch_ext, patch_unpack, revision_path,
             # Process patch
             patch_name = revision + '_001001' + patch_ext
             patch_file = os.path.join(patch_path, patch_name)
-            patch_process(patch_file, patch_name, patch_unpack, patch_url)
+            filesize = 0
+            if os.path.exists(patch_file):
+                filesize = os.path.getsize(patch_file)
+            if filesize == 0:
+                logging.warning('Filesize is ZERO %s...', patch_file)
+            else:
+                patch_process(patch_file, patch_name, patch_unpack, patch_url)
 
             # Update revision
             revision_txt_write(revision_path, revision)
@@ -89,7 +95,12 @@ def patch_process(patch_file, patch_name, patch_unpack, patch_url):
     def request_as_fox(url):
         headers={"User-Agent":"tos"}
         return urllib.request.Request(url,None,headers)
-    if not os.path.exists(patch_file):
+
+    filesize = 0
+    if os.path.exists(patch_file):
+        filesize = os.path.getsize(patch_file)
+
+    if not os.path.exists(patch_file)or filesize==0:
         # Download patch
         logging.debug('Downloading %s...', patch_url + patch_name)
         patch_response = urllib.request.urlopen(request_as_fox(patch_url + patch_name))
@@ -97,10 +108,13 @@ def patch_process(patch_file, patch_name, patch_unpack, patch_url):
         with open(patch_file, 'wb') as file:
             file.write(patch_response.read())
     else:
-        logging.debug("Reusing cache %s...",patch_name)            
-    logging.debug('OK')
-    # Extract patch
-    patch_unpack(patch_name)
+        logging.debug("Reusing cache %s...",patch_name)
+    if filesize == 0:
+        logging.warning('Filesize is ZERO %s...', patch_file)
+    else:
+        logging.debug('OK')
+        # Extract patch
+        patch_unpack(patch_name)
 
     # Delete patch
     #os.remove(patch_file)
