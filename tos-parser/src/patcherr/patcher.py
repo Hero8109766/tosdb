@@ -45,10 +45,18 @@ def patch_full(patch_destination, patch_path, patch_url, patch_ext, patch_unpack
         # Download patch
         patch_name = revision + patch_ext
         patch_file = os.path.join(patch_path, patch_name)
-
-        if (not os.path.exists(os.path.join(patch_destination, patch_name)) or repatch==1 )and patch_name not in IPF_BLACKLIST :
+        filesize=0
+        if os.path.exists(os.path.join(patch_destination, patch_name)):
+            filesize=os.path.getsize(os.path.join(patch_destination, patch_name))
+        if (not os.path.exists(os.path.join(patch_destination, patch_name)) or repatch==1 or filesize==0 )and patch_name not in IPF_BLACKLIST :
             logging.debug('Downloading %s...', patch_url + patch_name)
-            patch_process(patch_file, patch_name, patch_unpack, patch_url)
+            filesize=0
+            if os.path.exists(os.path.join(patch_destination, patch_name)):
+                filesize = os.path.getsize(os.path.join(patch_destination, patch_name))
+            if filesize==0:
+                logging.warning('Filesize is ZERO %s...', patch_url + patch_name)
+            else:
+                patch_process(patch_file, patch_name, patch_unpack, patch_url)
 
 
 def patch_partial(patch_path, patch_url, patch_ext, patch_unpack, revision_path, revision_url,repatch):
