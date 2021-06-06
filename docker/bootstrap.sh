@@ -7,8 +7,8 @@ BASEDIR=$(cd $(dirname $0); pwd)
 
 # build up!
 cd ${BASEDIR}/tos-web/
-
-rm -r  ./dist/*
+mkdir ./dist/ | true
+rm -r  ./dist/* | true
 ng build --prod
 
 # merge
