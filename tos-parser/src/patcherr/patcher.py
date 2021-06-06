@@ -53,10 +53,8 @@ def patch_full(patch_destination, patch_path, patch_url, patch_ext, patch_unpack
             filesize=0
             if os.path.exists(os.path.join(patch_destination, patch_name)):
                 filesize = os.path.getsize(os.path.join(patch_destination, patch_name))
-            if filesize==0:
-                logging.warning('Filesize is ZERO %s...', patch_url + patch_name)
-            else:
-                patch_process(patch_file, patch_name, patch_unpack, patch_url)
+            
+            patch_process(patch_file, patch_name, patch_unpack, patch_url)
 
 
 def patch_partial(patch_path, patch_url, patch_ext, patch_unpack, revision_path, revision_url,repatch):
@@ -76,10 +74,8 @@ def patch_partial(patch_path, patch_url, patch_ext, patch_unpack, revision_path,
             filesize = 0
             if os.path.exists(patch_file):
                 filesize = os.path.getsize(patch_file)
-            if filesize == 0:
-                logging.warning('Filesize is ZERO %s...', patch_file)
-            else:
-                patch_process(patch_file, patch_name, patch_unpack, patch_url)
+            
+            patch_process(patch_file, patch_name, patch_unpack, patch_url)
 
             # Update revision
             revision_txt_write(revision_path, revision)
@@ -109,7 +105,7 @@ def patch_process(patch_file, patch_name, patch_unpack, patch_url):
             file.write(patch_response.read())
     else:
         logging.debug("Reusing cache %s...",patch_name)
-        
+
     if os.path.exists(patch_file):
         filesize = os.path.getsize(patch_file)
 
