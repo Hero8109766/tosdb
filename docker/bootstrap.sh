@@ -9,7 +9,7 @@ BASEDIR=$(cd $(dirname $0); pwd)
 cd ${BASEDIR}/tos-web/
 mkdir ./dist/ | true
 rm -r  ./dist/* | true
-ng build --prod
+ng build
 
 # merge
 cp -Rln ../tos-build/dist/* ./dist/ 
