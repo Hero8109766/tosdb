@@ -5,7 +5,7 @@ echo "ToS database building start."
 
 # build
 BASEDIR=$(cd $(dirname $0); pwd)
-REGIONS=(jTOS iTOS kTOS kTEST twTOS)
+REGIONS=(jTOS iTOS kTOS twTOS)
 #REGIONS=(jTOS)
 REPATCH=0
 if [ $# -ge 1 ];then
@@ -27,7 +27,7 @@ do
     # ->unzip
     cd ${BASEDIR}/tos-build/dist/
     echo ${region,,}.zip
-    if [ $(unzip -o ${region,,}.zip 2> /dev/null) -ge 2 ]; then
+    if [ $(unzip -o ${region,,}.zip) -ge 2 ]; then
         exit 1
     fi
     echo "complete"
