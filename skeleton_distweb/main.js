@@ -5425,9 +5425,9 @@ var TOSRegion;
 (function (TOSRegion) {
     TOSRegion["iTOS"] = "iTOS";
     TOSRegion["jTOS"] = "jTOS";
-    TOSRegion["kTEST"] = "kTEST";
+    // TOSRegion["kTEST"] = "kTEST";
     TOSRegion["kTOS"] = "kTOS";
-    TOSRegion["twTOS"] = "twTOS";
+    // TOSRegion["twTOS"] = "twTOS";
 })(TOSRegion || (TOSRegion = {}));
 var VERSIONS = JSON.parse(document.getElementById('tos-region').innerText);
 var TOSRegionService;
