@@ -1,6 +1,6 @@
 name: Docker build test
-jobs:
-  build_no_cache:
+
+build_no_cache:
   runs-on: ubuntu-20.04
   steps:
     - uses: actions/checkout@master
