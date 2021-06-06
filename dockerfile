@@ -54,6 +54,11 @@ COPY ./tos-sw ./tos-sw
 
 COPY ./tos-web-rest ./tos-web-rest
 COPY ./docker/*   ./
+COPY ./skeleton_distweb   ./skeleton_distweb
+COPY ./skeleton_distbuild   ./skeleton_distbuild
+
+
+
 # copy http server conf
 COPY ./httpserver/http.conf /etc/nginx/conf.d/http.conf
 # expose http server

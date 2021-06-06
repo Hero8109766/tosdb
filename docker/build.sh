@@ -3,6 +3,7 @@ set -eu
 echo "ToS database building start."
 
 
+
 # build
 BASEDIR=$(cd $(dirname $0); pwd)
 REGIONS=(jTOS iTOS kTOS)
@@ -11,6 +12,16 @@ REPATCH=0
 if [ $# -ge 1 ];then
     REPATCH=$1
 fi
+
+
+# insert skeleton
+cd ${BASEDIR}/tos-build
+rm -R ./dist/*
+copy -Rf ../skeleton_distbuild ./dist
+cd ${BASEDIR}/tos-web
+rm -R ./dist/*
+copy -Rf ../skeleton_distweb ./dist
+
 for region in ${REGIONS[@]}
 do
     echo ${region}
