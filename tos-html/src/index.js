@@ -41,7 +41,7 @@ let archive = archiver('zip', { zlib: { level: 9 }});
     archive.pipe(output);
 
 // Load base template
-let templateBase = fs.readFileSync(path.join(folder_dist_web, 'index.html'), 'utf8');
+let templateBase = fs.readFileSync(path.join(folder_template, 'index.html'), 'utf8');
 
 // Inject patreon & region data
 let patreonPath = path.join(folder_dist_build, 'patreon.json');
