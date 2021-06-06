@@ -5,13 +5,14 @@ echo "ToS database bootstrap start."
 echo "Let's go to build up!"
 BASEDIR=$(cd $(dirname $0); pwd)
 
-# insert skeleton
-cd ${BASEDIR}/tos-web/
-cp -Rf ../tos-build/dist/* ./dist/
 
 # build up!
 cd ${BASEDIR}/tos-web/
 ng build --prod
+
+# insert skeleton
+cd ${BASEDIR}/tos-web/
+cp -Rn ../tos-build/dist/* ./dist/
 
 # copy
 echo "Copying"
