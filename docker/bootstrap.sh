@@ -7,9 +7,6 @@ BASEDIR=$(cd $(dirname $0); pwd)
 
 # insert skeleton
 
-cd ${BASEDIR}/tos-web
-rm -R ./dist/*
-cp -Rf ../skeleton_distweb/* ./dist/
 # build up!
 cd ${BASEDIR}/tos-web/
 ng build --prod
