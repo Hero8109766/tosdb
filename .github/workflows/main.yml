@@ -1,0 +1,10 @@
+name: Docker build test
+jobs:
+  build_no_cache:
+  runs-on: ubuntu-20.04
+  steps:
+    - uses: actions/checkout@master
+    - name: Build
+      env:
+        DOCKER_BUILDKIT: 1
+      run: docker build TAG
