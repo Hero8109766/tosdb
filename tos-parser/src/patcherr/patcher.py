@@ -100,7 +100,7 @@ def patch_process(patch_file, patch_name, patch_unpack, patch_url):
     if os.path.exists(patch_file):
         filesize = os.path.getsize(patch_file)
 
-    if not os.path.exists(patch_file)or filesize==0:
+    if not os.path.exists(patch_file) or filesize==0:
         # Download patch
         logging.debug('Downloading %s...', patch_url + patch_name)
         patch_response = urllib.request.urlopen(request_as_fox(patch_url + patch_name))
@@ -109,6 +109,7 @@ def patch_process(patch_file, patch_name, patch_unpack, patch_url):
             file.write(patch_response.read())
     else:
         logging.debug("Reusing cache %s...",patch_name)
+        
     if os.path.exists(patch_file):
         filesize = os.path.getsize(patch_file)
 
