@@ -17,11 +17,11 @@ fi
 # insert skeleton
 cd ${BASEDIR}/tos-build
 rm -R ./dist/*
-copy -Rf ../skeleton_distbuild ./dist
+cp -Rf ../skeleton_distbuild/* ./dist/
 cd ${BASEDIR}/tos-web
 rm -R ./dist/*
-copy -Rf ../skeleton_distweb ./dist
-
+cp -Rf ../skeleton_distweb/* ./dist/
+cd ${BASEDIR}
 for region in ${REGIONS[@]}
 do
     echo ${region}
@@ -38,7 +38,7 @@ do
     # ->unzip
     cd ${BASEDIR}/tos-build/dist/
     echo ${region,,}.zip
-    if [ $(unzip -o ${region,,}.zip) -ge 2 ]; then
+    if [ $(unzip -o ${region,,}.zip) -ge 2 ];then
         exit 1
     fi
     echo "complete"
