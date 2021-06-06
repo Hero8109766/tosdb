@@ -8,5 +8,8 @@ BASEDIR=$(cd $(dirname $0); pwd)
 cd ${BASEDIR}/tos-web/
 ng build --prod
 
+# copy
+echo "Copying"
+cp -Rn ../tos-build/dist ./dist
 
 echo "Done."
