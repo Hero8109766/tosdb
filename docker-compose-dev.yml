@@ -3,7 +3,7 @@ services:
     tosdev:
         build: .
         ports:
-            - "8000:8000"
+            - "8200:8000"
         volumes:
             - ./input:/var/www/base/tos-parser/input/
          
