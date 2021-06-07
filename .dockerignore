@@ -5,3 +5,4 @@ distbuild/*
 distweb/*
 **/.git/*
 .idea
+.git/*
