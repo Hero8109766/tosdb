@@ -46,7 +46,7 @@ def patch_full(patch_destination, patch_path, patch_url, patch_ext, patch_unpack
         patch_name = revision + patch_ext
         patch_file = os.path.join(patch_path, patch_name)
         filesize=0
-        if os.path.exists(os.path.join(patch_destination, patch_name)):
+        if os.path.isfile(os.path.join(patch_destination, patch_name)):
             filesize=os.path.getsize(os.path.join(patch_destination, patch_name))
         if (not os.path.exists(os.path.join(patch_destination, patch_name)) or repatch==1 or filesize==0 )and patch_name not in IPF_BLACKLIST :
             logging.debug('Lets Downloading %s...', patch_url + patch_name)
@@ -72,7 +72,7 @@ def patch_partial(patch_path, patch_url, patch_ext, patch_unpack, revision_path,
             patch_name = revision + '_001001' + patch_ext
             patch_file = os.path.join(patch_path, patch_name)
             filesize = 0
-            if os.path.exists(patch_file):
+            if os.path.isfile(patch_file):
                 filesize = os.path.getsize(patch_file)
             
             patch_process(patch_file, patch_name, patch_unpack, patch_url)
@@ -96,17 +96,17 @@ def patch_process(patch_file, patch_name, patch_unpack, patch_url):
     if os.path.exists(patch_file):
         filesize = os.path.getsize(patch_file)
 
-    if not os.path.exists(patch_file) or filesize==0:
+    if not os.path.isfile(patch_file) or filesize==0:
         # Download patch
         logging.debug('Downloading %s ...', patch_url + patch_name)
-        patch_response = urllib.request.urlopen(patch_url + patch_name)
+        patch_response = urllib.request.urlopen(request_as_fox(patch_url + patch_name))
 
         with open(patch_file, 'wb') as file:
             file.write(patch_response.read())
     else:
         logging.debug("Reusing cache %s...",patch_name)
 
-    if os.path.exists(patch_file):
+    if os.path.isfile(patch_file):
         filesize = os.path.getsize(patch_file)
 
     if filesize == 0:
