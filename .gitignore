@@ -74,5 +74,5 @@ tos-parser/result
 *.bak
 .DS_Store
 **/*.zip
-input
+input/*
 result.txt
