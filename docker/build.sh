@@ -31,7 +31,7 @@ do
     cd ${BASEDIR}/tos-build/dist/assets
 
     echo ${region,,}.zip
-    if [ $(unzip -o ${region,,}.zip) -ge 2 ];then
+    if [ $(unzip -o ../${region,,}.zip) -ge 2 ];then
         exit 1
     fi
     echo "complete"

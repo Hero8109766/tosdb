@@ -3,7 +3,7 @@ const lunr = require('lunr');
 const nodejieba = require("nodejieba");
 const papa = require('papaparse');
 const path = require('path');
-
+const TinySegmenter=require('tiny-segmenter');
 // Add timestamp to logs
 require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss');
 
@@ -11,7 +11,6 @@ require('../node_modules/lunr-languages/lunr.multi.js')(lunr);
 require('../node_modules/lunr-languages/lunr.stemmer.support.js')(lunr);
 require('../node_modules/lunr-languages/tinyseg.js')(lunr);
 require('../node_modules/lunr-languages/lunr.jp.js')(lunr);
-require('../node_modules/tiny-segmenter/tiny-segmenter-0.2.0js')(tiny);
 
 require('./lunr.ch.js')(lunr, nodejieba);
 require('./lunr.kr.js')(lunr, nodejieba);
