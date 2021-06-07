@@ -12,7 +12,8 @@
   "dependencies": {
     "console-stamp": "^0.2.7",
     "lunr": "^2.3.9",
-    "lunr-languages": "^1.1.0",
+    "lunr-languages": "^1.4.0",
+    "lunr-language-jp":"^1.0.1",
     "nodejieba": "^2.5.2",
     "papaparse": "^5.3.1"
     
