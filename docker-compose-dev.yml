@@ -1,6 +1,7 @@
 version: '3'
 services: 
     tosdev:
+        container_name: tosdev
         build: .
         ports:
             - "8200:8000"
