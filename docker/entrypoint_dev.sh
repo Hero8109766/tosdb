@@ -3,9 +3,9 @@ set -eu
 
 cd /root
 mkdir ./tos-build/dist | true
-cp -rf ./skeleton_distbuild ./tos-build/dist/
+cp -rf ./skeleton_distbuild/* ./tos-build/dist/
 mkdir ./tos-web/dist | true
-cp -rf ./skeleton_distweb ./tos-web/dist/
+cp -rf ./skeleton_distweb/* ./tos-web/dist/
 
 
 
