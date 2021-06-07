@@ -26,7 +26,8 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
     level=logging.DEBUG
 )
-
+if not os.path.exists(constants.PATH_INPUT):
+    os.makedirs(constants.PATH_INPUT)
 # Configure csv to support large files
 csv.field_size_limit(999999999)
 
