@@ -99,7 +99,7 @@ def patch_process(patch_file, patch_name, patch_unpack, patch_url):
     if not os.path.exists(patch_file) or filesize==0:
         # Download patch
         logging.debug('Downloading %s ...', patch_url + patch_name)
-        patch_response = urllib.request.urlopen(request_as_fox(patch_url + patch_name))
+        patch_response = urllib.request.urlopen(patch_url + patch_name)
 
         with open(patch_file, 'wb') as file:
             file.write(patch_response.read())
