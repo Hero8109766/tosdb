@@ -1,10 +1,11 @@
 version: '3'
 services: 
     tosdev:
+        container_name: tosdev
         build: .
         ports:
             - "8200:8000"
         volumes:
             - ./input:/var/www/base/tos-parser/input/
-         
+            - ./distbuild:/var/www/base/tos-build/dist/
             

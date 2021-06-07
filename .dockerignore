@@ -1,6 +1,7 @@
 tos-parser/input/*
 **/venv
 input/*
+input
 distbuild/*
 distweb/*
 **/.git/*

@@ -66,4 +66,4 @@ EXPOSE 8000
 
 
 # freqently change ENVs
-ENTRYPOINT ["/bin/sh","/var/www/base/entrypoint.sh","jTOS"  ]
+ENTRYPOINT ["/bin/sh","/var/www/base/entrypoint_dev.sh","jTOS"  ]

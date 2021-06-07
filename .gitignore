@@ -71,6 +71,8 @@ fabric.properties
 **/.DS_Store
 tos-parser/src/venv
 tos-parser/result
+distweb/*
+distbuild/*
 *.bak
 .DS_Store
 **/*.zip

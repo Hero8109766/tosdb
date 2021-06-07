@@ -28,7 +28,8 @@ do
     npm install
     npm run main ${region}
     # ->unzip
-    cd ${BASEDIR}/tos-build/dist/
+    cd ${BASEDIR}/tos-build/dist/assets
+
     echo ${region,,}.zip
     if [ $(unzip -o ${region,,}.zip) -ge 2 ];then
         exit 1

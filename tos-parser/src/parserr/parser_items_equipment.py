@@ -14,12 +14,12 @@ from utils.tosenum import TOSEnum
 import codecs
 
 class TOSEquipmentGrade(TOSEnum):
-    LEGENDARY = 0
-    MAGIC = 1
-    NORMAL = 2
+    NORMAL = 1
+    MAGIC = 2
     RARE = 3
     UNIQUE = 4
-    GODDESS = 5
+    LEGENDARY = 5
+    GODDESS = 6
     @staticmethod
     def value_of(index):
         return [
