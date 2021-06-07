@@ -1,9 +1,10 @@
 #!/bin/bash
 set -eu
-mkdir ./tos_build/dist | true
-cp -rf ./skeleton_distbuild ./tos_build/dist/
-mkdir ./tos_web/dist | true
-cp -rf ./skeleton_distweb ./tos_web/dist/
+mkdir ./tos-build/dist | true
+cp -rf ./skeleton_distbuild ./tos-build/dist/
+mkdir ./tos-web/dist | true
+cp -rf ./skeleton_distweb ./tos-web/dist/
+
 
 /bin/bash /var/www/base/build.sh
 /bin/bash /var/www/base/bootstrap.sh

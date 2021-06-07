@@ -2,10 +2,10 @@
 set -eu
 
 cd /root
-mkdir ./tos_build/dist | true
-cp -rf ./skeleton_distbuild ./tos_build/dist/
-mkdir ./tos_web/dist | true
-cp -rf ./skeleton_distweb ./tos_web/dist/
+mkdir ./tos-build/dist | true
+cp -rf ./skeleton_distbuild ./tos-build/dist/
+mkdir ./tos-web/dist | true
+cp -rf ./skeleton_distweb ./tos-web/dist/
 
 
 
