@@ -28,9 +28,9 @@ do
     npm install
     npm run main ${region}
     # ->unzip
-    cd ${BASEDIR}/tos-build/dist/
+    cd ${BASEDIR}
     echo ${region,,}.zip
-    if [ $(unzip -o ${region,,}.zip) -ge 2 ];then
+    if [ $(unzip -o ./tos-build/dist/${region,,}.zip) -ge 2 ];then
         exit 1
     fi
     echo "complete"
