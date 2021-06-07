@@ -11,7 +11,7 @@ cp -rf ./skeleton_distweb/* ./tos-web/dist/
 /bin/bash /var/www/base/bootstrap.sh
 
 echo "nginx READY!"
-/usr/sbin/nginx -g 
+/usr/sbin/nginx 
 BASEDIR=$(cd $(dirname $0); pwd)
 
 cd ${BASEDIR}/tos-web-rest/
