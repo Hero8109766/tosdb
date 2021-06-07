@@ -49,7 +49,7 @@ def patch_full(patch_destination, patch_path, patch_url, patch_ext, patch_unpack
         if os.path.exists(os.path.join(patch_destination, patch_name)):
             filesize=os.path.getsize(os.path.join(patch_destination, patch_name))
         if (not os.path.exists(os.path.join(patch_destination, patch_name)) or repatch==1 or filesize==0 )and patch_name not in IPF_BLACKLIST :
-            logging.debug('Downloading %s...', patch_url + patch_name)
+            logging.debug('Lets Downloading %s...', patch_url + patch_name)
             filesize=0
             if os.path.exists(os.path.join(patch_destination, patch_name)):
                 filesize = os.path.getsize(os.path.join(patch_destination, patch_name))
