@@ -61,7 +61,7 @@ def parse_translations(language):
         if '.tsv' not in translation:
             continue
 
-        with codecs.open(translation_path, 'r','utf-8') as translation_file:
+        with codecs.open(translation_path, 'r','utf-8',errors="replace") as translation_file:
             for row in csv.reader(translation_file, delimiter='\t', quoting=csv.QUOTE_NONE):
                 if len(row) > 1:
                     result[row[0]] = str(row[1])
