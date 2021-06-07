@@ -8,6 +8,7 @@ mkdir ./tos-web/dist | true
 cp -rf ./skeleton_distweb/* ./tos-web/dist/
 
 
+/bin/bash /var/www/base/bootstrap.sh
 
 echo "nginx READY!"
 /usr/sbin/nginx -g 

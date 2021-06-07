@@ -12,7 +12,7 @@ rm -r  ./dist/* | true
 ng build --prod
 
 # merge
-cp -Rln ../tos-build/dist/* ./dist/ 
+cp -Rn ../tos-build/dist/* ./dist/ 
 
 # copy
 echo "Copying"
