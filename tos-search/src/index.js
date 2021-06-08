@@ -51,40 +51,41 @@ files.forEach((fileName) => {
         .data
         .forEach((row) => documents[dataset].push(row));
 });
+var idx;
+kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenizer) => {
 
-var builder = kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" });
+    
+    // Build index
+    log('Building index...');
+    idx = lunr(function () {
+        if (REGION === REGION_jTOS)
+            //this.use(lunr.multiLanguage('en', 'jp'));
+            this.use(lunr.multiLanguage('en', "jp"));
+        if (REGION === REGION_kTOS || REGION === REGION_kTEST)
+            this.use(lunr.multiLanguage('en', 'kr'));
+        if (REGION === REGION_twTOS)
+            this.use(lunr.multiLanguage('en', 'ch'));
 
-// Build index
-log('Building index...');
-var idx = lunr(function () {
-    if (REGION === REGION_jTOS)
-        //this.use(lunr.multiLanguage('en', 'jp'));
-        this.use(lunr.multiLanguage('en',"jp"));
-    if (REGION === REGION_kTOS || REGION === REGION_kTEST)
-        this.use(lunr.multiLanguage('en', 'kr'));
-    if (REGION === REGION_twTOS)
-        this.use(lunr.multiLanguage('en', 'ch'));
+        // Disable stemmer
+        this.pipeline.remove(lunr.stemmer);
 
-    // Disable stemmer
-    this.pipeline.remove(lunr.stemmer);
-  
-    this.ref('$ID_lunr');
-    this.field('$ID');
-    this.field('$ID_NAME');
-    this.field('Name');
-    if (REGION == REGION_jTOS) {
+        this.ref('$ID_lunr');
+        this.field('$ID');
+        this.field('$ID_NAME');
+        this.field('Name');
+        if (REGION == REGION_jTOS) {
 
-        
-        
-        Object.entries(documents)
-            .forEach(value => {
 
-                let documents = value[1];
-                let dataset = value[0];
-              
+
+            Object.entries(documents)
+                .forEach(value => {
+
+                    let documents = value[1];
+                    let dataset = value[0];
+
                     documents.forEach((doc) => {
 
-                        if (doc['Name'] == null ) {
+                        if (doc['Name'] == null) {
                             this.add({
                                 $ID: doc['$ID'],
                                 $ID_lunr: dataset + '#' + doc['$ID'],
@@ -94,59 +95,61 @@ var idx = lunr(function () {
 
                         } else {
                             let path = null;
-                            builder.build((err, tokenizer) => {
-                    
-                                path = tokenizer.tokenize(doc['Name']);
 
-                                if (path != null) {
-                                    let iidx=0;
-                                    path.forEach((token) => {
-                                        if(token.pos=="名詞"){
-                                            this.add({
-                                                $ID: doc['$ID'],
-                                                $ID_lunr: dataset + '#' + doc['$ID'] + "_" + iidx.toString(),
-                                                $ID_NAME: doc['$ID_NAME'],
-                                                Name: token.surface_form,
-                                            });
-                                        
-                                            iidx++;
-                                        }
-                                        
-                                    });
-                                } else {
-                                    this.add({
-                                        $ID: doc['$ID'],
-                                        $ID_lunr: dataset + '#' + doc['$ID'],
-                                        $ID_NAME: doc['$ID_NAME'],
-                                        Name: doc['Name'],
-                                    });
-                                }
-                            });
+
+                            path = tokenizer.tokenize(doc['Name']);
+
+                            if (path != null) {
+                                let iidx = 0;
+                                path.forEach((token) => {
+                                    if (token.pos == "名詞" && token.pos_detail_1 == "一般") {
+                                        this.add({
+                                            $ID: doc['$ID'],
+                                            $ID_lunr: dataset + '#' + doc['$ID'] + "_" + iidx.toString(),
+                                            $ID_NAME: doc['$ID_NAME'],
+                                            Name: token.surface_form,
+                                        });
+
+                                        iidx++;
+                                    }
+
+                                });
+                            } else {
+                                this.add({
+                                    $ID: doc['$ID'],
+                                    $ID_lunr: dataset + '#' + doc['$ID'],
+                                    $ID_NAME: doc['$ID_NAME'],
+                                    Name: doc['Name'],
+                                });
+                            }
+
                         }
-                
+
+
+                    });
 
                 });
 
-            });
+        } else {
+            Object.entries(documents)
+                .forEach(value => {
+                    let documents = value[1];
+                    let dataset = value[0];
 
-    } else {
-        Object.entries(documents)
-            .forEach(value => {
-                let documents = value[1];
-                let dataset = value[0];
+                    documents.forEach((doc) => {
+                        this.add({
+                            $ID: doc['$ID'],
+                            $ID_lunr: dataset + '#' + doc['$ID'],
+                            $ID_NAME: doc['$ID_NAME'],
+                            Name: doc['Name'],
+                        })
+                    });
+                })
+        }
+    });
+    // Save index
+    log('Saving Index...');
+    fs.writeFileSync(path.join(folder, 'index.json'), JSON.stringify(idx));
 
-                documents.forEach((doc) => {
-                    this.add({
-                        $ID: doc['$ID'],
-                        $ID_lunr: dataset + '#' + doc['$ID'],
-                        $ID_NAME: doc['$ID_NAME'],
-                        Name: doc['Name'],
-                    })
-                });
-            })
-    }
 });
 
-// Save index
-log('Saving Index...');
-fs.writeFileSync(path.join(folder, 'index.json'), JSON.stringify(idx));
