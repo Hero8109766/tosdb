@@ -102,7 +102,7 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
                             if (path != null) {
                                 let iidx = 0;
                                 path.forEach((token) => {
-                                    if (token.pos == "名詞" && token.pos_detail_1 == "一般") {
+                                    if (token.pos == "名詞") {
                                         this.add({
                                             $ID: doc['$ID'],
                                             $ID_lunr: dataset + '#' + doc['$ID'] + "_" + iidx.toString(),
