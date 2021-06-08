@@ -63,7 +63,7 @@ var idx = lunr(function () {
         this.use(lunr.multiLanguage('en', 'ch'));
 
     // Disable stemmer
-    this.pipeline.remove(lunr.stemmer);
+    //this.pipeline.remove(lunr.stemmer);
 
     this.ref('$ID_lunr');
     this.field('$ID');
@@ -71,25 +71,22 @@ var idx = lunr(function () {
     this.field('Name');
     //this.field('Description');
     if (REGION === REGION_jTOS){
-        var tinyseg=new TinySegmenter();
+
         Object.entries(documents)
             .forEach(value => {
                 let documents = value[1];
                 let dataset = value[0];
 
                 documents.forEach((doc) => {
-                    var segs = tinyseg.segment(doc['Name']);
-                    var idxs=0;
-                    segs.forEach(vv=>{
-                        this.add({
-                            $ID: doc['$ID'],
-                            $ID_lunr: dataset + '#' + doc['$ID']+"#"+idxs,
-                            $ID_NAME: doc['$ID_NAME'],
-                            Name: doc['Name'],
-                        })
-                        idxs++;
-                    });
+                    
                    
+                    this.add({
+                        $ID: doc['$ID'],
+                        $ID_lunr: dataset + '#' + doc['$ID'],
+                        $ID_NAME: doc['$ID_NAME'],
+                        Name: doc['Name'],
+                    })
+                
                 });
             })
     }else{

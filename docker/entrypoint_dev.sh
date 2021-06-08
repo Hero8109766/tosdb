@@ -10,6 +10,10 @@ cd ${BASEDIR}
 
 
 /bin/bash ${BASEDIR}/bootstrap.sh
+# search
+cd ${BASEDIR}/tos-search/
+npm install
+npm run main jTOS
 
 echo "nginx READY!"
 /usr/sbin/nginx 
