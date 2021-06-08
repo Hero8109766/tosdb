@@ -7,7 +7,6 @@ services:
             dockerfile: dockerfile
         ports:
             - "8200:8000"
-            - "3999:3939"
         volumes:
             - ./input:/var/www/base/tos-parser/input/
             - ./distbuild:/var/www/base/tos-build/dist/

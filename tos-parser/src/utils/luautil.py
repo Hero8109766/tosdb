@@ -45,7 +45,8 @@ LUA_OVERRIDE = [
     'function SCR_MON_OWNERITEM_ARMOR_CALC(self, defType) return 0 end',
     'function SetExProp(entity, name, value) entity[name] = value end',
     'function math.pow(value,power) return value ^ power end',
-    'function GetZoneName() return "" end'
+    'function GetZoneName() return "" end',
+    "function Weeklyboss_GetNowWeekNum() return nil end"
 ]
 
 LUA_RUNTIME = None

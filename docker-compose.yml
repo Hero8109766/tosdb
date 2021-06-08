@@ -5,7 +5,6 @@ services:
         build: .
         ports:
             - "8000:8000"
-            - "3939:3939"
         volumes:
             - ./input:/var/www/base/tos-parser/input/
             - ./distbuild:/var/www/base/tos-build/dist/
