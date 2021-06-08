@@ -3,7 +3,7 @@ set -eu
 echo "ToS database bootstrap start."
 
 echo "Let's go to build up!"
-BASEDIR=$(cd $(dirname $0); pwd)
+BASEDIR=/var/www/base/
 
 # build up!
 cd ${BASEDIR}/tos-web/

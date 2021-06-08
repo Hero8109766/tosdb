@@ -5,7 +5,7 @@ echo "ToS database building start."
 
 
 # build
-BASEDIR=$(cd $(dirname $0); pwd)
+BASEDIR=/var/www/base/
 REGIONS=(jTOS iTOS kTOS twTOS)
 #REGIONS=(jTOS)
 REPATCH=0

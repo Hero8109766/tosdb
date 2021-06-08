@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 cd /var/www/base/
-BASEDIR=$(cd $(dirname $0); pwd)
+BASEDIR=/var/www/base/
 
 cd ${BASEDIR}
 mkdir ./tos-build/dist | true
