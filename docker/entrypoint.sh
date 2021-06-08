@@ -2,6 +2,7 @@
 set -eu
 cd /var/www/base/
 BASEDIR=$(cd $(dirname $0); pwd)
+
 cd ${BASEDIR}
 mkdir ./tos-build/dist | true
 cp -rf ./skeleton_distbuild/* ./tos-build/dist/

@@ -10,6 +10,8 @@ cp -rf ./skeleton_distweb/* ./tos-web/dist/
 
 
 /bin/bash ${BASEDIR}/bootstrap.sh
+
+
 # search
 cd ${BASEDIR}/tos-search/
 npm install
