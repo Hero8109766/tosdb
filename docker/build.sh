@@ -50,7 +50,4 @@ done
 
 cd ${BASEDIR}
 
-echo "Launch bootstrap."
-sh bootstrap.sh
-
 echo "Done."
