@@ -105,7 +105,7 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
                                     if (token.pos == "名詞") {
                                         this.add({
                                             $ID: doc['$ID'],
-                                            $ID_lunr: dataset + '#' + doc['$ID'] + "_" + iidx.toString(),
+                                            $ID_lunr: dataset + '#' + doc['$ID'] ,
                                             $ID_NAME: doc['$ID_NAME'],
                                             Name: token.surface_form,
                                         });
