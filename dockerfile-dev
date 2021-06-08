@@ -63,7 +63,7 @@ COPY ./skeleton_distbuild   ./skeleton_distbuild
 COPY ./httpserver/http.conf /etc/nginx/conf.d/http.conf
 # expose http server
 EXPOSE 8000
-
+EXPOSE 3939
 
 # freqently change ENVs
 ENTRYPOINT ["/bin/sh","/var/www/base/entrypoint_dev.sh","jTOS"  ]

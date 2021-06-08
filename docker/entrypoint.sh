@@ -18,5 +18,5 @@ BASEDIR=$(cd $(dirname $0); pwd)
 
 cd ${BASEDIR}/tos-web-rest/
 npm install 
-ng run main
+node src/index.js
 # WAITING
