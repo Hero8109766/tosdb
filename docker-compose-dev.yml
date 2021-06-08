@@ -2,7 +2,9 @@ version: '3'
 services: 
     tosdev:
         container_name: tosdev
-        build: .
+        build: 
+            context: .
+            dockerfile: dockerfile-dev
         ports:
             - "8200:8000"
         volumes:
