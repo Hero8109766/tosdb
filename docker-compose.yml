@@ -9,4 +9,3 @@ services:
             - "8000:8000"
         volumes:
             - ./input:/var/www/base/tos-parser/input/
-            - ./distbuild:/var/www/base/tos-build/dist/

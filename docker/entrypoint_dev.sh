@@ -18,7 +18,6 @@ npm run main jTOS
 echo "nginx READY!"
 /usr/sbin/nginx 
 
-
 cd ${BASEDIR}/tos-web-rest/
 npm install 
 node src/index.js
