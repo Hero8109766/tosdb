@@ -16,6 +16,6 @@ ng build
 # copy
 echo "Copying"
 cd ${BASEDIR}
-cp -rn ./tos_build/dist/* ./tos-web/dist/
+cp -rn ./tos-build/dist/* ./tos-web/dist/
 
 echo "Done."
