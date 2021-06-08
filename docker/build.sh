@@ -52,7 +52,5 @@ cd ${BASEDIR}
 
 echo "Launch bootstrap."
 sh bootstrap.sh
-echo "Copying"
-cd ${BASEDIR}
-cp -rf ./tos-build/dist/* ./tos-web/dist/
+
 echo "Done."
