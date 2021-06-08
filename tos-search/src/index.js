@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('graceful-fs');
 const lunr = require('lunr');
 const nodejieba = require("nodejieba");
 const papa = require('papaparse');
@@ -52,12 +52,14 @@ files.forEach((fileName) => {
         .forEach((row) => documents[dataset].push(row));
 });
 
+var builder = kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" });
+
 // Build index
 log('Building index...');
 var idx = lunr(function () {
     if (REGION === REGION_jTOS)
         //this.use(lunr.multiLanguage('en', 'jp'));
-        this.use(lunr.multiLanguage('en', 'jp'));
+        this.use(lunr.multiLanguage('en',"jp"));
     if (REGION === REGION_kTOS || REGION === REGION_kTEST)
         this.use(lunr.multiLanguage('en', 'kr'));
     if (REGION === REGION_twTOS)
@@ -65,28 +67,24 @@ var idx = lunr(function () {
 
     // Disable stemmer
     this.pipeline.remove(lunr.stemmer);
-
+  
     this.ref('$ID_lunr');
     this.field('$ID');
     this.field('$ID_NAME');
     this.field('Name');
     if (REGION == REGION_jTOS) {
 
-        var builder = kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" });
-    
-        // tokenizer is ready
-        //var path = tokenizer.tokenize("すもももももももものうち");
-        //console.log(path);
+        
+        
         Object.entries(documents)
             .forEach(value => {
-                
+
                 let documents = value[1];
                 let dataset = value[0];
-                builder.build( (err, tokenizer)=> {
-                    if (err) { throw err }
+              
                     documents.forEach((doc) => {
-                       
-                        if (doc['Name'] == null) {
+
+                        if (doc['Name'] == null ) {
                             this.add({
                                 $ID: doc['$ID'],
                                 $ID_lunr: dataset + '#' + doc['$ID'],
@@ -95,32 +93,37 @@ var idx = lunr(function () {
                             });
 
                         } else {
-                            var path = null;
-                            path = tokenizer.tokenize(doc['Name']);
+                            let path = null;
+                            builder.build((err, tokenizer) => {
+                    
+                                path = tokenizer.tokenize(doc['Name']);
 
-                            if (path != null) {
-                                var iidx = 0;
-                                
-                                path.forEach((token) => {
-                                    
+                                if (path != null) {
+                                    let iidx=0;
+                                    path.forEach((token) => {
+                                        if(token.pos=="名詞"){
+                                            this.add({
+                                                $ID: doc['$ID'],
+                                                $ID_lunr: dataset + '#' + doc['$ID'] + "_" + iidx.toString(),
+                                                $ID_NAME: doc['$ID_NAME'],
+                                                Name: token.surface_form,
+                                            });
+                                        
+                                            iidx++;
+                                        }
+                                        
+                                    });
+                                } else {
                                     this.add({
                                         $ID: doc['$ID'],
-                                        $ID_lunr: dataset + '#' + doc['$ID'] + "##" + iidx.toString(),
+                                        $ID_lunr: dataset + '#' + doc['$ID'],
                                         $ID_NAME: doc['$ID_NAME'],
-                                        Name: token["surface_form"],
+                                        Name: doc['Name'],
                                     });
-                                    iidx++;
-                                });
-                            } else {
-                                this.add({
-                                    $ID: doc['$ID'],
-                                    $ID_lunr: dataset + '#' + doc['$ID'],
-                                    $ID_NAME: doc['$ID_NAME'],
-                                    Name: doc['Name'],
-                                });
-                            }
+                                }
+                            });
                         }
-                    });
+                
 
                 });
 

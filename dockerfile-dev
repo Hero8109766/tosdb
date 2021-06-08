@@ -43,7 +43,6 @@ WORKDIR /var/www/base/ipf_unpacker
 RUN make clean && make release
 WORKDIR /var/www/base
 
-COPY ./skeleton_distweb ./skeleton_distweb
 COPY ./tos-parser ./tos-parser
 COPY ./tos-build ./tos-build
 COPY ./tos-html ./tos-html
