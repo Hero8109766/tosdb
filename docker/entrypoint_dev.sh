@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-cd /root
+cd /var/www/base/
 mkdir ./tos-build/dist | true
 cp -rf ./skeleton_distbuild/* ./tos-build/dist/
 mkdir ./tos-web/dist | true
