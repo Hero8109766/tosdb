@@ -11,7 +11,6 @@ cp -rf ./skeleton_distweb/* ./tos-web/dist/
 
 
 /bin/bash ${BASEDIR}/build.sh
-
 /bin/bash ${BASEDIR}/bootstrap.sh
 
 
