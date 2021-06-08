@@ -14,7 +14,7 @@ cp -rf ./skeleton_distweb/* ./tos-web/dist/
 
 echo "nginx READY!"
 /usr/sbin/nginx
-BASEDIR=$(cd $(dirname $0); pwd)
+
 
 cd ${BASEDIR}/tos-web-rest/
 npm install 

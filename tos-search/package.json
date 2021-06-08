@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "console-stamp": "^0.2.7",
-    "lunr": "^2.3.9",
+    "lunr": "^2.3.6",
     "lunr-language-jp": "^1.0.1",
     "lunr-languages": "^1.4.0",
     "nodejieba": "^2.5.2",
