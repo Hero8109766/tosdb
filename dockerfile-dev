@@ -61,7 +61,7 @@ COPY ./skeleton_distbuild   ./skeleton_distbuild
 # copy http server conf
 COPY ./httpserver/http.conf /etc/nginx/conf.d/default.conf
 # expose http server
-EXPOSE 80
+EXPOSE 8000
 EXPOSE 3939
 
 # freqently change ENVs
