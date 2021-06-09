@@ -9,9 +9,17 @@ cd ${BASEDIR}
 /bin/bash ${BASEDIR}/bootstrap.sh
 
 
+
 #cp -rn ./tos-build/dist/* ./tos-web/dist/
-cp -rn ./skeleton_distbuild/* ./tos-web/dist/
-cp -rn ./skeleton_distweb/* ./tos-web/dist/
+cp -rn ./skeleton_distbuild/* ./tos-build/dist/
+cp -rn ./skeleton_distweb/* ./tos-build/dist/
+
+/bin/bash ${BASEDIR}/build.sh
+/bin/bash ${BASEDIR}/bootstrap.sh
+
+#cp -rn ./tos-build/dist/* ./tos-web/dist/
+#cp -rn ./skeleton_distbuild/* ./tos-web/dist/
+#cp -rn ./skeleton_distweb/* ./tos-web/dist/
 
 
 
