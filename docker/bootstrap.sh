@@ -13,9 +13,4 @@ ng build --prod
 
 # merge
 
-# copy
-echo "Copying"
-cd ${BASEDIR}
-cp -rn ./tos-build/dist/* ./tos-web/dist/
-
 echo "Done."
