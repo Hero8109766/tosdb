@@ -4,14 +4,13 @@ cd /var/www/base/
 BASEDIR=/var/www/base/
 
 cd ${BASEDIR}
-mkdir ./tos-build/dist | true
-cp -rf ./skeleton_distbuild/* ./tos-build/dist/
-mkdir ./tos-web/dist | true
-cp -rf ./skeleton_distweb/* ./tos-web/dist/
-
-
 /bin/bash ${BASEDIR}/build.sh
 /bin/bash ${BASEDIR}/bootstrap.sh
+
+mkdir ./tos-build/dist | true
+cp -rn ./skeleton_distbuild/* ./tos-build/dist/
+mkdir ./tos-web/dist | true
+cp -rn ./skeleton_distweb/* ./tos-web/dist/
 
 echo "nginx READY!"
 /usr/sbin/nginx
