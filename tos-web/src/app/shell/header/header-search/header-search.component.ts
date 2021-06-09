@@ -97,7 +97,7 @@ export class HeaderSearchComponent implements OnDestroy, OnInit {
   onKeyboardNavigate(i: number) {
     document.activeElement && document.activeElement['blur']();
     this.onFocus(false);
-    if(this.results[i].Url){
+    if(this.results && this.results[i]){
       this.router.navigate([this.results[i].Url]);
     }
   }
