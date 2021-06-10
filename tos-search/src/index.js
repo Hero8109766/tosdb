@@ -73,6 +73,9 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
         this.field('$ID');
         this.field('$ID_NAME');
         this.field('Name');
+        //this.field('Icon');
+        //this.field('Description');
+        
         if (REGION == REGION_jTOS) {
 
 
@@ -86,12 +89,14 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
                     documents.forEach((doc) => {
 
                         if (doc['Name'] == null) {
-                            this.add({
-                                $ID: doc['$ID'],
-                                $ID_lunr: dataset + '#' + doc['$ID'],
-                                $ID_NAME: doc['$ID_NAME'],
-                                Name: doc['Name'],
-                            });
+                            //this.add({
+                            //    $ID: doc['$ID'],
+                            //    $ID_lunr: dataset + '#' + doc['$ID'],
+                            //    $ID_NAME: doc['$ID_NAME'],
+                            //    Name: doc['Name'],
+                            //    //Icon: doc['Icon'],
+                            //    //Description: doc['Description']
+                            //});
 
                         } else {
                             let path = null;
@@ -101,25 +106,38 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
 
                             if (path != null) {
                                 let iidx = 0;
-                                path.forEach((token) => {
-                                    if (token.pos == "名詞") {
-                                        this.add({
-                                            $ID: doc['$ID'],
-                                            $ID_lunr: dataset + '#' + doc['$ID'] ,
-                                            $ID_NAME: doc['$ID_NAME'],
-                                            Name: token.surface_form,
-                                        });
 
-                                        iidx++;
-                                    }
-
+                                this.add({
+                                    $ID: doc['$ID'],
+                                    $ID_lunr: dataset + '#' + doc['$ID'],
+                                    $ID_NAME: doc['$ID_NAME'],
+                                    Name: path.map(x=>x.surface_form).join(" "),
+                                    //Icon: doc['Icon'],
+                                    //Description: doc['Description']
                                 });
+                                // path.forEach((token) => {
+                                //     if (token.pos == "名詞") {
+                                //         this.add({
+                                //             $ID: doc['$ID'],
+                                //             $ID_lunr: dataset + '#' + doc['$ID']+"##" ,
+                                //             $ID_NAME: doc['$ID_NAME'],
+                                //             Name: token.surface_form,
+                                //             Icon: doc['Icon'],
+                                //             Description: doc['Description']
+                                //         });
+
+                                //         iidx++;
+                                //     }
+
+                                // });
                             } else {
                                 this.add({
                                     $ID: doc['$ID'],
                                     $ID_lunr: dataset + '#' + doc['$ID'],
                                     $ID_NAME: doc['$ID_NAME'],
                                     Name: doc['Name'],
+                                    //Icon: doc['Icon'],
+                                    //Description: doc['Description']
                                 });
                             }
 
@@ -142,6 +160,8 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
                             $ID_lunr: dataset + '#' + doc['$ID'],
                             $ID_NAME: doc['$ID_NAME'],
                             Name: doc['Name'],
+                            //Icon: doc['Icon'],
+                            //Description: doc['Description']
                         })
                     });
                 })
