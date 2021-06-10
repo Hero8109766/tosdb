@@ -140,7 +140,7 @@ export class HeaderSearchComponent implements OnDestroy, OnInit {
     let query = this.query.trim();
     let words = query.split(' ');
         query = words
-          .map((value, index) => index == words.length - 1 ? '+' + value + '*' : '+' + value)
+          .map((value, index) => index == words.length - 1 ? '*' + value + '*' : '*' + value)
           .join(' ');
 
     this.search
