@@ -58,17 +58,24 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
     // Build index
     log('Building index...');
     idx = lunr(function () {
-        if (REGION === REGION_jTOS)
-            //this.use(lunr.multiLanguage('en', 'jp'));
+        if (REGION === REGION_jTOS){
             this.use(lunr.multiLanguage('en', "jp"));
-        if (REGION === REGION_kTOS || REGION === REGION_kTEST)
+        
+        }
+        if (REGION === REGION_kTOS || REGION === REGION_kTEST){
             this.use(lunr.multiLanguage('en', 'kr'));
-        if (REGION === REGION_twTOS)
+            // Disable stemmer
+            this.pipeline.remove(lunr.stemmer);
+       
+        }
+        if (REGION === REGION_twTOS){
             this.use(lunr.multiLanguage('en', 'ch'));
+            // Disable stemmer
+            this.pipeline.remove(lunr.stemmer);
 
-        // Disable stemmer
-        this.pipeline.remove(lunr.stemmer);
-
+        }
+            
+        
         this.ref('$ID_lunr');
         this.field('$ID');
         this.field('$ID_NAME');
@@ -76,7 +83,7 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
         //this.field('Icon');
         //this.field('Description');
         
-        if (REGION == REGION_jTOS) {
+        if (REGION == REGION_jTOS && false) {
 
 
 
@@ -111,7 +118,7 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
                                     $ID: doc['$ID'],
                                     $ID_lunr: dataset + '#' + doc['$ID'],
                                     $ID_NAME: doc['$ID_NAME'],
-                                    Name: path.map(x=>x.surface_form).join(" "),
+                                    Name: path.map(x=>x.surface_form).join("/"),
                                     //Icon: doc['Icon'],
                                     //Description: doc['Description']
                                 });
