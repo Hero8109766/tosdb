@@ -122,7 +122,7 @@ export class HeaderSearchComponent implements OnDestroy, OnInit {
 
   onInputChange() {
     // Ignore empty and duplicate queries
-    if (this.query == null || this.query == '' || this.query.length <= 1) return this.onQueryResult({ page: 0, response: []});
+    if (this.query == null || this.query == '' || this.query.length <= 0) return this.onQueryResult({ page: 0, response: []});
     if (this.query == this.queryPrevious && this.queryPage == this.queryPreviousPage) return;
 
     if (this.query != this.queryPrevious || this.queryDataset != this.queryPreviousDataset) {
