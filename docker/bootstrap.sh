@@ -9,7 +9,13 @@ BASEDIR=/var/www/base/
 cd ${BASEDIR}/tos-web/
 #mkdir ./dist/ | true
 #rm -r  ./dist/* | true
-ng build --prod
+cp -rn ../tos-build/dist/* ./src/
+cp -rn ../skeleton_distbuild/* ./src/
+cp -rn ../skeleton_distweb/* ./src/
+
+
+
+ng build
 
 # merge
 
