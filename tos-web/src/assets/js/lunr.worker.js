@@ -39,11 +39,7 @@ self.onmessage = function (event) {
 
       try {
         //console.log('query', payload.query, 'dataset', dataset)
-        //result = idx.search(payload.query);
-        result = idx.query((q)=>{
-          q.term(payload.query, { wildcard: lunr.Query.Wildcard.LEADING | lunr.Query.Wildcard.TRAILING })
-        });
-        
+        result = idx.search("*"+payload.query+"*");
         result = !!dataset ? result.filter(value => value['ref'].split('#')[0] === dataset) : result;
         result = result.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
       } catch (e) {}
