@@ -14,8 +14,8 @@ cd ${BASEDIR}/tos-web/
 
 ng build
 cp -rn ../tos-build/dist/* ./dist/
-#cp -rn ../skeleton_distbuild/* ./dist/
-#cp -rn ../skeleton_distweb/* ./dist/
+cp -rn ../skeleton_distbuild/* ./dist/
+cp -rn ../skeleton_distweb/* ./dist/
 
 # merge
 

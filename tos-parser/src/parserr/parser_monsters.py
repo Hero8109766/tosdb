@@ -129,7 +129,8 @@ def parse_monsters(file_name):
         row['INT'] = LUA_RUNTIME['SCR_Get_MON_INT'](row)
         row['MNA'] = LUA_RUNTIME['SCR_Get_MON_MNA'](row)
         row['STR'] = LUA_RUNTIME['SCR_Get_MON_STR'](row)
-
+        row['BLKABLE'] = LUA_RUNTIME['SCR_Get_MON_BLKABLE'](row)
+        
         obj = {}
         obj['$ID'] = int(row['ClassID'])
         obj['$ID_NAME'] = row['ClassName']

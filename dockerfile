@@ -61,7 +61,6 @@ COPY ./skeleton_distbuild   ./skeleton_distbuild
 # copy http server conf
 COPY ./httpserver/http.conf /etc/nginx/conf.d/default.conf
 COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
-
 # expose http server
 EXPOSE 80
 EXPOSE 3939
