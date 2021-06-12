@@ -18,6 +18,8 @@ OUTPUT_NPCS = 'npcs'
 OUTPUT_RECIPES = 'recipes'
 OUTPUT_SKILLS = 'skills'
 
+COMPARE_WITH_NEET= False
+
 URL_PATCH = None
 URL_PATCH_iTOS = 'http://drygkhncipyq8.cloudfront.net/toslive/patch/'
 URL_PATCH_jTOS = 'http://d3bbj7hlpo9jjy.cloudfront.net/live/patch/'

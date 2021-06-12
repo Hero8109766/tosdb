@@ -79,3 +79,4 @@ distbuild/*
 input/*
 result.txt
 **/node_modules
+ipf_unpacker/tmp.ipf

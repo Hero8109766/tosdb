@@ -63,6 +63,9 @@ def patch_partial(patch_path, patch_url, patch_ext, patch_unpack, revision_path,
 
     for revision in revision_list:
         revision = revision.split(' ')[0]
+        if constants.COMPARE_WITH_NEET:
+            if int(revision)>315941 and patch_ext=='.ipf':
+                break
 
         if (int(revision) > int(revision_old) or repatch==1) and revision not in ['147674']:
             # Process patch

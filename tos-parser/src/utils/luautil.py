@@ -149,6 +149,7 @@ def init_global_data():
 
 def init_global_functions():
     lua.execute("".join((s+"\n" for s in LUA_OVERRIDE))+'\n\n'+'''
+    
         app = {
             IsBarrackMode = function() return false end
         }

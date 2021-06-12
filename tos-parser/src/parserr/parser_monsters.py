@@ -98,10 +98,12 @@ class TOSMonsterType(TOSEnum):
 statbase_monster = {}
 statbase_monster_type = {}
 
+statbase_monster_race = {}
 
 def parse():
     parse_monsters_statbase('statbase_monster.ies', statbase_monster)
     parse_monsters_statbase('statbase_monster_type.ies', statbase_monster_type)
+    parse_monsters_statbase('statbase_monster_race.ies', statbase_monster_race)
 
     parse_monsters('monster.ies')
     parse_monsters('monster_event.ies')
