@@ -85,7 +85,7 @@ class TOSMonsterType(TOSEnum):
     NEUTRAL = 1
     NPC = 2
     SIGN = 3
-
+    ITEM = 4
     @staticmethod
     def value_of(string):
         return {
@@ -93,6 +93,7 @@ class TOSMonsterType(TOSEnum):
             'NEUTRAL': TOSMonsterType.NEUTRAL,
             'NPC': TOSMonsterType.NPC,
             'SIGN': TOSMonsterType.SIGN,
+            'ITEM':TOSMonsterType.ITEM,
         }[string.upper()]
 
 
