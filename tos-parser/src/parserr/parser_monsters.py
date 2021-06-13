@@ -140,7 +140,7 @@ def parse_monsters(file_name):
                 if v in LUA_RUNTIME and LUA_RUNTIME[v] is not None:
                     row[k] = LUA_RUNTIME[v](row)
                 else:
-                    if not k in row:
+                    if k not in row:
                         row[k] = v
         #2pass
         for k, v in monster_const[1].items():
@@ -148,7 +148,7 @@ def parse_monsters(file_name):
                 if v in LUA_RUNTIME and LUA_RUNTIME[v] is not None:
                     row[k] = LUA_RUNTIME[v](row)
                 else:
-                    if not k in row:
+                    if  k not in row:
                         row[k]=v
 
         #row['CON'] = LUA_RUNTIME['SCR_Get_MON_CON'](row)
