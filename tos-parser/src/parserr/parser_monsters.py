@@ -110,6 +110,11 @@ def parse():
     parse_monsters('monster_event.ies')
     parse_monsters('monster_npc.ies')
     parse_monsters('monster_solo_dungeon.ies')
+    parse_monsters('monster_Ancient.ies')
+    parse_monsters('monster_mgame.ies')
+    parse_monsters('monster_item_summon.ies')
+    parse_monsters('monster_item.ies')
+    parse_monsters('monster_guild.ies')
 
 
 def parse_monsters(file_name):
