@@ -201,7 +201,11 @@ def init_global_functions():
         
         
         function GetClassByNumProp(ies_key, column, value)
+        
             local data = ies_by_ClassID[string.lower(ies_key)]
+            if data==nil then
+                return nil
+            end
             for id, row in pairs(data) do
                 if TryGetProp(row, column) == value then
                     return row
