@@ -44,7 +44,7 @@ class TOSMonsterRank(TOSEnum):
     NORMAL = 5
     NPC = 6
     SPECIAL = 7
-
+    INSTANCE = 8
     @staticmethod
     def value_of(string):
         return {
@@ -56,6 +56,7 @@ class TOSMonsterRank(TOSEnum):
             'NORMAL': TOSMonsterRank.NORMAL,
             'NPC': TOSMonsterRank.NPC,
             'SPECIAL': TOSMonsterRank.SPECIAL,
+            'INSTANCE':TOSMonsterRank.INSTANCE,
         }[string.upper()]
 
 
