@@ -29,8 +29,6 @@ LUA_OVERRIDE = [
     'function IsBuffApplied(pc, buff) return "NO" end',
     'function GetAbilityAddSpendValue(pc,classname,column) return 0 end',
     'function GetSkillOwner(skill) return {} end',
-    #'function GetClassList(name) return {} end',
-    #'function GetClassByNameFromList(cls,name) return nil end',
     'function IsServerSection(pc) return 0 end',
     'function GetExProp(entity, name) return entity[name] end',
     'function GetExProp_Str(entity, name) return tostring(entity[name]) end',
@@ -46,7 +44,9 @@ LUA_OVERRIDE = [
     'function SetExProp(entity, name, value) entity[name] = value end',
     'function math.pow(value,power) return value ^ power end',
     'function GetZoneName() return "" end',
-    "function Weeklyboss_GetNowWeekNum() return nil end"
+    "function Weeklyboss_GetNowWeekNum() return nil end",
+    "function GetBuffByProp(self,mode,value) return nil end",
+    "function IsRaidField(self)return 0 end",
 ]
 
 LUA_RUNTIME = None
@@ -192,7 +192,8 @@ def init_global_functions():
                 GetPetEquipObjByGuid = function(guid) end
             }
         }
-    
+        
+        
         
         function GetClassByNumProp(ies_key, column, value)
             local data = ies_by_ClassID[string.lower(ies_key)]

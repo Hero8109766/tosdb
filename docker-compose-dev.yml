@@ -8,5 +8,5 @@ services:
         ports:
             - "8200:80"
         volumes:
-            - ./input:/var/www/base/tos-parser/input/
+            - ./input:/var/www/base/tos-parser/input
             

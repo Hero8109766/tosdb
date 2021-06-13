@@ -99,9 +99,10 @@ statbase_monster = {}
 statbase_monster_type = {}
 
 statbase_monster_race = {}
-
+monster_const={}
 def parse():
     parse_monsters_statbase('statbase_monster.ies', statbase_monster)
+    parse_monsters_statbase('monster_const.ies', monster_const)
     parse_monsters_statbase('statbase_monster_type.ies', statbase_monster_type)
     parse_monsters_statbase('statbase_monster_race.ies', statbase_monster_race)
 
@@ -126,12 +127,29 @@ def parse_monsters(file_name):
 
         # HotFix: these properties need to be calculated before the remaining ones
         row['Lv'] = int(row['Level']) if int(row['Level']) > 1 else 1
-        row['CON'] = LUA_RUNTIME['SCR_Get_MON_CON'](row)
-        row['DEX'] = LUA_RUNTIME['SCR_Get_MON_DEX'](row)
-        row['INT'] = LUA_RUNTIME['SCR_Get_MON_INT'](row)
-        row['MNA'] = LUA_RUNTIME['SCR_Get_MON_MNA'](row)
-        row['STR'] = LUA_RUNTIME['SCR_Get_MON_STR'](row)
-        row['BLKABLE'] = LUA_RUNTIME['SCR_Get_MON_BLKABLE'](row)
+        # injection constants
+        for k, v in monster_const[1].items():
+            if (k != "ClassID" and k != "Lv"):
+                if v in LUA_RUNTIME and LUA_RUNTIME[v] is not None:
+                    row[k] = LUA_RUNTIME[v](row)
+                else:
+                    if not k in row:
+                        row[k] = v
+        #2pass
+        for k, v in monster_const[1].items():
+            if (k!="ClassID"and k!="Lv") :
+                if v in LUA_RUNTIME and LUA_RUNTIME[v] is not None:
+                    row[k] = LUA_RUNTIME[v](row)
+                else:
+                    if not k in row:
+                        row[k]=v
+
+        #row['CON'] = LUA_RUNTIME['SCR_Get_MON_CON'](row)
+        #row['DEX'] = LUA_RUNTIME['SCR_Get_MON_DEX'](row)
+        #row['INT'] = LUA_RUNTIME['SCR_Get_MON_INT'](row)
+        #row['MNA'] = LUA_RUNTIME['SCR_Get_MON_MNA'](row)
+        #row['STR'] = LUA_RUNTIME['SCR_Get_MON_STR'](row)
+        #row['BLKABLE'] = LUA_RUNTIME['SCR_Get_MON_BLKABLE'](row)
         
         obj = {}
         obj['$ID'] = int(row['ClassID'])
@@ -155,14 +173,29 @@ def parse_monsters(file_name):
             obj['Stat_INT'] = int(row['INT'])
             obj['Stat_SPR'] = int(row['MNA'])
             obj['Stat_STR'] = int(row['STR'])
-            obj['Stat_HP'] = int(LUA_RUNTIME['SCR_Get_MON_MHP'](row))
-            obj['Stat_SP'] = int(LUA_RUNTIME['SCR_Get_MON_MSP'](row))
-            obj['Stat_ATTACK_MAGICAL_MAX'] = int(LUA_RUNTIME['SCR_Get_MON_MAXMATK'](row))
-            obj['Stat_ATTACK_MAGICAL_MIN'] = int(LUA_RUNTIME['SCR_Get_MON_MINMATK'](row))
-            obj['Stat_ATTACK_PHYSICAL_MAX'] = int(LUA_RUNTIME['SCR_Get_MON_MAXPATK'](row))
-            obj['Stat_ATTACK_PHYSICAL_MIN'] = int(LUA_RUNTIME['SCR_Get_MON_MINPATK'](row))
-            obj['Stat_DEFENSE_MAGICAL'] = int(LUA_RUNTIME['SCR_Get_MON_MDEF'](row))
-            obj['Stat_DEFENSE_PHYSICAL'] = int(LUA_RUNTIME['SCR_Get_MON_DEF'](row))
+            # obj['Stat_HP'] = int(LUA_RUNTIME['SCR_Get_MON_MHP'](row))
+            # obj['Stat_SP'] = int(LUA_RUNTIME['SCR_Get_MON_MSP'](row))
+            # obj['Stat_ATTACK_MAGICAL_MAX'] = int(LUA_RUNTIME['SCR_Get_MON_MAXMATK'](row))
+            # obj['Stat_ATTACK_MAGICAL_MIN'] = int(LUA_RUNTIME['SCR_Get_MON_MINMATK'](row))
+            # obj['Stat_ATTACK_PHYSICAL_MAX'] = int(LUA_RUNTIME['SCR_Get_MON_MAXPATK'](row))
+            # obj['Stat_ATTACK_PHYSICAL_MIN'] = int(LUA_RUNTIME['SCR_Get_MON_MINPATK'](row))
+            # obj['Stat_DEFENSE_MAGICAL'] = int(LUA_RUNTIME['SCR_Get_MON_MDEF'](row))
+            # obj['Stat_DEFENSE_PHYSICAL'] = int(LUA_RUNTIME['SCR_Get_MON_DEF'](row))
+            # obj['Stat_Accuracy'] = int(LUA_RUNTIME['SCR_Get_MON_HR'](row))
+            # obj['Stat_Evasion'] = int(LUA_RUNTIME['SCR_Get_MON_DR'](row))
+            # obj['Stat_CriticalDamage'] = int(LUA_RUNTIME['SCR_Get_MON_CRTATK'](row))
+            # obj['Stat_CriticalDefense'] = int(LUA_RUNTIME['SCR_Get_MON_CRTDR'](row))
+            # obj['Stat_CriticalRate'] = int(LUA_RUNTIME['SCR_Get_MON_CRTHR'](row))
+            # obj['Stat_BlockRate'] = int(LUA_RUNTIME['SCR_Get_MON_BLK'](row))
+            # obj['Stat_BlockPenetration'] = int(LUA_RUNTIME['SCR_Get_MON_BLK_BREAK'](row))
+            obj['Stat_HP'] = int(row['MHP'])
+            obj['Stat_SP'] = int(row['MSP'])
+            obj['Stat_ATTACK_MAGICAL_MAX'] =int(row['MAXMATK'])
+            obj['Stat_ATTACK_MAGICAL_MIN'] =int(row['MINMATK'])
+            obj['Stat_ATTACK_PHYSICAL_MAX'] = int(row['MAXPATK'])
+            obj['Stat_ATTACK_PHYSICAL_MIN'] = int(row['MINPATK'])
+            obj['Stat_DEFENSE_MAGICAL'] = int(row['MDEF'])
+            obj['Stat_DEFENSE_PHYSICAL'] = int(row['DEF'])
             obj['Stat_Accuracy'] = int(LUA_RUNTIME['SCR_Get_MON_HR'](row))
             obj['Stat_Evasion'] = int(LUA_RUNTIME['SCR_Get_MON_DR'](row))
             obj['Stat_CriticalDamage'] = int(LUA_RUNTIME['SCR_Get_MON_CRTATK'](row))
