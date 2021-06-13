@@ -143,7 +143,6 @@ def init_global_data():
     ies_ADD('monster', iesutil.load('monster_event.ies'))
     ies_ADD('monster', iesutil.load('Monster_solo_dungeon.ies'))
     ies_ADD('monster', iesutil.load('monster_Ancient.ies'))
-
     ies_ADD('monster', iesutil.load('monster_mgame.ies'))
 
     ies_ADD('stat_monster', iesutil.load('statbase_monster.ies'))
