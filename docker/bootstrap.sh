@@ -13,7 +13,8 @@ cd ${BASEDIR}/tos-web/
 mkdir ./dist/ | true
 mkdir ./dist/assets/ | true
 mkdir ./dist/assets/js | true
-cp -rf ${BASEDIR}/skeleton_distbuild/assets/js ./dist/assets/js
+cp -rf ${BASEDIR}/tos-build/dist/assets/js/* ./dist/assets/js/
+#cp -rf ${BASEDIR}/tos-build/dist/* ./dist/
 
 #cp -rn ../skeleton_distweb/* ./dist/
 

@@ -17,8 +17,14 @@ export abstract class Comparable {
 
 export abstract class TOSEntity extends Comparable implements ITOSEntity {
 
-  public Selected: boolean;
-
+  private _selected:boolean;
+  
+  public get Selected(){
+      return this._selected;
+  }
+  public set Selected(value:boolean){
+    this._selected=value;
+}
   private url: string;
 
   protected constructor(readonly Dataset: TOSDataSet, protected $json: TOSEntity) {

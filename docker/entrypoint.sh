@@ -24,6 +24,6 @@ echo "nginx READY!"
 /usr/sbin/nginx 
 
 cd ${BASEDIR}/tos-web-rest/
-yarn install 
+npm install 
 node src/index.js
 # WAITING
