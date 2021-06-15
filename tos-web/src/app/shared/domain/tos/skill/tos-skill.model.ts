@@ -47,7 +47,7 @@ export class TOSSkill extends TOSEntity implements ITOSSkill {
   get Link_Attributes() { return this.$lazyPropertyLink('Link_Attributes', value => TOSDomainService.attributesById(value)) as Observable<ITOSAttribute[]> }
   get Link_Gem() { return this.$lazyPropertyLink('Link_Gem', value => TOSDomainService.gemsById(value)) as Observable<ITOSGem> }
   get Link_Job() { return this.$lazyPropertyLink('Link_Job', value => TOSDomainService.jobsById(value)) as Observable<ITOSJob> }
-  get Link_Job$ID() { return this.$lazyPropertyLinkOriginal('Link_Job') as number }
+  get Link_Job$ID() { return this.$lazyPropertyLinkOriginal('Link_Job') as string }
 
   get OverHeat() { return this.$lazyPropertyNumber('OverHeat') }
 

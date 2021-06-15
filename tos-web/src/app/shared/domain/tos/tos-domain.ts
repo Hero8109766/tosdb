@@ -657,7 +657,7 @@ export interface ITOSBuildStats {
 }
 
 export interface ITOSEntity {
-  $ID: number;
+  $ID: string;
   $ID_NAME: string;
   Dataset: TOSDataSet;
   Description: string;
@@ -833,7 +833,7 @@ export interface ITOSJob extends ITOSEntity {
 
   Link_Attributes: Observable<ITOSAttribute[]>;
   Link_Skills: Observable<ITOSSkill[]>;
-  Link_Skills$ID: number[];
+  Link_Skills$ID: string[];
 }
 
 export interface ITOSMap extends ITOSEntity {
@@ -946,7 +946,7 @@ export interface ITOSSkill extends ITOSEntity {
   Link_Attributes: Observable<ITOSAttribute[]>;
   Link_Gem: Observable<ITOSGem>;
   Link_Job: Observable<ITOSJob>;
-  Link_Job$ID: number;
+  Link_Job$ID: string;
 
   BuildCoolDown(build: ITOSBuild): Observable<number>;
   BuildSP(build: ITOSBuild): Observable<number>;

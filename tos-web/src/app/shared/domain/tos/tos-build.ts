@@ -22,12 +22,12 @@ const SKILL_POINTS_PER_CIRCLE: number = 15; // TODO: find a way to retrieve this
 abstract class TOSBuild implements ITOSBuild {
 
   private jobs: ITOSJob[] = [];
-  private readonly jobCirclesById: { [key: number]: number } = {};
+  private readonly jobCirclesById: { [key: string]: number } = {};
   private readonly jobChange: BehaviorSubject<ITOSJob> = new BehaviorSubject(null);
   private jobTree: TOSJobTree;
 
   private readonly skillChange: BehaviorSubject<ITOSSkill> = new BehaviorSubject(null);
-  private readonly skillLevelsById: { [key: number]: number } = {};
+  private readonly skillLevelsById: { [key: string]: number } = {};
   private readonly skillPointsByJob: { [key: number]: number } = {};
 
   private readonly statsPoints: BehaviorSubject<number> = new BehaviorSubject(0);
@@ -162,7 +162,7 @@ abstract class TOSBuild implements ITOSBuild {
       && skillLevel + delta <= await this.skillLevelMax$(skill).toPromise()
     )());
   }
-  skillPoints(job: { $ID: number }): number { return this.skillPointsByJob[job.$ID] }
+  skillPoints(job: { $ID: string }): number { return this.skillPointsByJob[job.$ID] }
   skillPointsMax(job: ITOSJob) : number { return SKILL_POINTS_PER_CIRCLE * this.jobCircle(job) }
   skillSP$(skill: ITOSSkill): Observable<number> { return skill.BuildSP(this) }
 
@@ -200,7 +200,7 @@ abstract class TOSBuild implements ITOSBuild {
     // Restore previous skill levels
     for (let skill$ID in skillLevels) {
       let delta = skillLevels[skill$ID];
-      let skill = await TOSDomainService.skillsById(+skill$ID).toPromise();
+      let skill = await TOSDomainService.skillsById(skill$ID).toPromise();
       let skillPoints = this.skillPointsByJob[job.$ID];
 
       if (delta > 0) {
@@ -422,7 +422,7 @@ export class TOSSimulatorBuild implements ITOSBuild {
         // Parse skills
         for (let skill$ID of Object.keys(encoded.skills || {})) {
           let skill =
-            await TOSDomainService.skillsById(+skill$ID).toPromise();
+            await TOSDomainService.skillsById(skill$ID).toPromise();
             await build.skillLevelIncrement$(skill, encoded.skills[skill$ID]);
         }
 

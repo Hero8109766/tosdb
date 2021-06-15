@@ -78,6 +78,6 @@ import 'zone.js/dist/zone'; // Included with Angular CLI.
 //import 'core-js/es6/promise';
 import 'core-js/es/array';
 import 'core-js/es/object';
-
+import '@angular/localize/init'
 // https://github.com/angular/angular/issues/23428 -sigh-
 //(window as any)['Zone'] = { current: { get: function() {} } };

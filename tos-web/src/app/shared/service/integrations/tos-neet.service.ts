@@ -43,11 +43,12 @@ export class TosNeetService {
           let job = jobsDecoded[i - 1];
 
           let skills = await TOSDomainService.skillsByJob(job).toPromise();
-          let skillClassID = skills[0].$ID;
+          let skillClassID = parseInt(skills[0].$ID);
               skillClassID = parseInt(skillsEncoded[j], 36) + (skillClassID - skillClassID % 100);
+          var skillClassIDstr=skillClassID.toString();
           let skillLevel = parseInt(skillsEncoded[j + 1], 36);
 
-          let skill = await TOSDomainService.skillsById(skillClassID).toPromise();
+          let skill = await TOSDomainService.skillsById(skillClassIDstr).toPromise();
           let skillsIDs = skills.map(value => value.$ID);
 
           if (skill && skillsIDs.indexOf(skill.$ID) > -1)

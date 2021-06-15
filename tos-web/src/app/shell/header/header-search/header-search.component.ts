@@ -5,6 +5,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+
   ViewChild
 } from '@angular/core';
 import {faSearch, faTimes} from "@fortawesome/free-solid-svg-icons";
@@ -58,10 +59,16 @@ export class HeaderSearchComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.input$ = fromEvent(this.input.nativeElement, 'keyup').pipe(debounceTime(200));
-    this.subscriptionInput = this.input$.subscribe(value => this.onInputChange());
+    
   }
-
+  ngAfterViewInit(){
+    //ad hoc fixing by ebisuke
+      setTimeout(() => {
+        this.input$ = fromEvent(this.input.nativeElement, 'keyup').pipe(debounceTime(200));
+        this.subscriptionInput = this.input$.subscribe(value => this.onInputChange());
+    
+      }, 1000);
+    }
   ngOnDestroy(): void {
     this.subscriptionInput && this.subscriptionInput.unsubscribe();
     this.subscriptionLoad && this.subscriptionLoad.unsubscribe();

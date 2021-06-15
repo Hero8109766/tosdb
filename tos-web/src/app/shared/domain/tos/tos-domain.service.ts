@@ -110,7 +110,7 @@ export class TOSDomainService {
   public static recipesById($ID): Observable<ITOSRecipe>                                    { return this.repository.findByIndex(TOSDataSet.RECIPES, '$ID', $ID, true) };
 
   public static skills(page: CRUDPage): Observable<CRUDPageResult<ITOSSkill>>               { return this.repository.find(TOSDataSet.SKILLS, page) };
-  public static skillsById($ID: number): Observable<ITOSSkill>                              { return this.repository.findByIndex(TOSDataSet.SKILLS, '$ID', $ID, true) };
+  public static skillsById($ID: string): Observable<ITOSSkill>                              { return this.repository.findByIndex(TOSDataSet.SKILLS, '$ID', $ID, true) };
   public static skillsByIdName($ID_NAME: string): Observable<ITOSSkill>                     { return this.repository.findByIndex(TOSDataSet.SKILLS, '$ID_NAME', $ID_NAME,  true) };
   public static skillsByJob(job: ITOSJob): Observable<ITOSSkill[]>                          { return this.repository.findByIndex(TOSDataSet.SKILLS, 'Link_Job', job.$ID) };
 
