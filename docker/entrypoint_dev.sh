@@ -18,8 +18,6 @@ cp -rn ./skeleton_distweb/* ./tos-build/dist/
 #cp -rn ./skeleton_distweb/* ./tos-web/dist/
 
 
-
-
 echo "nginx READY!"
 /usr/sbin/nginx 
 

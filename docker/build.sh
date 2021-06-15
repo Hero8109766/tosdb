@@ -14,6 +14,9 @@ if [ $# -ge 1 ];then
 fi
 
 cd ${BASEDIR}
+cp -rn ./skeleton_distbuild/* ./tos-build/dist/
+cp -rn ./skeleton_distweb/* ./tos-build/dist/
+
 for region in ${REGIONS[@]}
 do
     echo ${region}

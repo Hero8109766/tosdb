@@ -21,7 +21,7 @@ ENV GYP_DEFINES="javalibdir=/usr/lib/jvm/java-1.8.0-openjdk-amd64/lib/server"
 ENV JAVA_HOME ="/usr/lib/jvm/java-1.8.0-openjdk-amd64/"
 ENV PATH $PATH:/usr/lib/jvm/java-1.8.0-openjdk-amd64/bin
 ENV NODE_OPTIONS="--max-old-space-size=2048"
-RUN npm -g i n && n 16 
+RUN npm -g i n yarn && n 16
 RUN npm install -g @angular/cli 
 
 RUN mkdir /var/www/base
@@ -35,6 +35,7 @@ WORKDIR /var/www/base
 COPY ./tos-web ./tos-web
 WORKDIR /var/www/base/tos-web
 RUN npm ci -std=c++17 --force
+#RUN yarn install --force
 WORKDIR /var/www/base
 
 COPY ./ipf_unpacker ./ipf_unpacker

@@ -7,15 +7,15 @@ BASEDIR=/var/www/base/
 
 # build up!
 cd ${BASEDIR}/tos-web/
-#mkdir ./dist/ | true
-#rm -r  ./dist/* | true
+rm -r ./dist/* | true
+ng build 
+cd ${BASEDIR}/tos-web/
+mkdir ./dist/ | true
+mkdir ./dist/assets/ | true
+mkdir ./dist/assets/js | true
+cp -rf ${BASEDIR}/skeleton_distbuild/assets/js ./dist/assets/js
 
-
-
-ng build
-cp -rn ../tos-build/dist/* ./dist/
-cp -rn ../skeleton_distbuild/* ./dist/
-cp -rn ../skeleton_distweb/* ./dist/
+#cp -rn ../skeleton_distweb/* ./dist/
 
 # merge
 
