@@ -143,11 +143,12 @@ export const
   TOSElementService.icon = (value: TOSElement) => 'assets/images/element_' + value.toString().toLowerCase() + '.png';
 
 export enum TOSEquipmentGrade {
-  LEGENDARY = 'Legendary',
-  MAGIC = 'Magic',
+  
   NORMAL = 'Normal',
+  MAGIC = 'Magic',
   RARE = 'Rare',
   UNIQUE = 'Unique',
+  LEGENDARY = 'Legendary',
   GODDESS = 'Goddess',
 }
 export const
