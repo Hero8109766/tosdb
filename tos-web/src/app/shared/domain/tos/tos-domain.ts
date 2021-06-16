@@ -143,7 +143,7 @@ export const
   TOSElementService.icon = (value: TOSElement) => 'assets/images/element_' + value.toString().toLowerCase() + '.png';
 
 export enum TOSEquipmentGrade {
-  
+  UNUSED='Unused',
   NORMAL = 'Normal',
   MAGIC = 'Magic',
   RARE = 'Rare',
@@ -153,6 +153,7 @@ export enum TOSEquipmentGrade {
 }
 export const
   TOSEquipmentGradeService = EnumServiceFactory(TOSEquipmentGrade) as EnumService<TOSEquipmentGrade> & {
+    
     comparator(a: TOSEquipmentGrade, b: TOSEquipmentGrade): -1 | 0 | 1;
     color(value: TOSEquipmentGrade): string;
     order(value: TOSEquipmentGrade): number;
@@ -163,7 +164,11 @@ export const
 
     return (i < j) ? -1 : (i > j) ? 1 : 0;
   };
+  TOSEquipmentGradeService.groupBy = () => {
+    return [{ options: Object.values(TOSEquipmentGrade).filter(x=>x!=TOSEquipmentGrade.UNUSED) }]
+  },
   TOSEquipmentGradeService.color = (value: TOSEquipmentGrade) => {
+    if (value == TOSEquipmentGrade.UNUSED)    return '#000000';
     if (value == TOSEquipmentGrade.NORMAL)    return '#999999';
     if (value == TOSEquipmentGrade.MAGIC)     return '#42BAF7';
     if (value == TOSEquipmentGrade.RARE)      return '#CE69EF';
@@ -173,12 +178,13 @@ export const
     
   };
   TOSEquipmentGradeService.order = (value: TOSEquipmentGrade) => {
-    if (value == TOSEquipmentGrade.NORMAL)    return 0;
-    if (value == TOSEquipmentGrade.MAGIC)     return 1;
-    if (value == TOSEquipmentGrade.RARE)      return 2;
-    if (value == TOSEquipmentGrade.UNIQUE)    return 3;
-    if (value == TOSEquipmentGrade.LEGENDARY) return 4;
-    if (value == TOSEquipmentGrade.GODDESS)   return 5;
+    if (value == TOSEquipmentGrade.UNUSED)    return 0;
+    if (value == TOSEquipmentGrade.NORMAL)    return 1;
+    if (value == TOSEquipmentGrade.MAGIC)     return 2;
+    if (value == TOSEquipmentGrade.RARE)      return 3;
+    if (value == TOSEquipmentGrade.UNIQUE)    return 4;
+    if (value == TOSEquipmentGrade.LEGENDARY) return 5;
+    if (value == TOSEquipmentGrade.GODDESS)   return 6;
     
   };
 
