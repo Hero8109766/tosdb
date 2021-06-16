@@ -1,7 +1,7 @@
 export enum TOSRegion {
   iTOS = 'iTOS',
   jTOS = 'jTOS',
-  //kTEST = 'kTEST',
+  kTEST = 'kTEST',
   kTOS = 'kTOS',
   twTOS = 'twTOS',
 }
