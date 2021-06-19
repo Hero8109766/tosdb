@@ -4,7 +4,7 @@ services:
         container_name: tosdev
         build: 
             context: .
-            dockerfile: dockerfile-dev
+            dockerfile: dockerfile
         ports:
             - "8200:80"
         volumes:

@@ -3,13 +3,13 @@ import json
 import logging
 import os
 import unicodecsv as csv
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr import parser_translations, parser_items_books, \
     parser_items_gems, parser_monsters, parser_skills
 from parserlib.parserr import parser_items_cubes, parser_items_cards, parser_items_equipment, parser_jobs, \
     parser_items_recipes, parser_attributes, parser_items, parser_assets, parser_items_equipment_sets, \
     parser_items_collections
-from parserlib.utils import luautil
+from parserlib.utils import luautilmod
 
 
 def csv_write(data, dataset):
@@ -31,8 +31,8 @@ def csv_write(data, dataset):
                 data[row][col] = json.dumps(cell, sort_keys=True)
 
     # Ensure destination directory exists
-    if not os.path.exists(constants.PATH_BUILD_ASSETS_DATA):
-        os.makedirs(constants.PATH_BUILD_ASSETS_DATA)
+    if not os.path.exists(constantsmod.PATH_BUILD_ASSETS_DATA):
+        os.makedirs(constantsmod.PATH_BUILD_ASSETS_DATA)
 
     # Get keys from a complete entity
     keys = None
@@ -45,7 +45,7 @@ def csv_write(data, dataset):
              data[k][kk]=str(vv)
 
     # Write to CSV
-    file = open(os.path.join(constants.PATH_BUILD_ASSETS_DATA, dataset + '.csv'), 'wb')
+    file = open(os.path.join(constantsmod.PATH_BUILD_ASSETS_DATA, dataset + '.csv'), 'wb')
     if keys is not None:
 
         writer = csv.DictWriter(
@@ -59,7 +59,7 @@ def csv_write(data, dataset):
 
 def parse(region, is_rebuild, is_version_new):
     # Initialize LUA environment
-    luautil.init()
+    luautilmod.init()
 
     # Parse assets (Note: we start by processing assets as they use a ton of RAM)
     parser_assets.parse(region, is_version_new)
@@ -99,9 +99,9 @@ def parse(region, is_rebuild, is_version_new):
 
     # Write CSVs (1/2) - attributes + jobs + skills
     logging.debug('Writing CSVs (1/2)...')
-    csv_write(list(globals.attributes.values()), constants.OUTPUT_ATTRIBUTES)
-    csv_write(list(globals.jobs.values()), constants.OUTPUT_JOBS)
-    csv_write(list(globals.skills.values()), constants.OUTPUT_SKILLS)
+    csv_write(list(globals.attributes.values()), constantsmod.OUTPUT_ATTRIBUTES)
+    csv_write(list(globals.jobs.values()), constantsmod.OUTPUT_JOBS)
+    csv_write(list(globals.skills.values()), constantsmod.OUTPUT_SKILLS)
 
     globals.attributes = None
     globals.attributes_by_name = None
@@ -128,7 +128,7 @@ def parse(region, is_rebuild, is_version_new):
 
     # Garbage collect & Destroy LUA...
     logging.debug('Garbage collect...')
-    luautil.destroy()
+    luautilmod.destroy()
     gc.collect()
 
     # Parse links (2/2)
@@ -149,15 +149,15 @@ def parse(region, is_rebuild, is_version_new):
 
     # Write CSVs (2/2)
     logging.debug('Writing CSVs (2/2)...')
-    csv_write(list(globals.books.values()), constants.OUTPUT_BOOKS)
-    csv_write(list(globals.cards.values()), constants.OUTPUT_CARDS)
-    csv_write(list(globals.collections.values()), constants.OUTPUT_COLLECTIONS)
-    csv_write(list(globals.cubes.values()), constants.OUTPUT_CUBES)
-    csv_write(list(globals.equipment.values()), constants.OUTPUT_EQUIPMENT)
-    csv_write(list(globals.equipment_sets.values()), constants.OUTPUT_EQUIPMENT_SETS)
-    csv_write(list(globals.gems.values()), constants.OUTPUT_GEMS)
-    csv_write(list(globals.items.values()), constants.OUTPUT_ITEMS)
-    csv_write(list(globals.maps.values()), constants.OUTPUT_MAPS)
-    csv_write(list(globals.monsters.values()), constants.OUTPUT_MONSTERS)
-    csv_write(list(globals.npcs.values()), constants.OUTPUT_NPCS)
-    csv_write(list(globals.recipes.values()), constants.OUTPUT_RECIPES)
+    csv_write(list(globals.books.values()), constantsmod.OUTPUT_BOOKS)
+    csv_write(list(globals.cards.values()), constantsmod.OUTPUT_CARDS)
+    csv_write(list(globals.collections.values()), constantsmod.OUTPUT_COLLECTIONS)
+    csv_write(list(globals.cubes.values()), constantsmod.OUTPUT_CUBES)
+    csv_write(list(globals.equipment.values()), constantsmod.OUTPUT_EQUIPMENT)
+    csv_write(list(globals.equipment_sets.values()), constantsmod.OUTPUT_EQUIPMENT_SETS)
+    csv_write(list(globals.gems.values()), constantsmod.OUTPUT_GEMS)
+    csv_write(list(globals.items.values()), constantsmod.OUTPUT_ITEMS)
+    csv_write(list(globals.maps.values()), constantsmod.OUTPUT_MAPS)
+    csv_write(list(globals.monsters.values()), constantsmod.OUTPUT_MONSTERS)
+    csv_write(list(globals.npcs.values()), constantsmod.OUTPUT_NPCS)
+    csv_write(list(globals.recipes.values()), constantsmod.OUTPUT_RECIPES)

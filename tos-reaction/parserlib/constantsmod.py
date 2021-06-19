@@ -1,95 +1,85 @@
 import os
 
-from parserr.parser_enums import TOSRegion
-
-OUTPUT_ATTRIBUTES = 'attributes'
-OUTPUT_BOOKS = 'books'
-OUTPUT_CARDS = 'cards'
-OUTPUT_COLLECTIONS = 'collections'
-OUTPUT_CUBES = 'cubes'
-OUTPUT_GEMS = 'gems'
-OUTPUT_JOBS = 'jobs'
-OUTPUT_EQUIPMENT = 'equipment'
-OUTPUT_EQUIPMENT_SETS = 'equipment-sets'
-OUTPUT_ITEMS = 'items'
-OUTPUT_MAPS = 'maps'
-OUTPUT_MONSTERS = 'monsters'
-OUTPUT_NPCS = 'npcs'
-OUTPUT_RECIPES = 'recipes'
-OUTPUT_SKILLS = 'skills'
+from parserlib.parserr.parser_enums import TOSRegion
 
 
-URL_PATCH = None
-URL_PATCH_iTOS = 'http://drygkhncipyq8.cloudfront.net/toslive/patch/'
-URL_PATCH_jTOS = 'http://d3bbj7hlpo9jjy.cloudfront.net/live/patch/'
-URL_PATCH_kTOS = 'http://tosg.dn.nexoncdn.co.kr/patch/live/'
-URL_PATCH_kTEST = 'http://tosg.dn.nexoncdn.co.kr/patch/test/'
-URL_PATCH_twTOS = 'http://tospatch.x2game.com.tw/live/patch/'
+class constclass:
 
-PATH_INPUT = None
-PATH_INPUT_DATA = None
-PATH_INPUT_DATA_PATCH = None
-PATH_INPUT_DATA_PATCH_URL = None
-PATH_INPUT_DATA_PATCH_URL_FULL = None
-PATH_INPUT_DATA_REVISION = None
-PATH_INPUT_DATA_REVISION_URL = None
-PATH_INPUT_DATA_REVISION_URL_FULL = None
-PATH_INPUT_RELEASE = None
-PATH_INPUT_RELEASE_PATCH = None
-PATH_INPUT_RELEASE_PATCH_URL = None
-PATH_INPUT_RELEASE_REVISION = None
-PATH_INPUT_RELEASE_REVISION_URL = None
 
-PATH_PARSER = os.path.join('../..', 'tos-parser')
+    def __init__(self,region):
+        self.OUTPUT_ATTRIBUTES = 'attributes'
+        self.OUTPUT_BOOKS = 'books'
+        self.OUTPUT_CARDS = 'cards'
+        self.OUTPUT_COLLECTIONS = 'collections'
+        self.OUTPUT_CUBES = 'cubes'
+        self.OUTPUT_GEMS = 'gems'
+        self.OUTPUT_JOBS = 'jobs'
+        self.OUTPUT_EQUIPMENT = 'equipment'
+        self.OUTPUT_EQUIPMENT_SETS = 'equipment-sets'
+        self.OUTPUT_ITEMS = 'items'
+        self.OUTPUT_MAPS = 'maps'
+        self.OUTPUT_MONSTERS = 'monsters'
+        self.OUTPUT_NPCS = 'npcs'
+        self.OUTPUT_RECIPES = 'recipes'
+        self.OUTPUT_SKILLS = 'skills'
 
-PATH_UNPACKER = os.path.join('../..', 'ipf_unpacker')
-PATH_UNPACKER_EXE ="./ipf_unpack"
 
-PATH_BUILD = os.path.join('../..', 'tos-build', 'dist')
-PATH_BUILD_ASSETS = os.path.join(PATH_BUILD, 'assets')
-PATH_BUILD_ASSETS_DATA = None
-PATH_BUILD_ASSETS_ICONS = os.path.join(PATH_BUILD_ASSETS, 'icons')
-PATH_BUILD_ASSETS_IMAGES = os.path.join(PATH_BUILD_ASSETS, 'images')
-PATH_BUILD_ASSETS_IMAGES_MAPS = os.path.join(PATH_BUILD_ASSETS_IMAGES, 'maps')
+        self.URL_PATCH = None
+        self.URL_PATCH_iTOS = 'http://drygkhncipyq8.cloudfront.net/toslive/patch/'
+        self.URL_PATCH_jTOS = 'http://d3bbj7hlpo9jjy.cloudfront.net/live/patch/'
+        self.URL_PATCH_kTOS = 'http://tosg.dn.nexoncdn.co.kr/patch/live/'
+        self.URL_PATCH_kTEST = 'http://tosg.dn.nexoncdn.co.kr/patch/test/'
+        self.URL_PATCH_twTOS = 'http://tospatch.x2game.com.tw/live/patch/'
 
-def region(region):
-    global\
-        URL_PATCH, \
-        PATH_INPUT, \
-        PATH_INPUT_DATA, \
-        PATH_INPUT_DATA_PATCH, \
-        PATH_INPUT_DATA_PATCH_URL, \
-        PATH_INPUT_DATA_PATCH_URL_FULL, \
-        PATH_INPUT_DATA_REVISION, \
-        PATH_INPUT_DATA_REVISION_URL, \
-        PATH_INPUT_DATA_REVISION_URL_FULL, \
-        PATH_INPUT_RELEASE, \
-        PATH_INPUT_RELEASE_PATCH, \
-        PATH_INPUT_RELEASE_PATCH_URL, \
-        PATH_INPUT_RELEASE_REVISION, \
-        PATH_INPUT_RELEASE_REVISION_URL, \
-        PATH_BUILD_ASSETS_DATA
+        self.PATH_INPUT = None
+        self.PATH_INPUT_DATA = None
+        self.PATH_INPUT_DATA_PATCH = None
+        self.PATH_INPUT_DATA_PATCH_URL = None
+        self.PATH_INPUT_DATA_PATCH_URL_FULL = None
+        self.PATH_INPUT_DATA_REVISION = None
+        self.PATH_INPUT_DATA_REVISION_URL = None
+        self.PATH_INPUT_DATA_REVISION_URL_FULL = None
+        self.PATH_INPUT_RELEASE = None
+        self.PATH_INPUT_RELEASE_PATCH = None
+        self.PATH_INPUT_RELEASE_PATCH_URL = None
+        self.PATH_INPUT_RELEASE_REVISION = None
+        self.PATH_INPUT_RELEASE_REVISION_URL = None
 
-    region_str = TOSRegion.to_string(region)
+        self.PATH_PARSER = os.path.join('../..', 'tos-parser')
 
-    URL_PATCH = URL_PATCH_iTOS if region == TOSRegion.iTOS else URL_PATCH
-    URL_PATCH = URL_PATCH_jTOS if region == TOSRegion.jTOS else URL_PATCH
-    URL_PATCH = URL_PATCH_kTOS if region == TOSRegion.kTOS else URL_PATCH
-    URL_PATCH = URL_PATCH_kTEST if region == TOSRegion.kTEST else URL_PATCH
-    URL_PATCH = URL_PATCH_twTOS if region == TOSRegion.twTOS else URL_PATCH    
-   
-    PATH_INPUT = os.path.join(PATH_PARSER, 'input', region_str)
-    PATH_INPUT_DATA = os.path.join(PATH_INPUT, 'data')
-    PATH_INPUT_DATA_PATCH = os.path.join(PATH_INPUT_DATA, 'patch')
-    PATH_INPUT_DATA_PATCH_URL = URL_PATCH + 'partial/data/'
-    PATH_INPUT_DATA_PATCH_URL_FULL = URL_PATCH + 'full/data/'
-    PATH_INPUT_DATA_REVISION = os.path.join(PATH_INPUT, 'data.revision.txt')
-    PATH_INPUT_DATA_REVISION_URL = URL_PATCH + 'partial/data.revision.txt'
-    PATH_INPUT_DATA_REVISION_URL_FULL = URL_PATCH + 'full/data.file.list.txt'
-    PATH_INPUT_RELEASE = os.path.join(PATH_INPUT, 'release')
-    PATH_INPUT_RELEASE_PATCH = os.path.join(PATH_INPUT_RELEASE, 'patch')
-    PATH_INPUT_RELEASE_PATCH_URL = URL_PATCH + 'partial/release/'
-    PATH_INPUT_RELEASE_REVISION = os.path.join(PATH_INPUT, 'release.revision.txt')
-    PATH_INPUT_RELEASE_REVISION_URL = URL_PATCH + 'partial/release.revision.txt'
+        self.PATH_UNPACKER = os.path.join('../..', 'ipf_unpacker')
+        self.PATH_UNPACKER_EXE ="./ipf_unpack"
 
-    PATH_BUILD_ASSETS_DATA = os.path.join(PATH_BUILD_ASSETS, 'data', region_str.lower())
+        self.PATH_BUILD = os.path.join('../..', 'tos-build', 'dist')
+        self.PATH_BUILD_ASSETS = os.path.join(self.PATH_BUILD, 'assets')
+        self.PATH_BUILD_ASSETS_DATA = None
+        self.PATH_BUILD_ASSETS_ICONS = os.path.join(self.PATH_BUILD_ASSETS, 'icons')
+        self.PATH_BUILD_ASSETS_IMAGES = os.path.join(self.PATH_BUILD_ASSETS, 'images')
+        self.PATH_BUILD_ASSETS_IMAGES_MAPS = os.path.join(self.PATH_BUILD_ASSETS_IMAGES, 'maps')
+        self.region(region)
+    def region(self,region):
+
+
+        region_str = TOSRegion.to_string(region)
+
+        self.URL_PATCH = self.URL_PATCH_iTOS if region == TOSRegion.iTOS else self.URL_PATCH
+        self.URL_PATCH = self.URL_PATCH_jTOS if region == TOSRegion.jTOS else self.URL_PATCH
+        self.URL_PATCH = self.URL_PATCH_kTOS if region == TOSRegion.kTOS else self.URL_PATCH
+        self.URL_PATCH = self.URL_PATCH_kTEST if region == TOSRegion.kTEST else self.URL_PATCH
+        self.URL_PATCH = self.URL_PATCH_twTOS if region == TOSRegion.twTOS else self.URL_PATCH
+
+        self.PATH_INPUT = os.path.join(self.PATH_PARSER, 'input', region_str)
+        self.PATH_INPUT_DATA = os.path.join(self.PATH_INPUT, 'data')
+        self.PATH_INPUT_DATA_PATCH = os.path.join(self.PATH_INPUT_DATA, 'patch')
+        self.PATH_INPUT_DATA_PATCH_URL = self.URL_PATCH + 'partial/data/'
+        self.PATH_INPUT_DATA_PATCH_URL_FULL = self.URL_PATCH + 'full/data/'
+        self.PATH_INPUT_DATA_REVISION = os.path.join(self.PATH_INPUT, 'data.revision.txt')
+        self.PATH_INPUT_DATA_REVISION_URL = self.URL_PATCH + 'partial/data.revision.txt'
+        self.PATH_INPUT_DATA_REVISION_URL_FULL = self.URL_PATCH + 'full/data.file.list.txt'
+        self.PATH_INPUT_RELEASE = os.path.join(self.PATH_INPUT, 'release')
+        self.PATH_INPUT_RELEASE_PATCH = os.path.join(self.PATH_INPUT_RELEASE, 'patch')
+        self.PATH_INPUT_RELEASE_PATCH_URL = self.URL_PATCH + 'partial/release/'
+        self.PATH_INPUT_RELEASE_REVISION = os.path.join(self.PATH_INPUT, 'release.revision.txt')
+        self.PATH_INPUT_RELEASE_REVISION_URL = self.URL_PATCH + 'partial/release.revision.txt'
+
+        self.PATH_BUILD_ASSETS_DATA = os.path.join(self.PATH_BUILD_ASSETS, 'data', region_str.lower())

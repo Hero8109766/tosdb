@@ -35,11 +35,14 @@ WORKDIR /var/www/base
 COPY ./tos-web ./tos-web
 WORKDIR /var/www/base/tos-web
 RUN npm ci -std=c++17 --force
-#RUN yarn install 
+
+# reaction server
+COPY ./tos-reaction ./tos-reaction
+RUN pip3 install -r ./tos-reaction/requirements.txt
 WORKDIR /var/www/base
 
-COPY ./ipf_unpacker ./ipf_unpacker
 # make ipfunpack
+COPY ./ipf_unpacker ./ipf_unpacker
 WORKDIR /var/www/base/ipf_unpacker
 RUN make clean && make release
 WORKDIR /var/www/base
@@ -64,7 +67,5 @@ COPY ./httpserver/http.conf /etc/nginx/conf.d/default.conf
 COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 # expose http server
 EXPOSE 80
-EXPOSE 3939
-
 # freqently change ENVs
-ENTRYPOINT ["/bin/sh","/var/www/base/entrypoint.sh","jTOS"  ]
+CMD ["/bin/sh","/var/www/base/entrypoint.sh","jTOS"  ]

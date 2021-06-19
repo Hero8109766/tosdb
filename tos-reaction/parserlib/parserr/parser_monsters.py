@@ -2,12 +2,12 @@ import csv
 import logging
 import os
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr import parser_assets
 from parserlib.parserr import parser_translations
 from parserlib.parserr.parser_enums import TOSElement
 from parserlib.parserr.parser_items_equipment import TOSEquipmentMaterial
-from parserlib.utils import luautil
+from parserlib.utils import luautilmod
 from parserlib.utils.tosenum import TOSEnum
 import codecs
 
@@ -121,10 +121,10 @@ def parse():
 def parse_monsters(file_name):
     logging.debug('Parsing %s...', file_name)
 
-    LUA_RUNTIME = luautil.LUA_RUNTIME
-    LUA_SOURCE = luautil.LUA_SOURCE
+    LUA_RUNTIME = luautilmod.LUA_RUNTIME
+    LUA_SOURCE = luautilmod.LUA_SOURCE
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, "ies.ipf", file_name.lower())
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, "ies.ipf", file_name.lower())
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -227,7 +227,7 @@ def parse_monsters(file_name):
 def parse_monsters_statbase(file_name, destination):
     logging.debug('Parsing %s...', file_name)
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, "ies.ipf", file_name)
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, "ies.ipf", file_name)
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -246,7 +246,7 @@ def parse_links_items():
 
     for monster in list(globals.monsters.values()):
         ies_file = monster['$ID_NAME'] + '.ies'
-        ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_drop.ipf', ies_file.lower())
+        ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_drop.ipf', ies_file.lower())
 
         try:
             with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:

@@ -1,6 +1,6 @@
 #from multiprocessing import Manager
 
-import constants
+import constantsmod
 
 assets_icons = {}
 #assets_icons = Manager().dict()
@@ -128,28 +128,28 @@ def get_skill_link(name):
     return _get_entity_link(name, skills_by_name)
 
 
-def _get_entity_link(name, collection):
+def _get_entity_link(constant,name, collection):
     if not isinstance(name, str):
         name = name['$ID_NAME']
     if name not in collection:
         return None
 
     collection_path = None
-    collection_path = constants.OUTPUT_ATTRIBUTES if collection == attributes_by_name else collection_path
-    collection_path = constants.OUTPUT_BOOKS if collection == books_by_name else collection_path
-    collection_path = constants.OUTPUT_CARDS if collection == cards_by_name else collection_path
-    collection_path = constants.OUTPUT_JOBS if collection == jobs_by_name else collection_path
-    collection_path = constants.OUTPUT_COLLECTIONS if collection == collections_by_name else collection_path
-    collection_path = constants.OUTPUT_CUBES if collection == cubes_by_name else collection_path
-    collection_path = constants.OUTPUT_GEMS if collection == gems_by_name else collection_path
-    collection_path = constants.OUTPUT_EQUIPMENT if collection == equipment_by_name else collection_path
-    collection_path = constants.OUTPUT_EQUIPMENT_SETS if collection == equipment_sets_by_name else collection_path
-    collection_path = constants.OUTPUT_ITEMS if collection == items_by_name else collection_path
-    collection_path = constants.OUTPUT_MAPS if collection == maps_by_name else collection_path
-    collection_path = constants.OUTPUT_MONSTERS if collection == monsters_by_name else collection_path
-    collection_path = constants.OUTPUT_NPCS if collection == npcs_by_name else collection_path
-    collection_path = constants.OUTPUT_RECIPES if collection == recipes_by_name else collection_path
-    collection_path = constants.OUTPUT_SKILLS if collection == skills_by_name else collection_path
+    collection_path = constant.OUTPUT_ATTRIBUTES if collection == attributes_by_name else collection_path
+    collection_path = constant.OUTPUT_BOOKS if collection == books_by_name else collection_path
+    collection_path = constant.OUTPUT_CARDS if collection == cards_by_name else collection_path
+    collection_path = constant.OUTPUT_JOBS if collection == jobs_by_name else collection_path
+    collection_path = constant.OUTPUT_COLLECTIONS if collection == collections_by_name else collection_path
+    collection_path = constant.OUTPUT_CUBES if collection == cubes_by_name else collection_path
+    collection_path = constant.OUTPUT_GEMS if collection == gems_by_name else collection_path
+    collection_path = constant.OUTPUT_EQUIPMENT if collection == equipment_by_name else collection_path
+    collection_path = constant.OUTPUT_EQUIPMENT_SETS if collection == equipment_sets_by_name else collection_path
+    collection_path = constant.OUTPUT_ITEMS if collection == items_by_name else collection_path
+    collection_path = constant.OUTPUT_MAPS if collection == maps_by_name else collection_path
+    collection_path = constant.OUTPUT_MONSTERS if collection == monsters_by_name else collection_path
+    collection_path = constant.OUTPUT_NPCS if collection == npcs_by_name else collection_path
+    collection_path = constant.OUTPUT_RECIPES if collection == recipes_by_name else collection_path
+    collection_path = constant.OUTPUT_SKILLS if collection == skills_by_name else collection_path
 
     return Link(collection[name], collection_path[:-4])
 

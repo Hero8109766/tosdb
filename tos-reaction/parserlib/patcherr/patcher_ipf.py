@@ -3,7 +3,7 @@ import os
 import shutil
 import subprocess
 
-from parserlib import constants
+from parserlib import constantsmod
 from parserlib.utils import fileutil
 
 IPF_BLACKLIST = [
@@ -32,19 +32,19 @@ IPF_BLACKLIST = [
 
 
 def unpack(ipf):
-    ipf = os.path.join(constants.PATH_INPUT_DATA_PATCH, ipf)
+    ipf = os.path.join(constantsmod.PATH_INPUT_DATA_PATCH, ipf)
     ipf_extract = os.path.join(os.path.dirname(ipf), 'extract')
     ipf_revision = os.path.basename(ipf)[:-4]
     logging.debug('Unpacking %s...', ipf)
     tmpname="tmp.ipf"
-    extdir=os.path.join(constants.PATH_UNPACKER, 'extract')
-    shutil.copyfile(ipf, os.path.join(constants.PATH_UNPACKER, "tmp.ipf"))
+    extdir=os.path.join(constantsmod.PATH_UNPACKER, 'extract')
+    shutil.copyfile(ipf, os.path.join(constantsmod.PATH_UNPACKER, "tmp.ipf"))
     prevcurdir=os.getcwd()
-    os.chdir(constants.PATH_UNPACKER)
+    os.chdir(constantsmod.PATH_UNPACKER)
     # Decrypt and extract ipf file
     if ipf_revision not in ['29_001001']:  # HotFix: these specific patches aren't encrypted for some reason
         subprocess.check_call(
-            [constants.PATH_UNPACKER_EXE, tmpname, "decrypt"],
+            [constantsmod.PATH_UNPACKER_EXE, tmpname, "decrypt"],
             stdin=None, stdout=None, stderr=None, shell=False
         )
     #subprocess.check_call(
@@ -53,12 +53,12 @@ def unpack(ipf):
     #)
     if ipf_revision not in ['29_001001']:  # HotFix: these specific patches aren't encrypted for some reason
         subprocess.check_call(
-            [constants.PATH_UNPACKER_EXE, tmpname, "extract"],
+            [constantsmod.PATH_UNPACKER_EXE, tmpname, "extract"],
             stdin=None, stdout=None, stderr=None, shell=False
         )
     else:
         subprocess.check_call(
-            [constants.PATH_UNPACKER_EXE, tmpname, "extract"],
+            [constantsmod.PATH_UNPACKER_EXE, tmpname, "extract"],
             stdin=None, stdout=None, stderr=None, shell=False
         )
     os.chdir(prevcurdir)
@@ -74,7 +74,7 @@ def unpack(ipf):
         fileutil.to_lower(ipf_extract)
 
         # Move extracted IPF files to data directory
-        fileutil.move_tree(ipf_extract, constants.PATH_INPUT_DATA)
+        fileutil.move_tree(ipf_extract, constantsmod.PATH_INPUT_DATA)
 
         # Remove extract directory
         shutil.rmtree(ipf_extract)

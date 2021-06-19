@@ -2,7 +2,7 @@ import csv
 import logging
 import os
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr import parser_assets
 from parserlib.utils.tosenum import TOSEnum
 import codecs
@@ -37,7 +37,7 @@ def parse():
 def parse_cards():
     logging.debug('Parsing cards...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'item.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'item.ies')
     ies_file = codecs.open(ies_path, 'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -55,7 +55,7 @@ def parse_cards():
 def parse_cards_battle():
     logging.debug('Parsing cards battle...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'cardbattle.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'cardbattle.ies')
     ies_file = codecs.open(ies_path, 'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -76,7 +76,7 @@ def parse_links():
 def parse_links_monsters():
     logging.debug('Parsing monsters for cards...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'item.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'item.ies')
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 

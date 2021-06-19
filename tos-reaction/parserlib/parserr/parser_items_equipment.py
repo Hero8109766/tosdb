@@ -5,10 +5,10 @@ from math import floor
 
 from lupa import LuaError
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr import parser_translations
 from parserlib.parserr.parser_enums import TOSAttackType
-from parserlib.utils import luautil
+from parserlib.utils import luautilmod
 from parserlib.utils.tosenum import TOSEnum
 import codecs
 
@@ -439,12 +439,12 @@ def parse():
 def parse_equipment():
     logging.debug('Parsing equipment...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'item_equip.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'item_equip.ies')
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
-    LUA_RUNTIME = luautil.LUA_RUNTIME
-    LUA_SOURCE = luautil.LUA_SOURCE
+    LUA_RUNTIME = luautilmod.LUA_RUNTIME
+    LUA_SOURCE = luautilmod.LUA_SOURCE
 
     for row in ies_reader:
         if int(row['ClassID']) not in globals.equipment:
@@ -564,7 +564,7 @@ def parse_equipment():
 def parse_equipment_grade_ratios():
     logging.debug('Parsing equipment grade...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'item_grade.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'item_grade.ies')
     ies_file = codecs.open(ies_path, 'r','utf-8',errors='utf-8')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -581,7 +581,7 @@ def parse_links():
 def parse_links_sets(file_name):
     logging.debug('Parsing sets for equipment: %s...', file_name)
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', file_name)
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', file_name)
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 

@@ -13,17 +13,16 @@ cd ${BASEDIR}
 /bin/bash ${BASEDIR}/build.sh
 /bin/bash ${BASEDIR}/bootstrap.sh
 
-#cp -rn ./tos-build/dist/* ./tos-web/dist/
-#cp -rn ./skeleton_distbuild/* ./tos-web/dist/
-#cp -rn ./skeleton_distweb/* ./tos-web/dist/
-
-
-
-
-echo "nginx READY!"
+echo "Launching nginx"
 /usr/sbin/nginx 
 
+echo "Launching tos-web-rest"
 cd ${BASEDIR}/tos-web-rest/
 npm install 
-node src/index.js
+node src/index.js&
+
+echo "Launching tos-reaction"
+
+cd ${BASEDIR}/tos-reaction/
+python3 main.py
 # WAITING

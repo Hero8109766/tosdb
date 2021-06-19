@@ -2,7 +2,7 @@ import csv
 import logging
 import os
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 
 import codecs
 def parse():
@@ -27,7 +27,7 @@ def parse_links():
 def parse_links_items():
     logging.debug('Parsing items for collections...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'collection.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'collection.ies')
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 

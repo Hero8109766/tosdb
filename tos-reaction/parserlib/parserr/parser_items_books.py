@@ -2,7 +2,7 @@ import csv
 import logging
 import os
 import codecs
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr import parser_translations
 
 
@@ -24,7 +24,7 @@ def parse_books():
 def parse_books_dialog():
     logging.debug('Parsing books dialog...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_client.ipf', 'dialogtext.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_client.ipf', 'dialogtext.ies')
     ies_file = codecs.open(ies_path, 'rb','utf-8',errors="replace")
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 

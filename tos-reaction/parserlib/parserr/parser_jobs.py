@@ -5,7 +5,7 @@ import logging
 import os
 import urllib.request, urllib.parse, urllib.error
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 import codecs
 from parserlib.parserr import parser_assets
 from parserlib.parserr import parser_translations
@@ -86,7 +86,7 @@ def parse(is_rebuild):
 def parse_jobs():
     logging.debug('Parsing Jobs...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'job.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'job.ies')
 
     with codecs.open(ies_path, 'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -128,11 +128,11 @@ def parse_jobs_images(region, version_update):
         return
 
     logging.debug('Parsing Jobs images...')
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'job.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'job.ies')
 
     with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
-            image_path = os.path.join(constants.PATH_BUILD_ASSETS_IMAGES, 'classes', row['ClassName'])
+            image_path = os.path.join(constantsmod.PATH_BUILD_ASSETS_IMAGES, 'classes', row['ClassName'])
             image_path_f = image_path + '_f.gif'
             image_path_m = image_path + '_m.gif'
 
@@ -164,7 +164,7 @@ def parse_jobs_images(region, version_update):
 def parse_jobs_stats():
     logging.debug('Parsing Jobs base stats...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'statbase_pc.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'statbase_pc.ies')
 
     with codecs.open(ies_path, 'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -189,7 +189,7 @@ def parse_links():
 def parse_links_skills():
     logging.debug('Parsing Jobs <> Skills...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'skilltree.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'skilltree.ies')
 
     with codecs.open(ies_path, 'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):

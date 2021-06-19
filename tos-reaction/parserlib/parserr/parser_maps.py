@@ -5,7 +5,7 @@ import re
 import codecs
 from PIL import Image, ImageDraw, ImageColor, ImageFilter
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr import parser_translations
 from parserlib.parserr.parser_enums import TOSRegion
 from parserlib.utils import tokutil
@@ -43,7 +43,7 @@ def parse(region, version_update):
 def parse_maps():
     logging.debug('Parsing Maps...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
 
     with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -78,12 +78,12 @@ def parse_maps():
 def parse_maps_images(region, version_update):
     logging.debug('Parsing Maps images...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
 
     with codecs.open(ies_path, 'r',"utf-8",errors="replace") as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
-            image_path = os.path.join(constants.PATH_BUILD_ASSETS_IMAGES_MAPS, row['ClassName'].lower() + '.png')
-            tok_path = os.path.join(constants.PATH_INPUT_DATA, 'bg.ipf', row['ClassName'].lower() + '.tok')
+            image_path = os.path.join(constantsmod.PATH_BUILD_ASSETS_IMAGES_MAPS, row['ClassName'].lower() + '.png')
+            tok_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'bg.ipf', row['ClassName'].lower() + '.tok')
 
             if not os.path.exists(tok_path):
                 continue
@@ -158,12 +158,12 @@ def parse_links_items():
 
     for map in list(globals.maps.values()):
         ies_file = 'zonedropitemlist_' + map['$ID_NAME'] + '.ies'
-        ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_drop.ipf', 'zonedrop', ies_file.lower())
+        ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_drop.ipf', 'zonedrop', ies_file.lower())
 
         # For some reason IMC uses these 2 types of name formats...
         if not os.path.isfile(ies_path):
             ies_file = 'zonedropitemlist_f_' + map['$ID_NAME'] + '.ies'
-            ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_drop.ipf', 'zonedrop', ies_file.lower())
+            ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_drop.ipf', 'zonedrop', ies_file.lower())
 
         try:
             drops = []
@@ -182,7 +182,7 @@ def parse_links_items():
                     # Therefore we need to sum the DropRatio of the entire group before calculating the actual one
                     if len(zone_drop['DropGroup']) > 0:
                         ies_file = zone_drop['DropGroup'] + '.ies'
-                        ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_drop.ipf', 'dropgroup', ies_file.lower())
+                        ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_drop.ipf', 'dropgroup', ies_file.lower())
 
                         group_drop_ratio = 0
                         group_drops = []
@@ -229,7 +229,7 @@ def parse_links_items():
 def parse_links_items_rewards():
     logging.debug('Parsing Maps <> Items (Rewards)...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
 
     with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -263,7 +263,7 @@ def parse_links_items_rewards():
 def parse_links_maps():
     logging.debug('Parsing Maps <> Maps...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
 
     with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -284,7 +284,7 @@ def parse_links_maps():
 def parse_links_npcs():
     logging.debug('Parsing Maps <> NPCs...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'map.ies')
 
     with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -296,7 +296,7 @@ def parse_links_npcs():
 
             # Spawn Positions (aka Anchors)
             ies_file = 'anchor_' + map['$ID_NAME'] + '.ies'
-            ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_mongen.ipf', ies_file.lower())
+            ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_mongen.ipf', ies_file.lower())
 
             try:
                 with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:
@@ -313,7 +313,7 @@ def parse_links_npcs():
 
             # Spawn NPCs
             ies_file = 'gentype_' + map['$ID_NAME'] + '.ies'
-            ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_mongen.ipf', ies_file.lower())
+            ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_mongen.ipf', ies_file.lower())
 
             try:
                 with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:

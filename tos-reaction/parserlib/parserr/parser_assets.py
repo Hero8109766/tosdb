@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 #from functools import partial
 #from multiprocessing import Pool
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr.parser_enums import TOSRegion
 from parserlib.utils import imageutil
 
@@ -75,7 +75,7 @@ def parse(region, version_update):
 def parse_icons(file_name, region, version_update):
     logging.debug('Parsing icons from %s...', file_name)
 
-    data_path = os.path.join(constants.PATH_INPUT_DATA, 'ui.ipf', 'baseskinset', file_name)
+    data_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ui.ipf', 'baseskinset', file_name)
     data = ET.parse(data_path).getroot()
 
     # example: <imagelist category="Monster_icon_boss_02">
@@ -105,9 +105,9 @@ def parse_icons_step(file_name, region, version_update, work):
     image_rect = tuple(int(x) for x in image.get('imgrect').split()) if len(image.get('imgrect')) else None  # top, left, width, height
 
     # Copy icon to web assets folder
-    copy_from = os.path.join(constants.PATH_INPUT_DATA, 'ui.ipf', *image.get('file').lower().split('\\')[:-1])
+    copy_from = os.path.join(constantsmod.PATH_INPUT_DATA, 'ui.ipf', *image.get('file').lower().split('\\')[:-1])
     copy_from = os.path.join(copy_from, image_file)
-    copy_to = os.path.join(constants.PATH_BUILD_ASSETS_ICONS, image_name + image_extension)
+    copy_to = os.path.join(constantsmod.PATH_BUILD_ASSETS_ICONS, image_name + image_extension)
 
     if not os.path.isfile(copy_from):
         # Note for future self:

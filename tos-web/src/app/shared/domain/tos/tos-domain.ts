@@ -626,6 +626,9 @@ export interface ITOSBuild {
   StatsBase: ITOSBuildStats;
   StatsBonus: ITOSBuildStats;
   StatsPoints$: Observable<number>;
+  Attribute$:Observable<ITOSAttribute>;
+  Attributes:ITOSAttribute[];
+  
   Version: number;
 
   jobAdd$(job: ITOSJob): Promise<void>;
@@ -648,6 +651,13 @@ export interface ITOSBuild {
   statsIncrementLevel(stat: string, delta: number): void;
   statsIncrementLevelAvailable(stat: string, delta: number): boolean;
   statsPointsMax(): number;
+
+  attributeLevel(attribute: ITOSAttribute): number;
+  attributePointsTotalConsumption$():Promise<number>;
+  attributeIncrementLevel$(attribute: ITOSAttribute, delta: number, force?: boolean):  Promise<void>;
+  attributeIncrementLevelAvailable$(attribute: ITOSAttribute, delta: number):  Observable<boolean>;
+
+
 }
 export interface ITOSBuildEncoded {
   jobs: string[],

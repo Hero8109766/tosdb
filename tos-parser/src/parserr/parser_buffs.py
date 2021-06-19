@@ -13,44 +13,20 @@ from parserr.parser_jobs import TOSJobTree
 from utils import luautil
 from utils.tosenum import TOSEnum
 
-EFFECT_DEPRECATE = {
-    'SkillAtkAdd': 'SkillFactor'
-}
-
-
-class TOSRequiredStanceCompanion(TOSEnum):
-    BOTH = 0
-    NO = 1
-    SELF = 2
-    YES = 3
-
-    @staticmethod
-    def value_of(string):
-        return {
-            'BOTH': TOSRequiredStanceCompanion.BOTH,
-            '': TOSRequiredStanceCompanion.NO,
-            'SELF': TOSRequiredStanceCompanion.SELF,
-            'YES': TOSRequiredStanceCompanion.YES,
-        }[string.upper()]
-
 
 EFFECTS = []
 
 
 def parse(is_rebuild):
-    parse_skills(is_rebuild)
-    parse_skills_overheats()
-    parse_skills_simony()
-    parse_skills_stances()
+    parse_buffs(is_rebuild)
 
-
-def parse_skills(is_rebuild):
-    logging.debug('Parsing skills...')
+def parse_buffs(is_rebuild):
+    logging.debug('Parsing buffs...')
 
     LUA_RUNTIME = luautil.LUA_RUNTIME
     LUA_SOURCE = luautil.LUA_SOURCE
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'skill.ies')
+    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'buff.ies')
 
     with codecs.open(ies_path, 'r','utf-8',errors="replace") as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):

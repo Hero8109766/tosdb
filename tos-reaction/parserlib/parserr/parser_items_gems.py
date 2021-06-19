@@ -3,7 +3,7 @@ import logging
 import os
 import xml.etree.ElementTree as ET
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 import codecs
 from parserlib.parserr import parser_translations
 from parserlib.parserr.parser_items_equipment import TOSEquipmentStat
@@ -30,7 +30,7 @@ def parse(is_rebuild):
 def parse_gems():
     logging.debug('Parsing gems...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'item_gem.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'item_gem.ies')
     ies_file = codecs.open(ies_path, 'r','utf-8',errors="replace")
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -49,7 +49,7 @@ def parse_gems():
 def parse_gems_bonus(is_rebuild):
     logging.debug('Parsing gems bonus...')
 
-    xml_path = os.path.join(constants.PATH_INPUT_DATA, 'xml.ipf', 'socket_property.xml')
+    xml_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'xml.ipf', 'socket_property.xml')
     xml = ET.parse(xml_path).getroot()
 
     SLOTS = ['TopLeg', 'HandOrFoot', 'MainOrSubWeapon'] if is_rebuild else\

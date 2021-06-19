@@ -4,12 +4,12 @@ import math
 import os
 import re
 import codecs
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr import parser_assets
 from parserlib.parserr import parser_translations
 from parserlib.parserr.parser_enums import TOSElement, TOSAttackType
 from parserlib.parserr.parser_jobs import TOSJobTree
-from parserlib.utils import luautil
+from parserlib.utils import luautilmod
 from parserlib.utils.tosenum import TOSEnum
 
 EFFECT_DEPRECATE = {
@@ -46,10 +46,10 @@ def parse(is_rebuild):
 def parse_skills(is_rebuild):
     logging.debug('Parsing skills...')
 
-    LUA_RUNTIME = luautil.LUA_RUNTIME
-    LUA_SOURCE = luautil.LUA_SOURCE
+    LUA_RUNTIME = luautilmod.LUA_RUNTIME
+    LUA_SOURCE = luautilmod.LUA_SOURCE
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'skill.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'skill.ies')
 
     with codecs.open(ies_path, 'r','utf-8',errors="replace") as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -173,7 +173,7 @@ def parse_skills(is_rebuild):
 
 
 def parse_skills_lua_source(function):
-    LUA_SOURCE = luautil.LUA_SOURCE
+    LUA_SOURCE = luautilmod.LUA_SOURCE
     LUA_EMBEDDED = [
         'SCR_ABIL_ADD_SKILLFACTOR',
         'SCR_ABIL_ADD_SKILLFACTOR_TOOLTIP',
@@ -188,10 +188,10 @@ def parse_skills_lua_source(function):
         return result
 
     # Replace embedded function calls with their source code
-    for line in luautil.lua_function_source(LUA_SOURCE[function])[1:-1]:  # remove 'function' and 'end'
+    for line in luautilmod.lua_function_source(LUA_SOURCE[function])[1:-1]:  # remove 'function' and 'end'
         for embed in LUA_EMBEDDED:
             if embed in line:
-                result = luautil.lua_function_source(LUA_SOURCE[embed]) + result
+                result = luautilmod.lua_function_source(LUA_SOURCE[embed]) + result
                 break
 
         result.append(line)
@@ -230,13 +230,13 @@ def parse_skills_lua_source_to_javascript(skill, source):
 
         result.append(line)
 
-    return luautil.lua_function_source_to_javascript(result)
+    return luautilmod.lua_function_source_to_javascript(result)
 
 
 def parse_skills_overheats():
     logging.debug('Parsing skills overheats...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'cooldown.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'cooldown.ies')
     with codecs.open(ies_path, 'r','utf-8',errors="replace") as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
             # We're only interested in overheats
@@ -265,7 +265,7 @@ def parse_skills_overheats():
 def parse_skills_simony():
     logging.debug('Parsing skills simony...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'skill_simony.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'skill_simony.ies')
     with codecs.open(ies_path, 'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
             if int(row['ClassID']) not in globals.skills:
@@ -282,7 +282,7 @@ def parse_skills_stances():
     logging.debug('Parsing skills stances...')
 
     stance_list = []
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'stance.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'stance.ies')
 
     # Parse stances
     with codecs.open(ies_path, 'r','utf-8',errors='replace') as ies_file:
@@ -349,7 +349,7 @@ def parse_links(is_rebuild):
 def parse_links_gems():
     logging.debug('Parsing gems for skills...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'item_gem.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'item_gem.ies')
 
     with codecs.open(ies_path, 'r','utf-8',errors='replace') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -365,7 +365,7 @@ def parse_links_gems():
 def parse_links_jobs(is_rebuild):
     logging.debug('Parsing jobs for skills...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'skilltree.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'skilltree.ies')
 
     tree_enchanter = TOSJobTree.SCOUT if is_rebuild else TOSJobTree.WIZARD
     tree_pardoner = TOSJobTree.CLERIC

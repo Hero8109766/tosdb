@@ -3,7 +3,7 @@ import csv
 import logging
 import os
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr import parser_assets
 from parserlib.parserr import parser_translations
 from parserlib.parserr.parser_items_equipment import TOSEquipmentType, TYPE_EQUIPMENT_COSTUME_LIST
@@ -146,7 +146,7 @@ def parse():
 def parse_items(file_name):
     logging.debug('Parsing %s...', file_name)
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, "ies.ipf", file_name)
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, "ies.ipf", file_name)
     ies_file = codecs.open(ies_path, 'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -228,7 +228,7 @@ def parse_links():
 def parse_links_collections(items_by_name):
     logging.debug('Parsing collections for items...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'collection.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'collection.ies')
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -251,7 +251,7 @@ def parse_links_collections(items_by_name):
 def parse_links_cubes(items_by_name):
     logging.debug('Parsing cubes for items...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'reward_indun.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'reward_indun.ies')
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -271,7 +271,7 @@ def parse_links_cubes(items_by_name):
 def parse_links_recipes(items_by_name):
     logging.debug('Parsing recipes for items...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'recipe.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'recipe.ies')
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 

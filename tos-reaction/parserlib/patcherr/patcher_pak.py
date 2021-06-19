@@ -3,7 +3,7 @@ import os
 import struct
 import zlib
 
-from parserlib import constants
+from parserlib import constantsmod
 
 PAK_BLACKLIST = [
     b'.aes',
@@ -26,7 +26,7 @@ OFFSET_FILE_NAME = 4 + OFFSET_SIZE_UNCOMPRESSED
 
 
 def unpack(pak):
-    pak = os.path.join(constants.PATH_INPUT_RELEASE_PATCH, pak)
+    pak = os.path.join(constantsmod.PATH_INPUT_RELEASE_PATCH, pak)
     logging.debug('Unpacking %s...', pak)
 
     pak = open(pak, 'rb').read()
@@ -51,13 +51,13 @@ def unpack(pak):
                 OFFSET_FILE_NAME + file_name_len + size_compressed + pak_offset
             ]
             file_name=file_name.decode(encoding="utf-8")        
-            file_path = os.path.join(constants.PATH_INPUT_RELEASE, file_name)
+            file_path = os.path.join(constantsmod.PATH_INPUT_RELEASE, file_name)
 
             # ensure file_path exists
             if not os.path.exists(os.path.dirname(file_path)):
                 os.makedirs(os.path.dirname(file_path))
 
-            with open(os.path.join(constants.PATH_INPUT_RELEASE, file_name), 'wb') as file:
+            with open(os.path.join(constantsmod.PATH_INPUT_RELEASE, file_name), 'wb') as file:
                 # For more information regarding WBITS, read: https://stackoverflow.com/a/22310760
                 data = zlib.decompress(data, -zlib.MAX_WBITS)
 

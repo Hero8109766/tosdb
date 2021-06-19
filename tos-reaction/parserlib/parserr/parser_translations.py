@@ -4,7 +4,7 @@ import logging
 import os
 import xml.etree.ElementTree as ET
 
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 import codecs
 from parserlib.parserr.parser_enums import TOSRegion
 from parserlib.utils.stringutil import is_ascii
@@ -25,7 +25,7 @@ def parse(region):
 
 def parse_dictionary(translations):
     logging.debug('Parsing translations dictionary...')
-    dictionary_path = os.path.join(constants.PATH_INPUT_DATA, 'language.ipf', 'wholedicid.xml')
+    dictionary_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'language.ipf', 'wholedicid.xml')
     dictionary = ET.parse(dictionary_path).getroot()
 
     # example: <file name="xml\item_Equip.xml">
@@ -52,7 +52,7 @@ def parse_translations(language):
     logging.debug('Parsing translations for %s...', language)
     result = {}
 
-    translation_folder = os.path.join(constants.PATH_INPUT_RELEASE, 'languageData', language)
+    translation_folder = os.path.join(constantsmod.PATH_INPUT_RELEASE, 'languageData', language)
 
     for translation in os.listdir(translation_folder):
         translation_path = os.path.join(translation_folder, translation)

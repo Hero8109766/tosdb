@@ -2,10 +2,10 @@ import csv
 import logging
 import os
 import codecs
-from parserlib import constants, globals
+from parserlib import constantsmod, globals
 from parserlib.parserr import parser_assets
 from parserlib.parserr import parser_translations
-from parserlib.utils import luautil
+from parserlib.utils import luautilmod
 
 
 def parse():
@@ -15,7 +15,7 @@ def parse():
 def parse_attributes():
     logging.debug('Parsing attributes...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_ability.ipf', 'ability.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_ability.ipf', 'ability.ies')
 
     with codecs.open(ies_path, 'r','utf-8') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -48,16 +48,16 @@ def parse_links():
 def parse_links_jobs():
     logging.debug("Parsing attributes <> jobs...")
 
-    LUA_RUNTIME = luautil.LUA_RUNTIME
-    LUA_SOURCE = luautil.LUA_SOURCE
+    LUA_RUNTIME = luautilmod.LUA_RUNTIME
+    LUA_SOURCE = luautilmod.LUA_SOURCE
 
     # Parse level, unlock and formula
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'job.ies')
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies.ipf', 'job.ies')
 
     with codecs.open(ies_path, 'r','utf-8') as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
             job = globals.jobs_by_name[row['ClassName']]
-            ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_ability.ipf', 'ability_' + row['EngName'].lower() + '.ies')
+            ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_ability.ipf', 'ability_' + row['EngName'].lower() + '.ies')
 
             # If this job is still under development, skip
             if not os.path.isfile(ies_path):
@@ -98,8 +98,8 @@ def parse_links_jobs():
                         )
 
                     # Parse attribute unlock
-                    attribute['Unlock'] = luautil.lua_function_source_to_javascript(
-                        luautil.lua_function_source(LUA_SOURCE[row['UnlockScr']])[1:-1]  # remove 'function' and 'end'
+                    attribute['Unlock'] = luautilmod.lua_function_source_to_javascript(
+                        luautilmod.lua_function_source(LUA_SOURCE[row['UnlockScr']])[1:-1]  # remove 'function' and 'end'
                     ) if not attribute['Unlock'] and row['UnlockScr'] else attribute['Unlock']
 
                     attribute['UnlockArgs'][job['$ID']] = {
