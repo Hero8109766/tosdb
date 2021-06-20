@@ -11,14 +11,15 @@ ENV TZ=Asia/Tokyo
 
 # add prerequisites
 
+WORKDIR /root
 RUN apt-get update && apt-get install -y -q nodejs npm python3 python3-pip unzip nginx bash build-essential curl wget p7zip git
-RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-RUN sudo dpkg -i packages-microsoft-prod.deb
+RUN wget https://dot.net/v1/dotnet-install.sh
+RUN chmod 777 ./dotnet-install.sh
+RUN bash ./dotnet-install.sh -c 5.0
+
 
 # prepare python environment
 RUN pip3 install pillow lupa unicodecsv pydevd-pycharm~=211.7442
-RUN apt-get update && apt-get install -y dotnet-sdk-5.0
-
 # prepare nodejs environment
 ENV GYP_DEFINES="javalibdir=/usr/lib/jvm/java-1.8.0-openjdk-amd64/lib/server"
 ENV JAVA_HOME ="/usr/lib/jvm/java-1.8.0-openjdk-amd64/"
@@ -27,7 +28,6 @@ ENV NODE_OPTIONS="--max-old-space-size=2048"
 RUN npm -g i n yarn && n 16
 RUN npm install -g @angular/cli 
 
-WORKDIR /root
 
 # make unipf
 RUN git clone https://github.com/ebisuke/libipf.git

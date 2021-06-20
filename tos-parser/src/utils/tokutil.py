@@ -25,8 +25,7 @@ def _read_string(buf, pos):
     l = buf.find(b'\x00', pos)
     if l == pos:
         return None
-    print(str(l-pos) + "s")
-
+    return struct.unpack(str(l - pos) + "s", buf[pos:l])[0]
 
 
 def tok2xml(f):
@@ -58,7 +57,7 @@ def tok2xml(f):
         _s = _read_string(buf, pos)
         pos += len(_s) + 1
         attr.append((_type, _s))
-        # print (_type, _s)
+        #print (_type, _s)
     root_node = None
     while True:
         # read node name
@@ -71,21 +70,22 @@ def tok2xml(f):
             continue
         if root_node is None:
             root_node = XML.Element(s[_name_idx])
-            root_node.parent = None
+            #root_node.parent = None
             node = root_node
         else:
             parent = node
             node = XML.SubElement(node, s[_name_idx])
             node.parent = parent
-        # print s[_name_idx]
+        #print(s[_name_idx])
         # read attributes
         while True:
             _attr_idx = struct.unpack("b", buf[pos:pos+1])[0] - 1
             if buf[pos] == b'\x00':
                 pos += 1
                 break
-            pos += 1
+
             _attr_type, _attr_name = attr[_attr_idx]
+            pos += 1
             if _attr_type == TokAttrType.C_STR:
                 _val = _read_string(buf, pos)
                 pos += len(_val) + 1

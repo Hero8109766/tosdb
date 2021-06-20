@@ -9,7 +9,7 @@ import { TOSUrlService } from './tos-url.service';
 import { TOSRegionService } from '../domain/tos-region';
 import { InjectorInstance } from 'src/app/app.module';
 
-declare enum LUA_MODE {
+enum LUA_MODE {
     Skill="skill",
     Attribute="ability"
 };
@@ -43,6 +43,32 @@ export class RemoteLUAService {
         'MINMATK': 'Minimum Magic Attack',
         'MINPATK': 'Minimum Physical Attack',
         'MINPATK_SUB': 'Minimum Physical Attack (Sub-Weapon)',
+    };
+
+    private static readonly STATS_RUNTIME_BASE = {
+        'CON': 1000,
+        'DEX': 1000,
+        'INT': 1000,
+        'MNA': 1000,
+        'STR': 1000,
+        'Lv':  LEVEL_LIMIT,
+        'HR': 1000,
+        'MHP': 300000,
+        'MSP': 20000,
+        'SR': 0,
+        'MSPD': 30,
+        'MDEF': 30000,
+        'DEF': 30000,
+        'PATK': 30000,
+        'MATK': 30000,
+        'MAXATK': 30000,
+        'MAXMATK': 30000,
+        'MAXPATK': 30000,
+        'MAXPATK_SUB': 30000,
+        'MINATK': 30000,
+        'MINMATK': 30000,
+        'MINPATK': 30000,
+        'MINPATK_SUB': 30000,
     };
 
     constructor() { }
@@ -88,21 +114,23 @@ export class RemoteLUAService {
         for (var key in build.Attributes) {
             let abil = build.Attributes[key]
 
-            jsoncontext.abilities[abil.$ID] = build.attributeLevel(abil)
+            jsoncontext.abilities[parseInt(abil.$ID)] = build.attributeLevel(abil)
         }
         for (var key in build.Jobs) {
-            jsoncontext.jobs[build.Jobs[key].$ID] = build.jobCircle(build.Jobs[key]);
+            jsoncontext.jobs[ parseInt(build.Jobs[key].$ID)] = build.jobCircle(build.Jobs[key]);
 
-            let skills = await build.Jobs[key].Link_Skills
+            let skills = await build.Jobs[key].Link_Skills.toPromise()
             for (var key in skills) {
                 let skill = skills[key];
-                jsoncontext.skills[skill.$ID] = build.skillLevel(skill);
+                jsoncontext.skills[parseInt(skill.$ID)] = build.skillLevel(skill);
             };
-
         }
 
 
 
+        for (var key in RemoteLUAService.STATS_RUNTIME_BASE) {
+            jsoncontext.stats[key] = RemoteLUAService.STATS_RUNTIME_BASE[key];
+        }
 
         for (var key in RemoteLUAService.STATS_RUNTIME) {
             jsoncontext.stats[key] = context[key];

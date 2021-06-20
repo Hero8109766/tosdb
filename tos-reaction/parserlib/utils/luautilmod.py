@@ -2,13 +2,16 @@ import csv
 import os
 import re
 import codecs
+import multiprocessing
 from lupa import LuaRuntime, LuaError
 import logging
 from parserlib.utils import iesutilmod
 
 class luaclass:
+
+    lock=multiprocessing.Lock()
     # HotFix: don't throw errors when LUA is getting an unknown key
-    def attr_getter(obj, name):
+    def attr_getter(self,obj, name):
         if name in obj:
             if name in ['Blockable', 'HPCount', 'ReinforceArmor', 'TranscendArmor', 'ReinforceWeapon', 'TranscendWeapon']:
                 return int(obj[name])
@@ -17,7 +20,7 @@ class luaclass:
         return 0
 
 
-    def attr_setter(obj, name, value):
+    def attr_setter(self,obj, name, value):
         obj[name] = value
 
 
@@ -27,22 +30,25 @@ class luaclass:
 
     def __init__(self,constants):
         self.constants=constants
-        self.lua = LuaRuntime(attribute_handlers=(self.attr_getter, self.attr_setter), unpack_returned_tuples=True)
+        self.lua = LuaRuntime(attribute_handlers=(self.attr_getter, self.attr_setter),
+                              unpack_returned_tuples=True)
         self.ies=iesutilmod.iesclass(constants)
         self.LUA_OVERRIDE = [
             'function GET_ITEM_LEVEL(item) return 0 end',  # We cant emulate this function as geItemTable is undefined
             'function IsBuffApplied(pc, buff) return "NO" end',
             'function GetAbilityAddSpendValue(pc,classname,column) return 0 end',
-            'function GetSkillOwner(skill) return {} end',
+            #'function GetSkillOwner(skill) return {} end',
             'function IsServerSection(pc) return 0 end',
-            'function GetExProp(entity, name) return entity[name] end',
-            'function GetExProp_Str(entity, name) return tostring(entity[name]) end',
+            'function GetExProp(entity, name) return entity[name] or 0 end',
+            'function GetExProp_Str(entity, name) return tostring(entity[name]) or nil end',
             'function GetIESID(item) end',
             'function GetItemOwner(item) return {} end',
             'function GetOwner(monster) end',
             'function GetServerNation() end',
             'function GetServerGroupID() end',
             'function IsPVPServer(itemOwner) end',
+            'function IsPVPField(pc) return 0 end',
+
             'function IMCRandom(min, max) return 0 end',
             'function ScpArgMsg(a, b, c) return "" end',
             'function SCR_MON_OWNERITEM_ARMOR_CALC(self, defType) return 0 end',
@@ -53,18 +59,24 @@ class luaclass:
             "function GetBuffByProp(self,mode,value) return nil end",
             "function IsRaidField(self)return 0 end",
         ]
-    def exec_lua_encapsulated(self,context,lua_fn,arg_call):
-        func=self.lua.eval(
-            "function(obj,fn_str) "
-            "   local masktable={LUA_CONTEXT=obj}"
-            "   setmetatable(masktable,{__index,_G})"
-            "   local fn=load(fn_str,masktable)"
-            "   local arg="+(arg_call or "nil")+
-            "   local result,retval=pcall(fn,arg)"
-            "   return result,retval"
-            "end")
-        return func(context,lua_fn)
-
+    def exec_lua_encapsulated(self,cls,context,lua_fn,arg_call):
+        self.lock.acquire()
+        try:
+            func=self.lua.execute(
+                "return function(cls,context,fn_str,arg_call) "
+                "   LUA_CONTEXT=context\n"
+                "   local fn=load(fn_str,fn_str,'t')\n"
+                "   local arg_fn=load(arg_call,arg_call,'t') \n"
+                "   local _,arg_fn2=assert(pcall(arg_fn))\n"
+                "   local _,arg=assert(pcall(arg_fn))\n"
+                "   local _,cls_fn=assert(pcall(fn))\n"
+                "   local _,retval=assert(pcall(cls_fn,arg))\n"
+                "   return result,retval\n"
+                "end\n")
+            return func(cls,context,lua_fn,arg_call)
+        finally:
+            pass
+            self.lock.release()
     def init(self):
         self.init_global_constants('sharedconst.ies')
         self.init_global_constants('sharedconst_system.ies')
@@ -159,6 +171,7 @@ class luaclass:
         self.ies_ADD('monster', self.ies.load('monster_mgame.ies'))
         self.ies_ADD('monster', self.ies.load('monster_npc.ies'))
         self.ies_ADD('skill', self.ies.load('skill.ies'))
+        self.ies_ADD('SkillRestrict', self.ies.load('SkillRestrict.ies'))
         self.ies_ADD('ability', self.ies.load('ability.ies'))
         self.ies_ADD('monster_skill', self.ies.load('monster_skill.ies'))
 
@@ -168,8 +181,27 @@ class luaclass:
 
 
     def init_global_functions(self):
-        self.lua.execute("".join((s+"\n" for s in self.LUA_OVERRIDE))+'\n\n'+'''
-        
+
+        self.lua.execute("".join((s+"\n" for s in self.LUA_OVERRIDE)))
+        self.lua.execute('''
+            function setfenv(fn, env)
+              local i = 1
+              while true do
+                local name = debug.getupvalue(fn, i)
+                if name == "_ENV" then
+                  debug.upvaluejoin(fn, i, (function()
+                    return env
+                  end), 1)
+                  break
+                elseif not name then
+                  break
+                end
+            
+                i = i + 1
+              end
+            
+              return fn
+            end
             app = {
                 IsBarrackMode = function() return false end
             }
@@ -303,12 +335,14 @@ class luaclass:
               end
               return nil
             end
-            
+            function intToString(val)
+                return tostring(math.floor(val),0)
+            end
             function TryGetProp(item, prop, default)
                 if item == nil then
                     return default
                 end
-                
+                print(debug.traceback("Stack trace"))
                 local value = item[prop]
                 
                 if tonumber(value) ~= nil then
@@ -321,10 +355,18 @@ class luaclass:
                     return default
                 end
             end
+            function GetSkillOwner(skill) 
+                if LUA_CONTEXT then
+                    return LUA_CONTEXT.stats
+                else
+                    return {}
+                end 
+            
+            end
             
             function GetJobGradeByName(pc, name)
                 local cls=GetClass("Job",name)
-                local job=LUA_CONTEXT.jobs[cls.ClassID]
+                local job=LUA_CONTEXT.jobs[intToString(cls.ClassID)]
                 if job==nil then
                     return 0
                 else
@@ -333,37 +375,37 @@ class luaclass:
             end
             function GetJobLevelByName(pc, name)
                 local cls=GetClass("Job",name)
-                local job=LUA_CONTEXT.jobs[cls.ClassID]
+                local job=LUA_CONTEXT.jobs[intToString(cls.ClassID)]
                 if job==nil then
                     return 0
                 else
-                    return job.Level
+                    return job
                 end
             end
             function GetSkill(pc, name)
                 local cls=GetClass("Skill",name)
-                if cls==nil or LUA_CONTEXT.skills[cls.ClassID]==nil then
-                    return 0
+                if cls==nil or LUA_CONTEXT.skills[intToString(cls.ClassID)]==nil then
+                    return  nil
                 end
-                cls.Level=LUA_CONTEXT.skills[cls.ClassID].Level
-                
-                retuattributesarn cls
+                cls.Level=LUA_CONTEXT.skills[intToString(cls.ClassID)]
+                    print(""..cls.ClassID.."/"..intToString(cls.Level));
+                return cls
             end
             function GetSkillByType(pc, type)
                 local cls=GetClassByType("Skill",type)
-                if cls==nil or LUA_CONTEXT.skills[cls.ClassID]==nil then
-                    return 0
+                if cls==nil or LUA_CONTEXT.skills[intToString(cls.ClassID)]==nil then
+                    return nil
                 end
-                cls.Level=LUA_CONTEXT.skills[cls.ClassID].Level
-                
+                cls.Level=LUA_CONTEXT.skills[intToString(cls.ClassID)]
+                print(""..cls.ClassID.."/"..intToString(cls.Level));
                 return cls
             end
             function GetAbility(pc, name)
                 local cls=GetClass("Ability",name)
-                if cls==nil or LUA_CONTEXT.abilities[cls.ClassID]==nil then
-                    return 0
+                if cls==nil or LUA_CONTEXT.abilities[intToString(cls.ClassID)]==nil then
+                    return nil
                 end
-                cls.Level=LUA_CONTEXT.abilities[cls.ClassID].Level
+                cls.Level=LUA_CONTEXT.abilities[intToString(cls.ClassID)]
                 return cls
             end
 

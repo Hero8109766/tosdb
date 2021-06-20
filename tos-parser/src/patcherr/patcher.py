@@ -16,7 +16,7 @@ def patch(repatch):
 
     # Full patch
     patch_full(
-        constants.PATH_INPUT_DATA, constants.PATH_INPUT_DATA_PATCH, constants.PATH_INPUT_DATA_PATCH_URL_FULL, '.ipf', patcher_ipf.unpack,
+        constants.PATH_INPUT_DATA, constants.PATH_INPUT_DATA_PATCH, constants.PATH_INPUT_DATA_PATCH_URL_FULL, '.ipf',patcher_ipf.unpack,
         constants.PATH_INPUT_DATA_REVISION_URL_FULL,repatch
     )
 

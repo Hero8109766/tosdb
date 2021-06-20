@@ -64,7 +64,7 @@ def parse(region, is_rebuild, is_version_new):
     # Parse assets (Note: we start by processing assets as they use a ton of RAM)
     parser_assets.parse(region, is_version_new)
     parser_jobs.parse_jobs_images(region, is_version_new)
-    parser_maps.parse_maps_images(region, is_version_new)
+    #parser_maps.parse_maps_images(region, is_version_new)
     parser_translations.parse(region)
 
     # Garbage collect...
@@ -123,7 +123,7 @@ def parse(region, is_rebuild, is_version_new):
     parser_items_equipment.parse()
     parser_items_equipment_sets.parse()
     parser_items_recipes.parse()
-    parser_maps.parse(region, is_version_new)
+    #parser_maps.parse(region, is_version_new)
     parser_monsters.parse()
 
     # Garbage collect & Destroy LUA...
@@ -140,7 +140,7 @@ def parse(region, is_rebuild, is_version_new):
     parser_items_equipment.parse_links()
     parser_items_equipment_sets.parse_links()
     parser_items_recipes.parse_links()
-    parser_maps.parse_links()
+    #parser_maps.parse_links()
     parser_monsters.parse_links()
 
     # Garbage collect...

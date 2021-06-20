@@ -45,12 +45,12 @@ class constclass:
         self.PATH_INPUT_RELEASE_REVISION = None
         self.PATH_INPUT_RELEASE_REVISION_URL = None
 
-        self.PATH_PARSER = os.path.join('../..', 'tos-parser')
+        self.PATH_PARSER = os.path.join('..', 'tos-parser')
 
-        self.PATH_UNPACKER = os.path.join('../..', 'ipf_unpacker')
+        self.PATH_UNPACKER = os.path.join('..', 'ipf_unpacker')
         self.PATH_UNPACKER_EXE ="./ipf_unpack"
 
-        self.PATH_BUILD = os.path.join('../..', 'tos-build', 'dist')
+        self.PATH_BUILD = os.path.join('..', 'tos-build', 'dist')
         self.PATH_BUILD_ASSETS = os.path.join(self.PATH_BUILD, 'assets')
         self.PATH_BUILD_ASSETS_DATA = None
         self.PATH_BUILD_ASSETS_ICONS = os.path.join(self.PATH_BUILD_ASSETS, 'icons')

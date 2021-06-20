@@ -104,15 +104,15 @@ export class TOSSkill extends TOSEntity implements ITOSSkill {
           console.error('Failed to calculate prop', prop, 'for skill', this, e);
         }
 
-        if (result != null)
-          for (let dependency of result.dependencies)
-            if (dependencies.indexOf(dependency) == -1)
-              dependencies.push(dependency);
+        // if (result != null)
+        //   for (let dependency of result.dependencies)
+        //     if (dependencies.indexOf(dependency) == -1)
+        //       dependencies.push(dependency);
 
         if (result == null || showFactors && level == 0) {
           effect = effect.replace(match[0], '<b>[' + prop + ']</b>')
         } else {
-          effect = effect.replace(match[0], (result != null ? result.value : 0) + (result.dependencies.length ? '*' : ''));
+          effect = effect.replace(match[0], (result != null ? result : 0));
         }
       }));
 
@@ -178,7 +178,7 @@ export class TOSSkill extends TOSEntity implements ITOSSkill {
 
       //if (source == null)
       //  return null;
-      let lua
+      
       let result = await RemoteLUAService.evalSkill(build, this.$ID,prop, context);
       //let value = eval(result.func.join('\n')) as number;
       let value = parseFloat(result).toFixed(2); // Remove trailing 0s
