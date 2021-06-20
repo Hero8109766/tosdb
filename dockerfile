@@ -11,10 +11,13 @@ ENV TZ=Asia/Tokyo
 
 # add prerequisites
 
-RUN apt-get update && apt-get install -y -q nodejs npm python3 python3-pip unzip nginx bash build-essential curl wget openjdk-8-jdk p7zip
+RUN apt-get update && apt-get install -y -q nodejs npm python3 python3-pip unzip nginx bash build-essential curl wget p7zip git
+RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+RUN sudo dpkg -i packages-microsoft-prod.deb
 
 # prepare python environment
 RUN pip3 install pillow lupa unicodecsv pydevd-pycharm~=211.7442
+RUN apt-get update && apt-get install -y dotnet-sdk-5.0
 
 # prepare nodejs environment
 ENV GYP_DEFINES="javalibdir=/usr/lib/jvm/java-1.8.0-openjdk-amd64/lib/server"
@@ -24,7 +27,22 @@ ENV NODE_OPTIONS="--max-old-space-size=2048"
 RUN npm -g i n yarn && n 16
 RUN npm install -g @angular/cli 
 
+WORKDIR /root
+
+# make unipf
+RUN git clone https://github.com/ebisuke/libipf.git
+WORKDIR /root/libipf
+RUN make
+RUN cp -f ./unipf ./ipf /usr/bin/
+RUN cp -f ./libipf.so /usr/lib/
+
+
+RUN apt purge -y git 
+WORKDIR /
 RUN mkdir /var/www/base
+
+
+
 # apply chmod
 WORKDIR /var/www/base
 RUN chown -R www-data:www-data ./

@@ -45,6 +45,8 @@ PATH_PARSER = os.path.join('..', 'tos-parser')
 
 PATH_UNPACKER = os.path.join('..', 'ipf_unpacker')
 PATH_UNPACKER_EXE ="./ipf_unpack"
+PATH_UNPACKER_UNIPF ="dotnet"
+PATH_UNPACKER_UNIPF2 ="./tpIpfToolCmd.dll"
 
 PATH_BUILD = os.path.join('..', 'tos-build', 'dist')
 PATH_BUILD_ASSETS = os.path.join(PATH_BUILD, 'assets')

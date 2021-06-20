@@ -30,7 +30,7 @@ def invokelua():
     mode=Request.form['mode']
     region=TOSRegion.value_of(Request.form['region'])
     classid=Request.form['classid']
-    stats=json.loads(Request.form['stats'])
+    luatype=Request.form['type']
     if region is None:
         logging.error("Region is not selected.")
         return 'fail'
@@ -40,7 +40,13 @@ def invokelua():
 
     # search function
     lua=luas[region]
-    ies=lua.lua.eval("return GetClassByID('Skill',"+classid+")")
+    preverb=''
+    if luatype=='skill':
+        ies=lua.lua.eval("return GetClassByID('Skill',"+classid+")")
+        preverb="GetSkill"
+    elif luatype=='ability':
+        ies = lua.lua.eval("return GetClassByID('Ability'," + classid + ")")
+        preverb = "GetAbility"
     if ies is None:
         logging.error("IES not found :"+classid)
         return 'fail'
@@ -54,7 +60,7 @@ def invokelua():
 
     # call lua
     result,retval=luas[region].exec_lua_encapsulated(
-        lua.exec_lua_encapsulated(context,func,"GetSkill("+ies.ClassName+")")
+        lua.exec_lua_encapsulated(context,func,preverb+"("+ies.ClassName+")")
     )
     if result==False:
         # fail

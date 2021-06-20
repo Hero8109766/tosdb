@@ -42,28 +42,30 @@ def unpack(ipf):
     prevcurdir=os.getcwd()
     os.chdir(constants.PATH_UNPACKER)
     # Decrypt and extract ipf file
-    if ipf_revision not in ['29_001001']:  # HotFix: these specific patches aren't encrypted for some reason
-        subprocess.check_call(
-            [constants.PATH_UNPACKER_EXE, tmpname, "decrypt"],
-            stdin=None, stdout=None, stderr=None, shell=False
-        )
+    # if ipf_revision not in ['29_001001']:  # HotFix: these specific patches aren't encrypted for some reason
+    #     subprocess.check_call(
+    #         [constants.PATH_UNPACKER_EXE, tmpname, "decrypt"],
+    #         stdin=None, stdout=None, stderr=None, shell=False
+    #     )
     #subprocess.check_call(
     #    [constants.PATH_UNPACKER_EXE, ipf, "extract"],
     #    stdin=None, stdout=None, stderr=None, shell=False
     #)
+
     if ipf_revision not in ['29_001001']:  # HotFix: these specific patches aren't encrypted for some reason
         subprocess.check_call(
-            [constants.PATH_UNPACKER_EXE,tmpname, "extract"],
+            [constants.PATH_UNPACKER_UNIPF,constants.PATH_UNPACKER_UNIPF2,tmpname],
             stdin=None, stdout=None, stderr=None, shell=False
         )
     else:
         subprocess.check_call(
-            [constants.PATH_UNPACKER_EXE, tmpname, "extract"],
+            [constants.PATH_UNPACKER_UNIPF,constants.PATH_UNPACKER_UNIPF2, tmpname],
             stdin=None, stdout=None, stderr=None, shell=False
         )
     os.chdir(prevcurdir)
     fileutil.move_tree(extdir,ipf_extract)
-    shutil.rmtree(extdir)
+    if os.path.exists(ipf_extract):
+        shutil.rmtree(extdir)
     if os.path.exists(ipf_extract):
         # Remove blacklisted IPF files from extracted result
         for file_name in os.listdir(ipf_extract):

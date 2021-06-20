@@ -66,7 +66,7 @@ export class TOSMonster extends TOSEntity implements ITOSMonster {
   private TOSMonsterLinkItem(value: TOSMonsterLinkItem): Observable<TOSMonsterLinkItem> {
     return fromPromise((async () => {
       let object = new TOSMonsterLinkItem(value);
-          object.Item = await TOSDomainService.itemsByIdLink(+object.Item).toPromise();
+          object.Item = await TOSDomainService.itemsByIdLink(object.Item.$ID).toPromise();
 
       return object;
     })());
@@ -74,7 +74,7 @@ export class TOSMonster extends TOSEntity implements ITOSMonster {
   private TOSMonsterLinkMap(value: TOSMonsterLinkMap): Observable<TOSMonsterLinkMap> {
     return fromPromise((async () => {
       let object = new TOSMonsterLinkMap(value);
-          object.Map = await TOSDomainService.mapsById(+object.Map).toPromise();
+          object.Map = await TOSDomainService.mapsById(object.Map.$ID).toPromise();
 
       return object;
     })());

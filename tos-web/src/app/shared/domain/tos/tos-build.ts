@@ -15,7 +15,7 @@ import { TOSDomainService } from "./tos-domain.service";
 import { TOSRegion, TOSRegionService } from "../tos-region";
 import { fromPromise } from "rxjs/internal-compatibility";
 
-export const LEVEL_LIMIT: number = 420; // TODO: find a way to retrieve this value from the game files (sharedconst.ies / sharedconst_system.ies)
+export const LEVEL_LIMIT: number = 460; // TODO: find a way to retrieve this value from the game files (sharedconst.ies / sharedconst_system.ies)
 export const RANK_LIMIT: number = 10; // TODO: find a way to retrieve this value from the game files
 const SKILL_POINTS_PER_CIRCLE: number = 15; // TODO: find a way to retrieve this value from the game files
 
@@ -425,6 +425,22 @@ export class TOSDatabaseBuild implements ITOSBuild {
     }
 
     private constructor(private build: TOSBuild) { }
+    get Attribute$(){
+        return this.build.Attribute$;
+    }
+    Attributes: ITOSAttribute[];
+    attributeLevel(attribute: ITOSAttribute): number {
+        return this.build.attributeLevel(attribute)
+    }
+    attributePointsTotalConsumption$(): Promise<number> {
+        return this.build.attributePointsTotalConsumption$()
+    }
+    attributeIncrementLevel$(attribute: ITOSAttribute, delta: number, force?: boolean): Promise<void> {
+        return this.build.attributeIncrementLevel$(attribute,delta,force)
+    }
+    attributeIncrementLevelAvailable$(attribute: ITOSAttribute, delta: number): Observable<boolean> {
+        return this.build.attributeIncrementLevelAvailable$(attribute,delta)
+    }
 
     get Job$() { return this.build.Job$ }
     get Jobs() { return this.build.Jobs }
@@ -504,15 +520,28 @@ export class TOSSimulatorBuild implements ITOSBuild {
     }
 
     static new(region: TOSRegion): TOSSimulatorBuild {
-        let build = TOSRegionService.isRebuild(region)
-            ? new TOSBuild_20()
-            : new TOSBuild_10();
+        let build = new TOSBuild_20();
 
         return new TOSSimulatorBuild(build);
     }
 
     private constructor(private build: TOSBuild) { }
-
+    get Attribute$(){
+        return this.build.Attribute$
+    }
+    Attributes: ITOSAttribute[];
+    attributeLevel(attribute: ITOSAttribute): number {
+        return this.build.attributeLevel(attribute)
+    }
+    attributePointsTotalConsumption$(): Promise<number> {
+        return this.build.attributePointsTotalConsumption$()
+    }
+    attributeIncrementLevel$(attribute: ITOSAttribute, delta: number, force?: boolean): Promise<void> {
+        return this.build.attributeIncrementLevel$(attribute,delta,force)
+    }
+    attributeIncrementLevelAvailable$(attribute: ITOSAttribute, delta: number): Observable<boolean> {
+        return this.build.attributeIncrementLevelAvailable$(attribute,delta)
+    }
     get Job$() { return this.build.Job$ }
     get Jobs() { return this.build.Jobs }
     get JobTree() { return this.build.JobTree }

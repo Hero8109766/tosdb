@@ -12,10 +12,11 @@ import {
   TOSSkillRequiredStanceCompanion,
 } from "../tos-domain";
 import {TOSDomainService} from "../tos-domain.service";
-import {LUAService} from "../../../service/lua.service";
+import {RemoteLUAService} from "../../../service/remote-lua.service";
 import {Observable} from "rxjs";
 import {fromPromise} from "rxjs/internal-compatibility";
 import {map} from "rxjs/operators";
+import { observable } from "rxjs";
 
 export class TOSSkill extends TOSEntity implements ITOSSkill {
 
@@ -76,12 +77,12 @@ export class TOSSkill extends TOSEntity implements ITOSSkill {
   BuildCoolDown(build: ITOSBuild): Observable<number> {
     return this
       .effectToEval('CoolDown', build)
-      .pipe(map(value => value.value));
+      .pipe(map(value => parseFloat(value)));
   }
   BuildSP(build: ITOSBuild): Observable<number> {
     return this
       .effectToEval('SP', build)
-      .pipe(map(value => value.value));
+      .pipe(map(value => parseFloat(value)));
   }
 
   EffectDescription(build: ITOSBuild, showFactors: boolean): Observable<string> {
@@ -165,35 +166,38 @@ export class TOSSkill extends TOSEntity implements ITOSSkill {
 
 
       if (prop != 'SkillFactor' && this.effectSource('SkillFactor'))
-        skill['SkillFactor'] = (await this.effectToEval('SkillFactor', build).toPromise()).value;
+        skill['SkillFactor'] = (await this.effectToEval('SkillFactor', build).toPromise());
 
       return { player, skill }
     })());
   }
-  private effectToEval(prop: string, build: ITOSBuild): Observable<{ dependencies: string[], value: number }> {
+  private effectToEval(prop: string, build: ITOSBuild): Observable< string > {
     return fromPromise((async () => {
-      let source = this.effectSource(prop);
+      //let source = this.effectSource(prop);
       let context = await this.effectContext(prop, build).toPromise();
 
-      if (source == null)
-        return null;
+      //if (source == null)
+      //  return null;
+      let lua
+      let result = await RemoteLUAService.evalSkill(build, this.$ID,prop, context);
+      //let value = eval(result.func.join('\n')) as number;
+      let value = parseFloat(result).toFixed(2); // Remove trailing 0s
 
-      let result = await LUAService.parse(build, source, context).toPromise();
-      let value = eval(result.func.join('\n')) as number;
-          value = parseFloat(value.toFixed(2)); // Remove trailing 0s
-
-      return { dependencies: result.dependencies, value };
+      return value;
     })());
   }
   private effectToHuman(prop: string, build: ITOSBuild): Observable<string> {
-    return fromPromise((async () => {
-      let source = this.effectSource(prop);
-      let context = await this.effectContext(prop, build, true).toPromise();
 
-      return source != null
-        ? await LUAService.human(build, source, context).toPromise()
-        : '';
-    })())
+    return fromPromise(Promise.resolve(this.effectSource(prop).join("\n")));
+
+    // return fromPromise((async () => {
+    //   let source = this.effectSource(prop);
+    //   let context = await this.effectContext(prop, build, true).toPromise();
+
+    //   return source != null
+    //     ? await LUAService.human(build, source, context).toPromise()
+    //     : '';
+    // })())
   }
   private effectSource(prop: string): string[] {
     return this[prop] || this['Effect_' + prop] || null;

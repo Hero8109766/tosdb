@@ -1,12 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Attribute, Injectable } from '@angular/core';
 import { ITOSBuild, TOSStat } from "../domain/tos/tos-domain";
 import { TOSDomainService } from "../domain/tos/tos-domain.service";
 import { LEVEL_LIMIT } from "../domain/tos/tos-build";
 import { Observable } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TOSUrlService } from './tos-url.service';
-import { LUAService } from './lua.service';
+import { TOSRegionService } from '../domain/tos-region';
+import { InjectorInstance } from 'src/app/app.module';
+
+declare enum LUA_MODE {
+    Skill="skill",
+    Attribute="ability"
+};
 @Injectable({
     providedIn: 'root'
 })
@@ -38,196 +44,95 @@ export class RemoteLUAService {
         'MINPATK': 'Minimum Physical Attack',
         'MINPATK_SUB': 'Minimum Physical Attack (Sub-Weapon)',
     };
+
     constructor() { }
 
-    static eval(build: ITOSBuild, source: string[], context?: object): Observable<string | number> {
-        return fromPromise((async () => {
-            let func = (await this.parse(build, source, context).toPromise()).func;
-            return eval(func.join('\n'));
-        })())
+    static async evalSkill(build: ITOSBuild, id$:string,element: string, context?: object): Promise<string> {
+        return this.eval(build, id$,element, LUA_MODE.Skill,context);
     }
-
-    static human(build: ITOSBuild, source: string[], context?: object): Observable<string> {
-        return fromPromise((async () => {
-            let func = (await this.parse(build, source, context, true).toPromise()).func;
-            func = await Promise.all(func.map(async (line) => {
-                // Note: we need to reset these on every new line so it doesn't skip matches
-                let lineOriginal = line;
-                let regexGetProp = /TryGetProp\((\w+), "(\w+)"\)/g;
-                let regexAbility = /GetAbility\(pc, ["'](.+)["']\)/g;
-                let match: RegExpExecArray;
-
-                line = line.replace(/\/\*{b}\*\/(.+?)\/\*{b}\*\//g, '<b>$1</b>');  // Apply bolds
-                // line = line.replace(/(?:pc\.(\w+))+/g, 'player.$1');              // Rename pc to player
-                // line = line.replace(/!=/g, 'not');
-                // line = line.replace(/&&/g, 'and');
-                // line = line.replace(/null/g, 'Null');
-
-                // TryGetProp(a, b) - return the 'b' property of the 'a' object
-                while (match = regexGetProp.exec(lineOriginal)) {
-                    line = line.replace(match[0], match[1] + '.' + match[2]);
-                }
-
-                // GetAbility(pc, ability) - replace with attribute name
-                while (match = regexAbility.exec(lineOriginal)) {
-                    let attribute = await TOSDomainService.attributesByIdName(match[1]).toPromise();
-                    if (attribute)
-                        line = line.replace(match[0], '<b>[' + attribute.Name + ']</b>');
-                    else { }
-                    // line = line.replace(match[0], 'Null');
-                }
-
-                return line;
-            }));
-
-            return func
-                .slice(1, -1)
-                .join('\n');
-        })());
+    static async evalAttribute(build: ITOSBuild, id$:string,element: string, context?: object): Promise<string> {
+        return this.eval(build, id$,element, LUA_MODE.Attribute,context);
     }
+    private static async eval(build: ITOSBuild,  id$:string,element: string,  type: LUA_MODE,context?: object): Promise<string> {
+    
+        let dependencies: string[] = [];
 
-    static parse(build: ITOSBuild, source: string[], context?: object, human?: boolean): Observable<{ dependencies: string[], func: string[] }> {
-        return fromPromise((async () => {
-            let dependencies: string[] = [];
-            let skill = context && context['skill'] || {};
-            let player = context && context['player'] || {};
-            player.ClassName = 'PC';
-            player.JobHistoryList = build.Jobs && build.Jobs.map(value => value.$ID);
-            player.Lv = LEVEL_LIMIT; // TODO: get level from build
+        let func: string[] = [];
+        // func.push('(function () {');
+        let jsoncontext = {
+            skills: {},
+            abilities: {},
+            stats: {},
+            jobs: {}
+        };
 
-            context && delete context['skill'];
-            context && delete context['player'];
+        context = context || {};
+        context["ClassName"] = 'PC';
+        //context.JobHistoryList = build.Jobs && build.Jobs.map(value => value.$ID);
+        context["Lv"] = LEVEL_LIMIT; // TODO: get level from build
 
-            // Process source code
-            source = await Promise.all(source.map(async line => {
-                // // Note: we need to reset these on every new line so it doesn't skip matches
-                // let lineOriginal = line;
-                // let regexGetJobGrade = /GetJobGradeByName\(pc, (.+)\)/g;
-                // let regexGetJobLevelByName = /GetJobLevelByName\(pc, curJobClsName\)/g;
-                // let regexGetSkill = /GetSkill\(pc, (.+)\)/g;
-                // let regexPlayer = /(?:pc\.(\w+))+/g;
-                // let regexSkill = /(?:skill\.(\w+))+/g;
-                // let match: RegExpExecArray;
+        // Initialize context
 
-                // // GetJobLevelByName(pc, curJobClsName);
+        // func.push('var pc = ' + JSON.stringify(player) + ';');
+        // func.push('var skill = ' + JSON.stringify(skill) + ';');
+        // func = func.concat(LUAService.LUA_CONTEXT);
 
-                // line = line.replace('GetTotalJobCount(pc)', build.Rank + '');
+        // Object
+        //     .keys(context)
+        //     .forEach(key => {
+        //         let value = typeof context[key] == 'object' ? JSON.parse(context[key]) : context[key];
+        //         func.push('var ' + key + ' = ' + value + ';')
+        //     });
 
-                // // GetJobGrade(pc, job) - return the circle of the requested job
-                // while (match = regexGetJobGrade.exec(lineOriginal)) {
-                //     let jobName = (['"', "'"].indexOf(match[1][0]) > -1 ? match[1] : context[match[1]]).slice(1, -1);
-                //     let job = await TOSDomainService.jobsByIdName(jobName).toPromise();
+        jsoncontext.abilities = {}
+        for (var key in build.Attributes) {
+            let abil = build.Attributes[key]
 
-                //     line = line.replace(match[0], build.jobCircle(job) + '');
-                // }
+            jsoncontext.abilities[abil.$ID] = build.attributeLevel(abil)
+        }
+        for (var key in build.Jobs) {
+            jsoncontext.jobs[build.Jobs[key].$ID] = build.jobCircle(build.Jobs[key]);
 
-                // // GetJobGradeByName(pc, curJobClsName) - return the circle for the current job
-                // while (match = regexGetJobLevelByName.exec(lineOriginal)) {
-                //     let jobName = player['JobName'].slice(1, -1);
-                //     let job = await TOSDomainService.jobsByIdName(jobName).toPromise();
-
-                //     line = line.replace(match[0], build.jobCircle(job) + '');
-                // }
-
-                // // GetSkill(pc, skill) - return a reference of the requested skill (with level)
-                // while (match = regexGetSkill.exec(lineOriginal)) {
-                //     let skillName = (['"', "'"].indexOf(match[1][0]) > -1 ? match[1] : context[match[1]]).slice(1, -1);
-                //     let skill = await TOSDomainService.skillsByIdName(skillName).toPromise();
-
-                //     line = line.replace(match[0], JSON.stringify({ LevelByDB: build.skillLevel(skill) }));
-                // }
-
-                // // Player properties - replace available properties in-place, make remaining ones bold
-                // while (match = regexPlayer.exec(lineOriginal)) {
-                //     let prop: string = match[1];
-
-                //     // Hotfix: Ignore in case we're the left operand (e.g. skill.SklSr = 17)
-                //     if (lineOriginal.indexOf('=') > lineOriginal.indexOf(prop))
-                //         continue;
-
-                //     if (player[prop] != undefined && prop != 'Lv') {
-                //         line = line.replace(match[0], player[prop]);
-                //     } else {
-                //         // Note: we need to slice in case there are multiple occurrences on the string (as we replace with the same matched value)
-                //         line =
-                //             line.slice(0, match.index) +
-                //             line.slice(match.index).replace(match[0], '/*{b}*/' + match[0] + '/*{b}*/')
-                //     }
-
-                //     player[prop] = player[prop] || 1;
-
-                //     // Note: some stats are runtime only (e.g. MINPATK)
-                //     dependencies.push(LUAService.STATS_RUNTIME[prop] + '');
-                // }
-
-                // // Skill properties - replace available properties in-place, make remaining ones bold
-                // while (match = regexSkill.exec(lineOriginal)) {
-                //     let prop: string = match[1];
-
-                //     // Hotfix: Ignore in case we're the left operand (e.g. skill.SklSr = 17)
-                //     if (lineOriginal.indexOf('=') > lineOriginal.indexOf(prop))
-                //         continue;
-
-                //     if (skill[prop] != undefined && prop != 'Level')
-                //         line = line.replace(match[0], skill[prop]);
-                //     else
-                //         // Note: we need to slice in case there are multiple occurrences on the string (as we replace with the same matched value)
-                //         line =
-                //             line.slice(0, match.index) +
-                //             line.slice(match.index).replace(match[0], '/*{b}*/' + match[0] + '/*{b}*/')
-                // }
-
-                return line;
-            }));
-
-            let func: string[] = [];
-            // func.push('(function () {');
-            let jsoncontext = {
-                skills: {},
-                abilities: {},
-                stats:{},
-                jobs:{}
+            let skills = await build.Jobs[key].Link_Skills
+            for (var key in skills) {
+                let skill = skills[key];
+                jsoncontext.skills[skill.$ID] = build.skillLevel(skill);
             };
-            // Initialize context
-            if (!human) {
-                // func.push('var pc = ' + JSON.stringify(player) + ';');
-                // func.push('var skill = ' + JSON.stringify(skill) + ';');
-                // func = func.concat(LUAService.LUA_CONTEXT);
 
-                // Object
-                //     .keys(context)
-                //     .forEach(key => {
-                //         let value = typeof context[key] == 'object' ? JSON.parse(context[key]) : context[key];
-                //         func.push('var ' + key + ' = ' + value + ';')
-                //     });
+        }
+
+
+
+
+        for (var key in RemoteLUAService.STATS_RUNTIME) {
+            jsoncontext.stats[key] = context[key];
+        }
+
+
+        //httprequest
+        let request = {
+            context: jsoncontext,
+            region: TOSRegionService.get().toString(),
+            type:type.toString(),
+            classid:id$,
+            mode:element
+
             
-                for(var key in build.Jobs){
-                    jsoncontext.jobs[build.Jobs[key].$ID]=build.jobCircle(build.Jobs[key]);
-                    let abilities=build.
-                    let skills=await build.Jobs[key].Link_Skills.toPromise()
-                    for(var key in skills){
-                        let skill=skills[key];
-                        jsoncontext.skills[skill.$ID]=build.skillLevel(skill);
-                    };
-                   
-                }
-               
-               
-                  
-                
-                for(var key in RemoteLUAService.STATS_RUNTIME){
-                    jsoncontext.stats[key]=context[key];
-                }
+        }
+        let http=InjectorInstance.get<HttpClient>(HttpClient);
 
-            }
+        let result=http.post(
+            TOSUrlService.WORKER_REACTION(),
+            request,{responseType:"text"}
+        )
+        //result: result of value
 
-            // Execute
-            //func = func.concat(source);
-            //func.push('}())');
+        // Execute
+        //func = func.concat(source);
+        //func.push('}())');
 
-            //console.log('eval', func.join('\n'));
-            return { dependencies, func };
-        })())
+        return result.toPromise()
+        
     }
 
 }
