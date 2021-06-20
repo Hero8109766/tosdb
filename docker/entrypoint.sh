@@ -24,5 +24,5 @@ node src/index.js&
 echo "Launching tos-reaction"
 
 cd ${BASEDIR}/tos-reaction/
-python3 main.py
+python3 app.py
 # WAITING
