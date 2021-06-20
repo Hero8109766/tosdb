@@ -54,10 +54,6 @@ COPY ./tos-web ./tos-web
 WORKDIR /var/www/base/tos-web
 RUN npm ci -std=c++17 --force
 
-# reaction server
-COPY ./tos-reaction ./tos-reaction
-RUN pip3 install -r ./tos-reaction/requirements.txt
-WORKDIR /var/www/base
 
 # make ipfunpack
 COPY ./ipf_unpacker ./ipf_unpacker
@@ -77,7 +73,11 @@ COPY ./tos-web-rest ./tos-web-rest
 COPY ./docker/*   ./
 COPY ./skeleton_distweb   ./skeleton_distweb
 COPY ./skeleton_distbuild   ./skeleton_distbuild
-
+WORKDIR /var/www/base
+# reaction server
+COPY ./tos-reaction ./tos-reaction
+RUN pip3 install -r ./tos-reaction/requirements.txt
+WORKDIR /var/www/base
 
 
 # copy http server conf
