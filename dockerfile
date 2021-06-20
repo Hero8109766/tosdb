@@ -54,11 +54,11 @@ COPY ./tos-web ./tos-web
 WORKDIR /var/www/base/tos-web
 RUN npm ci -std=c++17 --force
 
-
+WORKDIR /var/www/base
 # make ipfunpack
 COPY ./ipf_unpacker ./ipf_unpacker
 WORKDIR /var/www/base/ipf_unpacker
-# RUN make release
+RUN make release
 WORKDIR /var/www/base
 
 COPY ./tos-parser ./tos-parser
