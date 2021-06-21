@@ -22,7 +22,7 @@ def parse(region):
 
     if translations:
         parse_dictionary(translations)
-
+    parse_clmsg()
 
 def parse_dictionary(translations):
     logging.debug('Parsing translations dictionary...')
@@ -68,21 +68,44 @@ def parse_translations(language):
 
     return result
 
+def parse_clmsg():
+    global globals
+    logging.debug('Parsing clmsgs ...')
+    result = {}
+
+    dictionary_path = os.path.join(constants.PATH_INPUT_DATA, 'xml_lang.ipf', 'clientmessage.xml')
+    dictionary = ET.parse(dictionary_path).getroot()
+
+    # example: <file name="xml\item_Equip.xml">
+    for category in dictionary:
+        for data in category:
+            key = data.get('ClassName')
+            value = data.get('Data')
+            if key is not None and value is not None:
+                globals.clmsgs[key] = translate(value)
+
 
 def translate(key):
+
     try:
         key = str(key.replace('"', ''), 'utf-8')
     except TypeError:
         pass
 
     # In case the key is already in english, there's no need to translate
-    if is_ascii(key):
-        return key
+    #if is_ascii(key):
+    #    return key
     if not globals.translations:
         return key
 
-    if key != '' and key not in globals.translations:
-        logging.warn('Missing translation for key: %s', key)
-        return key
-
+    if (key == '' or key not in globals.translations):
+        if  key not in globals.clmsgs:
+            if key != '':
+                logging.warn('Missing translation for key: %s', key)
+            return key
+        else:
+            if key!=globals.clmsgs[key]:
+                return translate(globals.clmsgs[key])
+            else:
+                return key
     return globals.translations[key]

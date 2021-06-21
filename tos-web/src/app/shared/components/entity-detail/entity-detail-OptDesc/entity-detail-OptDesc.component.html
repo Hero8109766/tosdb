@@ -1,0 +1,6 @@
+<div *ngIf="entity['OptDesc'] || entity['OptDescHTML']">
+  <div class="w-100" *ngIf="divider"><hr></div>
+  <h5 *ngIf="header">Optional</h5>
+
+  <p class="text-multiline mb-0" [innerHTML]="((entity['OptDesc'] || '') + (entity['OptDescRequired'] || '')) | sanitizeHTML"></p>
+</div>

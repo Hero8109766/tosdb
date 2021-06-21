@@ -33,7 +33,7 @@ export abstract class TOSEntity extends Comparable implements ITOSEntity {
     this.$comparators['$ID'] = COMPARATOR_ID;
   }
 
-  // changed to string
+  // changed to string by ebisuke
   get $ID(): string { return this.$lazyPropertyString('$ID'); }
   get $ID_NAME(): string { return this.$lazyPropertyString('$ID_NAME'); }
   get Description(): string { return this.$lazyPropertyStringMultiline('Description'); }

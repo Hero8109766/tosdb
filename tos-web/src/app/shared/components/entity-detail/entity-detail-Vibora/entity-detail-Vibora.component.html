@@ -1,0 +1,8 @@
+<div *ngIf="entity['AdditionalOption'] ">
+  <div class="w-100" *ngIf="divider"><hr></div>
+  <h5 *ngIf="header">AdditionalOptions</h5>
+  <div *ngFor="let options of entity['AdditionalOption']" >
+    <p class="text-multiline mb-0" [innerHTML]="options | sanitizeHTML"></p>
+  </div>
+  
+</div>

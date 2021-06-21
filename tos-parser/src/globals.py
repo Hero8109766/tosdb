@@ -41,7 +41,7 @@ recipes_by_name = {}
 skills = {}
 skills_by_name = {}
 translations = {}
-
+clmsgs={}
 all_items_by_name = [
     books_by_name,
     cards_by_name,

@@ -13,6 +13,7 @@
         <!-- Description -->
         <tos-entity-detail-Description *ngIf="job || buff"
                                        [entity]="entity"></tos-entity-detail-Description>
+   
 
         <!-- Skill -->
         <tos-entity-detail-Skill [build]="build"
@@ -34,7 +35,9 @@
     <tos-entity-detail-Description *ngIf="item && !equipment || attribute "
                                    [divider]="true"
                                    [entity]="entity"></tos-entity-detail-Description>
-
+    <!-- Vibora -->
+    <tos-entity-detail-Vibora *ngIf="equipment"
+                                    [entity]="entity"></tos-entity-detail-Vibora>
     <!-- Physical and Magical Attack / Defense -->
     <tos-entity-detail-AttackDefense [entity]="entity"></tos-entity-detail-AttackDefense>
 
