@@ -3,18 +3,15 @@ set -eu
 echo "ToS database bootstrap start."
 
 echo "Let's go to build up!"
-BASEDIR=$(cd $(dirname $0); pwd)
+BASEDIR=/var/www/base/
 
 # build up!
 cd ${BASEDIR}/tos-web/
-mkdir ./dist/ | true
-rm -r  ./dist/* | true
-ng build --prod
+rm -r ./dist/* | true
+ng build --optimization=false --source-map
+cd ${BASEDIR}/tos-build/
+cp -rf ../tos-web/dist/* ./dist/
 
 # merge
-cp -Rn ../tos-build/dist/* ./dist/ 
-
-# copy
-echo "Copying"
 
 echo "Done."

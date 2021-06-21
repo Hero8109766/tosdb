@@ -1,0 +1,280 @@
+import csv
+import logging
+import os
+
+from parserlib import constantsmod, globals
+from parserlib.parserr import parser_assets
+from parserlib.parserr import parser_translations
+from parserlib.parserr.parser_enums import TOSElement
+from parserlib.parserr.parser_items_equipment import TOSEquipmentMaterial
+from parserlib.utils import luautilmod
+from parserlib.utils.tosenum import TOSEnum
+import codecs
+
+class TOSMonsterRace(TOSEnum):
+    BEAST = 0
+    DEMON = 1
+    INSECT = 2
+    ITEM = 3
+    MUTANT = 4
+    PLANT = 5
+    VELNAIS = 6
+
+    @staticmethod
+    def value_of(string):
+        return {
+            'WIDLING': TOSMonsterRace.BEAST,
+            'VELNIAS': TOSMonsterRace.DEMON,
+            'KLAIDA': TOSMonsterRace.INSECT,
+            'ITEM': TOSMonsterRace.ITEM,
+            'PARAMUNE': TOSMonsterRace.MUTANT,
+            'FORESTER': TOSMonsterRace.PLANT,
+            'VELNAIS': TOSMonsterRace.VELNAIS,
+            '': None
+        }[string.upper()]
+
+
+class TOSMonsterRank(TOSEnum):
+    BOSS = 0
+    ELITE = 1
+    MATERIAL = 2
+    MISC = 3
+    NEUTRAL = 4
+    NORMAL = 5
+    NPC = 6
+    SPECIAL = 7
+    INSTANCE = 8
+    @staticmethod
+    def value_of(string):
+        return {
+            'BOSS': TOSMonsterRank.BOSS,
+            'ELITE': TOSMonsterRank.ELITE,
+            'MATERIAL': TOSMonsterRank.MATERIAL,
+            'MISC': TOSMonsterRank.MISC,
+            'NEUTRAL': TOSMonsterRank.NEUTRAL,
+            'NORMAL': TOSMonsterRank.NORMAL,
+            'NPC': TOSMonsterRank.NPC,
+            'SPECIAL': TOSMonsterRank.SPECIAL,
+            'INSTANCE':TOSMonsterRank.INSTANCE,
+        }[string.upper()]
+
+
+class TOSMonsterSize(TOSEnum):
+    S = 0
+    M = 1
+    L = 2
+    XL = 3
+    XXL = 4
+    HIDDEN = 5
+
+    @staticmethod
+    def value_of(string):
+        return {
+            'S': TOSMonsterSize.S,
+            'M': TOSMonsterSize.M,
+            'L': TOSMonsterSize.L,
+            'XL': TOSMonsterSize.XL,
+            'XXL': TOSMonsterSize.XXL,
+            'HIDDEN': TOSMonsterSize.HIDDEN,
+        }[string.upper()]
+
+
+class TOSMonsterType(TOSEnum):
+    MONSTER = 0
+    NEUTRAL = 1
+    NPC = 2
+    SIGN = 3
+    ITEM = 4
+    @staticmethod
+    def value_of(string):
+        return {
+            'MONSTER': TOSMonsterType.MONSTER,
+            'NEUTRAL': TOSMonsterType.NEUTRAL,
+            'NPC': TOSMonsterType.NPC,
+            'SIGN': TOSMonsterType.SIGN,
+            'ITEM':TOSMonsterType.ITEM,
+        }[string.upper()]
+
+
+statbase_monster = {}
+statbase_monster_type = {}
+
+statbase_monster_race = {}
+monster_const={}
+def parse():
+    parse_monsters_statbase('statbase_monster.ies', statbase_monster)
+    parse_monsters_statbase('monster_const.ies', monster_const)
+    parse_monsters_statbase('statbase_monster_type.ies', statbase_monster_type)
+    parse_monsters_statbase('statbase_monster_race.ies', statbase_monster_race)
+
+    parse_monsters('monster.ies')
+    parse_monsters('monster_event.ies')
+    parse_monsters('monster_npc.ies')
+    parse_monsters('monster_solo_dungeon.ies')
+    parse_monsters('monster_Ancient.ies')
+    parse_monsters('monster_mgame.ies')
+    parse_monsters('monster_item_summon.ies')
+    parse_monsters('monster_item.ies')
+    parse_monsters('monster_guild.ies')
+
+
+def parse_monsters(file_name):
+    logging.debug('Parsing %s...', file_name)
+
+    LUA_RUNTIME = luautilmod.LUA_RUNTIME
+    LUA_SOURCE = luautilmod.LUA_SOURCE
+
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, "ies.ipf", file_name.lower())
+    ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
+    ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
+
+    for row in ies_reader:
+        #logging.debug('Parsing monster: %s :: %s', row['ClassID'], row['ClassName'])
+
+        # HotFix: these properties need to be calculated before the remaining ones
+        row['Lv'] = int(row['Level']) if int(row['Level']) > 1 else 1
+        # injection constants
+        for k, v in monster_const[1].items():
+            if (k != "ClassID" and k != "Lv"):
+                if v in LUA_RUNTIME and LUA_RUNTIME[v] is not None:
+                    row[k] = LUA_RUNTIME[v](row)
+                else:
+                    if k not in row:
+                        row[k] = v
+        #2pass
+        for k, v in monster_const[1].items():
+            if (k!="ClassID"and k!="Lv") :
+                if v in LUA_RUNTIME and LUA_RUNTIME[v] is not None:
+                    row[k] = LUA_RUNTIME[v](row)
+                else:
+                    if  k not in row:
+                        row[k]=v
+
+        #row['CON'] = LUA_RUNTIME['SCR_Get_MON_CON'](row)
+        #row['DEX'] = LUA_RUNTIME['SCR_Get_MON_DEX'](row)
+        #row['INT'] = LUA_RUNTIME['SCR_Get_MON_INT'](row)
+        #row['MNA'] = LUA_RUNTIME['SCR_Get_MON_MNA'](row)
+        #row['STR'] = LUA_RUNTIME['SCR_Get_MON_STR'](row)
+        #row['BLKABLE'] = LUA_RUNTIME['SCR_Get_MON_BLKABLE'](row)
+        
+        obj = {}
+        obj['$ID'] = int(row['ClassID'])
+        obj['$ID_NAME'] = row['ClassName']
+        obj['Description'] = parser_translations.translate(row['Desc'])
+        obj['Icon'] = parser_assets.parse_entity_icon(row['Icon']) if row['Icon'] != 'ui_CreateMonster' else None
+        obj['Name'] = parser_translations.translate(row['Name'])
+        obj['Type'] = TOSMonsterType.value_of(row['GroupName'])
+
+        if obj['Type'] == TOSMonsterType.MONSTER:
+            obj['Armor'] = TOSEquipmentMaterial.value_of(row['ArmorMaterial'])
+            obj['Element'] = TOSElement.value_of(row['Attribute'])
+            obj['Level'] = int(row['Lv'])
+            obj['Race'] = TOSMonsterRace.value_of(row['RaceType'])
+            obj['Rank'] = TOSMonsterRank.value_of(row['MonRank'])
+            obj['Size'] = TOSMonsterSize.value_of(row['Size']) if row['Size'] else None
+            obj['EXP'] = int(LUA_RUNTIME['SCR_GET_MON_EXP'](row)) if obj['Level'] < 999 else 0
+            obj['EXPClass'] = int(LUA_RUNTIME['SCR_GET_MON_JOBEXP'](row)) if obj['Level'] < 999 else 0
+            obj['Stat_CON'] = int(row['CON'])
+            obj['Stat_DEX'] = int(row['DEX'])
+            obj['Stat_INT'] = int(row['INT'])
+            obj['Stat_SPR'] = int(row['MNA'])
+            obj['Stat_STR'] = int(row['STR'])
+            # obj['Stat_HP'] = int(LUA_RUNTIME['SCR_Get_MON_MHP'](row))
+            # obj['Stat_SP'] = int(LUA_RUNTIME['SCR_Get_MON_MSP'](row))
+            # obj['Stat_ATTACK_MAGICAL_MAX'] = int(LUA_RUNTIME['SCR_Get_MON_MAXMATK'](row))
+            # obj['Stat_ATTACK_MAGICAL_MIN'] = int(LUA_RUNTIME['SCR_Get_MON_MINMATK'](row))
+            # obj['Stat_ATTACK_PHYSICAL_MAX'] = int(LUA_RUNTIME['SCR_Get_MON_MAXPATK'](row))
+            # obj['Stat_ATTACK_PHYSICAL_MIN'] = int(LUA_RUNTIME['SCR_Get_MON_MINPATK'](row))
+            # obj['Stat_DEFENSE_MAGICAL'] = int(LUA_RUNTIME['SCR_Get_MON_MDEF'](row))
+            # obj['Stat_DEFENSE_PHYSICAL'] = int(LUA_RUNTIME['SCR_Get_MON_DEF'](row))
+            # obj['Stat_Accuracy'] = int(LUA_RUNTIME['SCR_Get_MON_HR'](row))
+            # obj['Stat_Evasion'] = int(LUA_RUNTIME['SCR_Get_MON_DR'](row))
+            # obj['Stat_CriticalDamage'] = int(LUA_RUNTIME['SCR_Get_MON_CRTATK'](row))
+            # obj['Stat_CriticalDefense'] = int(LUA_RUNTIME['SCR_Get_MON_CRTDR'](row))
+            # obj['Stat_CriticalRate'] = int(LUA_RUNTIME['SCR_Get_MON_CRTHR'](row))
+            # obj['Stat_BlockRate'] = int(LUA_RUNTIME['SCR_Get_MON_BLK'](row))
+            # obj['Stat_BlockPenetration'] = int(LUA_RUNTIME['SCR_Get_MON_BLK_BREAK'](row))
+            obj['Stat_HP'] = int(row['MHP'])
+            obj['Stat_SP'] = int(row['MSP'])
+            obj['Stat_ATTACK_MAGICAL_MAX'] =int(row['MAXMATK'])
+            obj['Stat_ATTACK_MAGICAL_MIN'] =int(row['MINMATK'])
+            obj['Stat_ATTACK_PHYSICAL_MAX'] = int(row['MAXPATK'])
+            obj['Stat_ATTACK_PHYSICAL_MIN'] = int(row['MINPATK'])
+            obj['Stat_DEFENSE_MAGICAL'] = int(row['MDEF'])
+            obj['Stat_DEFENSE_PHYSICAL'] = int(row['DEF'])
+            obj['Stat_Accuracy'] = int(LUA_RUNTIME['SCR_Get_MON_HR'](row))
+            obj['Stat_Evasion'] = int(LUA_RUNTIME['SCR_Get_MON_DR'](row))
+            obj['Stat_CriticalDamage'] = int(LUA_RUNTIME['SCR_Get_MON_CRTATK'](row))
+            obj['Stat_CriticalDefense'] = int(LUA_RUNTIME['SCR_Get_MON_CRTDR'](row))
+            obj['Stat_CriticalRate'] = int(LUA_RUNTIME['SCR_Get_MON_CRTHR'](row))
+            obj['Stat_BlockRate'] = int(LUA_RUNTIME['SCR_Get_MON_BLK'](row))
+            obj['Stat_BlockPenetration'] = int(LUA_RUNTIME['SCR_Get_MON_BLK_BREAK'](row))
+
+            obj['Link_Items'] = []
+            obj['Link_Maps'] = []
+
+            globals.monsters[obj['$ID']] = obj
+            globals.monsters_by_name[obj['$ID_NAME']] = obj
+        elif obj['Type'] == TOSMonsterType.NPC:
+            obj['Icon'] = parser_assets.parse_entity_icon(row['MinimapIcon']) if row['MinimapIcon'] else obj['Icon']
+
+            globals.npcs[obj['$ID']] = obj
+            globals.npcs_by_name[obj['$ID_NAME']] = obj
+
+    ies_file.close()
+
+
+def parse_monsters_statbase(file_name, destination):
+    logging.debug('Parsing %s...', file_name)
+
+    ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, "ies.ipf", file_name)
+    ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
+    ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
+
+    for row in ies_reader:
+        destination[int(row['ClassID'])] = row
+
+    ies_file.close()
+
+
+def parse_links():
+    parse_links_items()
+
+
+def parse_links_items():
+    logging.debug('Parsing Monsters <> Items...')
+
+    for monster in list(globals.monsters.values()):
+        ies_file = monster['$ID_NAME'] + '.ies'
+        ies_path = os.path.join(constantsmod.PATH_INPUT_DATA, 'ies_drop.ipf', ies_file.lower())
+
+        try:
+            with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:
+                for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
+                    if not row['ItemClassName'] or globals.get_item_link(row['ItemClassName']) is None:
+                        continue
+
+                    item = globals.get_item_link(row['ItemClassName']).entity
+                    item_link = globals.get_item_link(item)
+                    item_link = {
+                        'Chance': int(row['DropRatio']) / 100.0,
+                        'Item': item_link,
+                        'Quantity_MAX': int(row['Money_Max']),
+                        'Quantity_MIN': int(row['Money_Min']),
+                    }
+
+                    monster_link = globals.get_monster_link(monster)
+                    monster_link = {
+                        'Chance': int(row['DropRatio']) / 100.0,
+                        'Monster': monster_link,
+                        'Quantity_MAX': int(row['Money_Max']),
+                        'Quantity_MIN': int(row['Money_Min']),
+                    }
+
+                    globals.link(
+                        monster, 'Link_Items', monster_link,
+                        item, 'Link_Monsters', item_link
+                    )
+
+        except IOError:
+            continue

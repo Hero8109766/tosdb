@@ -1,9 +1,9 @@
 import {TOSEntity} from "../tos-entity.model";
 import {ITOSAttribute, ITOSAttributeUnlockArg, ITOSBuild, ITOSJob, ITOSSkill, TOSDataSet} from "../tos-domain";
 import {TOSDomainService} from "../tos-domain.service";
-import {LUAService} from "../../../service/lua.service";
 import {Observable} from "rxjs";
 import {fromPromise} from "rxjs/internal-compatibility";
+import { RemoteLUAService } from "src/app/shared/service/remote-lua.service";
 
 export class TOSAttribute extends TOSEntity implements ITOSAttribute {
 
@@ -44,7 +44,7 @@ export class TOSAttribute extends TOSEntity implements ITOSAttribute {
           }
         };
 
-        let unlock = (await LUAService.eval(build, source, context).toPromise());
+        let unlock = (await RemoteLUAService.evalAttribute(build,this.$ID, 'Unlock', context));
         if (unlock === 'UNLOCK')
           return true;
       }

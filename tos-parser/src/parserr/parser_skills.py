@@ -147,7 +147,7 @@ def parse_skills(is_rebuild):
 
                     if row[effect] != 'ZERO':
                         obj[key] = parse_skills_lua_source(row[effect])
-                        obj[key] = parse_skills_lua_source_to_javascript(row, obj[key])
+                        #obj[key] = parse_skills_lua_source_to_javascript(row, obj[key])
                     else:
                         # Hotfix: similar to the hotfix above
                         logging.warning('[%32s] Deprecated effect [%s] in Effect', obj['$ID_NAME'], effect)
@@ -158,10 +158,10 @@ def parse_skills(is_rebuild):
             # Parse formulas
             if row['CoolDown']:
                 obj['CoolDown'] = parse_skills_lua_source(row['CoolDown'])
-                obj['CoolDown'] = parse_skills_lua_source_to_javascript(row, obj['CoolDown'])
+                #obj['CoolDown'] = parse_skills_lua_source_to_javascript(row, obj['CoolDown'])
             if row['SpendSP']:
                 obj['SP'] = parse_skills_lua_source(row['SpendSP'])
-                obj['SP'] = parse_skills_lua_source_to_javascript(row, obj['SP'])
+                #obj['SP'] = parse_skills_lua_source_to_javascript(row, obj['SP'])
 
             globals.skills[obj['$ID']] = obj
             globals.skills_by_name[obj['$ID_NAME']] = obj
@@ -200,38 +200,38 @@ def parse_skills_lua_source(function):
     return result
 
 
-def parse_skills_lua_source_to_javascript(skill, source):
-    result = []
-    reinforceAbilName = '"' + skill['ReinforceAbility'] + '"' if 'ReinforceAbility' in skill else None
-
-    for line in source:
-        if 'GetSkillOwner(skill)' in line:
-            continue
-        if 'local reinfabil = ' in line:
-            continue
-        if 'local reinforceAbilName = ' in line:
-            continue
-        if 'SCR_GET_SPEND_ITEM_Alchemist_SprinkleHPPotion' in line:
-            continue
-        if 'SCR_GET_SPEND_ITEM_Alchemist_SprinkleSPPotion' in line:
-            continue
-
-        if reinforceAbilName:
-            line = line.replace('reinfabil', reinforceAbilName)
-            line = line.replace('reinforceAbilName', reinforceAbilName)
-            line = line.replace('TryGetProp(skill, "ReinforceAbility")', reinforceAbilName)
-
-        line = line.replace('basicsp', 'basicSP')  # freaking LUA being case insensitive!
-        line = line.replace('TryGetProp(hpPotion, "NumberArg1", 0)', '395 // @rjgtav: using Lv 15 Condensed HP Potion')
-        line = line.replace('TryGetProp(spPotion, "NumberArg1", 0)', '131 // @rjgtav: using Lv 15 Condensed SP Potion')
-        line = line.replace('SCR_CALC_BASIC_DEF(pc)', 'pc.DEF')
-        line = line.replace('SCR_CALC_BASIC_MDEF(pc)', 'pc.MDEF')
-        line = re.sub(r'TryGetProp\(pc, \"(.+)\"\)', r'pc.\1', line)
-        line = re.sub(r'GetAbilityAddSpendValue\(pc, skill\.ClassName, \"(.+)\"\)', '0 // @rjgtav: Attributes aren\'t supported yet', line)  # TODO: support calculating the extra CoolDown/SP caused by attributes
-
-        result.append(line)
-
-    return luautil.lua_function_source_to_javascript(result)
+# def parse_skills_lua_source_to_javascript(skill, source):
+#     result = []
+#     reinforceAbilName = '"' + skill['ReinforceAbility'] + '"' if 'ReinforceAbility' in skill else None
+#
+#     for line in source:
+#         if 'GetSkillOwner(skill)' in line:
+#             continue
+#         if 'local reinfabil = ' in line:
+#             continue
+#         if 'local reinforceAbilName = ' in line:
+#             continue
+#         if 'SCR_GET_SPEND_ITEM_Alchemist_SprinkleHPPotion' in line:
+#             continue
+#         if 'SCR_GET_SPEND_ITEM_Alchemist_SprinkleSPPotion' in line:
+#             continue
+#
+#         if reinforceAbilName:
+#             line = line.replace('reinfabil', reinforceAbilName)
+#             line = line.replace('reinforceAbilName', reinforceAbilName)
+#             line = line.replace('TryGetProp(skill, "ReinforceAbility")', reinforceAbilName)
+#
+#         line = line.replace('basicsp', 'basicSP')  # freaking LUA being case insensitive!
+#         line = line.replace('TryGetProp(hpPotion, "NumberArg1", 0)', '395 // @rjgtav: using Lv 15 Condensed HP Potion')
+#         line = line.replace('TryGetProp(spPotion, "NumberArg1", 0)', '131 // @rjgtav: using Lv 15 Condensed SP Potion')
+#         line = line.replace('SCR_CALC_BASIC_DEF(pc)', 'pc.DEF')
+#         line = line.replace('SCR_CALC_BASIC_MDEF(pc)', 'pc.MDEF')
+#         line = re.sub(r'TryGetProp\(pc, \"(.+)\"\)', r'pc.\1', line)
+#         line = re.sub(r'GetAbilityAddSpendValue\(pc, skill\.ClassName, \"(.+)\"\)', '0 // @rjgtav: Attributes aren\'t supported yet', line)  # TODO: support calculating the extra CoolDown/SP caused by attributes
+#
+#         result.append(line)
+#
+#     return luautil.lua_function_source_to_javascript(result)
 
 
 def parse_skills_overheats():

@@ -29,8 +29,6 @@ LUA_OVERRIDE = [
     'function IsBuffApplied(pc, buff) return "NO" end',
     'function GetAbilityAddSpendValue(pc,classname,column) return 0 end',
     'function GetSkillOwner(skill) return {} end',
-    #'function GetClassList(name) return {} end',
-    #'function GetClassByNameFromList(cls,name) return nil end',
     'function IsServerSection(pc) return 0 end',
     'function GetExProp(entity, name) return entity[name] end',
     'function GetExProp_Str(entity, name) return tostring(entity[name]) end',
@@ -45,7 +43,10 @@ LUA_OVERRIDE = [
     'function SCR_MON_OWNERITEM_ARMOR_CALC(self, defType) return 0 end',
     'function SetExProp(entity, name, value) entity[name] = value end',
     'function math.pow(value,power) return value ^ power end',
-    'function GetZoneName() return "" end'
+    'function GetZoneName() return "" end',
+    "function Weeklyboss_GetNowWeekNum() return nil end",
+    "function GetBuffByProp(self,mode,value) return nil end",
+    "function IsRaidField(self)return 0 end",
 ]
 
 LUA_RUNTIME = None
@@ -140,7 +141,12 @@ def init_global_data():
     ies_ADD('monster', iesutil.load('monster_item_summon.ies'))
     ies_ADD('monster', iesutil.load('monster_item.ies'))
     ies_ADD('monster', iesutil.load('monster_event.ies'))
-    ies_ADD('monster', iesutil.load('monster_solo_dungeon.ies'))
+    ies_ADD('monster', iesutil.load('Monster_solo_dungeon.ies'))
+    ies_ADD('monster', iesutil.load('monster_Ancient.ies'))
+    ies_ADD('monster', iesutil.load('monster_mgame.ies'))
+    ies_ADD('monster', iesutil.load('monster_npc.ies'))
+
+
     ies_ADD('stat_monster', iesutil.load('statbase_monster.ies'))
     ies_ADD('stat_monster_race', iesutil.load('statbase_monster_race.ies'))
     ies_ADD('stat_monster_type', iesutil.load('statbase_monster_type.ies'))
@@ -148,6 +154,7 @@ def init_global_data():
 
 def init_global_functions():
     lua.execute("".join((s+"\n" for s in LUA_OVERRIDE))+'\n\n'+'''
+    
         app = {
             IsBarrackMode = function() return false end
         }
@@ -190,10 +197,15 @@ def init_global_functions():
                 GetPetEquipObjByGuid = function(guid) end
             }
         }
-    
+        
+        
         
         function GetClassByNumProp(ies_key, column, value)
+        
             local data = ies_by_ClassID[string.lower(ies_key)]
+            if data==nil then
+                return nil
+            end
             for id, row in pairs(data) do
                 if TryGetProp(row, column) == value then
                     return row

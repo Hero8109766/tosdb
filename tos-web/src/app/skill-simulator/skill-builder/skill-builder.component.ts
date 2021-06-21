@@ -9,6 +9,7 @@ import {TinyUrlService} from "../../shared/service/integrations/tiny-url.service
 import {ClipboardService} from "../../shared/service/clipboard.service";
 import {ITOSJob} from "../../shared/domain/tos/tos-domain";
 import {TOSRegionService} from "../../shared/domain/tos-region";
+import { RemoteLUAService } from 'src/app/shared/service/remote-lua.service';
 
 const PARAM_BUILD = 'build';
 const PARAM_TINYURL = 'tinyurl';
@@ -50,6 +51,7 @@ export class SkillBuilderComponent implements OnDestroy, OnInit {
     private router: Router,
     private tinyUrlService: TinyUrlService,
     private tosNeetService: TosNeetService,
+    private lua:RemoteLUAService,
   ) {}
 
   private buildSubscribe() {
@@ -61,7 +63,7 @@ export class SkillBuilderComponent implements OnDestroy, OnInit {
     this.subscriptionSkill = this.build.Skill$.subscribe(value => this.onBuildChange());
     this.subscriptionJob = this.build.Job$.subscribe(value => this.onJobChange(value));
     this.subscriptionStatsPoints = this.build.StatsPoints$.subscribe(value => this.onBuildChange());
-    this.subscriptionTooltip = this.build.Tooltip.subscribe(value => this.tooltip = value);
+    this.subscriptionTooltip = this.build.Tooltip.subscribe(value => this.tooltip = value as TOSEntity );
   }
 
   shareAsImage() {

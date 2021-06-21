@@ -2,7 +2,7 @@ import logging
 import os
 import shutil
 import subprocess
-
+import glob
 import constants
 from utils import fileutil
 
@@ -37,9 +37,45 @@ def unpack(ipf):
     ipf_revision = os.path.basename(ipf)[:-4]
     logging.debug('Unpacking %s...', ipf)
     tmpname="tmp.ipf"
+
+
+
+    extdir = os.path.join(constants.PATH_UNPACKER, 'extract')
+    shutil.copyfile(ipf, os.path.join(constants.PATH_UNPACKER, "tmp.ipf"))
+    prevcurdir = os.getcwd()
+    os.chdir(constants.PATH_UNPACKER)
+    # Decrypt and extract ipf file
+    subprocess.check_call(
+        [constants.PATH_UNPACKER_LIBIPF, tmpname,"extract"],
+        stdin=None, stdout=None, stderr=None, shell=False
+    )
+
+    os.chdir(prevcurdir)
+    fileutil.move_tree(extdir, ipf_extract)
+
+    if os.path.exists(ipf_extract):
+        # Make all files lower case
+        for file_name in os.listdir(ipf_extract):
+            if any(file_name == s for s in IPF_BLACKLIST):
+                shutil.rmtree(os.path.join(ipf_extract, file_name))
+
+        # Make all files lower case
+        fileutil.to_lower(ipf_extract)
+
+        # Move extracted IPF files to data directory
+        fileutil.move_tree(ipf_extract, constants.PATH_INPUT_DATA)
+
+        # Remove extract directory
+        shutil.rmtree(ipf_extract)
+    if os.path.exists(ipf_extract):
+        shutil.rmtree(ipf_extract)
+
+
+    # pass 2
+
     extdir=os.path.join(constants.PATH_UNPACKER, 'extract')
     shutil.copyfile(ipf,os.path.join(constants.PATH_UNPACKER,"tmp.ipf"))
-    prevcurdir=os.getcwd()
+
     os.chdir(constants.PATH_UNPACKER)
     # Decrypt and extract ipf file
     if ipf_revision not in ['29_001001']:  # HotFix: these specific patches aren't encrypted for some reason
@@ -62,19 +98,17 @@ def unpack(ipf):
             stdin=None, stdout=None, stderr=None, shell=False
         )
     os.chdir(prevcurdir)
-    fileutil.move_tree(extdir,ipf_extract)
-    shutil.rmtree(extdir)
+    fileutil.move_tree(extdir, ipf_extract)
+    if os.path.exists(extdir):
+        shutil.rmtree(extdir)
     if os.path.exists(ipf_extract):
-        # Remove blacklisted IPF files from extracted result
-        for file_name in os.listdir(ipf_extract):
-            if any(file_name == s for s in IPF_BLACKLIST):
-                shutil.rmtree(os.path.join(ipf_extract, file_name))
 
         # Make all files lower case
         fileutil.to_lower(ipf_extract)
-
-        # Move extracted IPF files to data directory
-        fileutil.move_tree(ipf_extract, constants.PATH_INPUT_DATA)
-
+        abspath=os.path.abspath(constants.PATH_INPUT_DATA)
+        os.chdir(ipf_extract)
+        for path in glob.glob("**/*.ies",recursive=True):
+            shutil.copyfile(path,os.path.join(abspath,path))
+        os.chdir(prevcurdir)
         # Remove extract directory
         shutil.rmtree(ipf_extract)

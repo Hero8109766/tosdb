@@ -56,9 +56,10 @@ export class EntityListComponent implements OnDestroy, OnInit {
       this.config = this.route.snapshot.data.configuration as TOSListConfiguration;
 
       let response = this.route.snapshot.data.response as CRUDPageResult<TOSEntity>;
-      this.data = response.result;
+      this.data = response.result.filter((x)=>!(x===undefined));
       this.dataSize = response.size;
-
+      //this.data = response.result;
+      //this.dataSize = response.size;
       this.page = +params.get(CRUDResolver.PARAM_PAGE) || 1;
       this.pageSort = Sort.valueOf(params.get(CRUDResolver.PARAM_SORT)) || Sort.default(this.config);
       this.pageFilter = (params.get(CRUDResolver.PARAM_FILTER) || '').split(';')

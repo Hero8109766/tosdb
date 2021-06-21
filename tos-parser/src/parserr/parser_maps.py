@@ -145,7 +145,6 @@ def parse_maps_images(region, version_update):
             image.close()
             image_shadow.close()
 
-
 def parse_links():
     parse_links_items()
     parse_links_items_rewards()

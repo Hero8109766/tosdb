@@ -97,16 +97,17 @@ export class SkillBuilderSkillComponent implements OnChanges, OnDestroy {
   }
 
   async unlockAttributes(args: string[]) {
-    if (!this.attributes) return;
+    if (!this.attributes || this.attributes===undefined) return;
 
     let dirty = false;
 
     for (let i = 0; i < this.attributes.length; i ++) {
       let attribute = this.attributes[i];
-
-      if (args == null || attribute.unlockAvailableCheck(args)) {
-        dirty = true;
-        this.attributesUnlock[i] = await attribute.unlockAvailable(this.build).toPromise();
+      if (!attribute===undefined){
+        if (args == null || attribute.unlockAvailableCheck(args)) {
+          dirty = true;
+          this.attributesUnlock[i] = await attribute.unlockAvailable(this.build).toPromise();
+        }
       }
     }
 

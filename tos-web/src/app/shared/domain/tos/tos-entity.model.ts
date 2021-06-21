@@ -17,8 +17,14 @@ export abstract class Comparable {
 
 export abstract class TOSEntity extends Comparable implements ITOSEntity {
 
-  public Selected: boolean;
-
+  private _selected:boolean;
+  
+  public get Selected(){
+      return this._selected;
+  }
+  public set Selected(value:boolean){
+    this._selected=value;
+}
   private url: string;
 
   protected constructor(readonly Dataset: TOSDataSet, protected $json: TOSEntity) {
@@ -27,7 +33,8 @@ export abstract class TOSEntity extends Comparable implements ITOSEntity {
     this.$comparators['$ID'] = COMPARATOR_ID;
   }
 
-  get $ID(): number { return this.$lazyPropertyNumber('$ID'); }
+  // changed to string
+  get $ID(): string { return this.$lazyPropertyString('$ID'); }
   get $ID_NAME(): string { return this.$lazyPropertyString('$ID_NAME'); }
   get Description(): string { return this.$lazyPropertyStringMultiline('Description'); }
   get Icon(): string {
@@ -98,8 +105,18 @@ export abstract class TOSEntity extends Comparable implements ITOSEntity {
           observable = Array.isArray(observable) && observable.map(mapper) || mapper(observable);
           observable = Array.isArray(observable) && forkJoin(observable) || observable;
           observable.subscribe(value => {
-            subject.next(value);
-            subject.complete();
+            if(value){  //ad hoc fix by ebisuke
+              if(value.filter){
+                let array=value;
+                array=array.filter(x=>x!=undefined);
+                subject.next(array.filter(x=>x!=undefined));
+                subject.complete();
+              }else{
+                
+                subject.next(value);
+                subject.complete();
+              }
+            }
           });
 
       return this.$json[prop] = subject.asObservable();
@@ -108,7 +125,7 @@ export abstract class TOSEntity extends Comparable implements ITOSEntity {
     return null;
   }
 
-  protected $lazyPropertyLinkOriginal(propOriginal: string) : number | number[] {
+  protected $lazyPropertyLinkOriginal(propOriginal: string) : string | string[] {
     let prop = propOriginal + '$original';
     return this.$json[prop] = this.$json[prop] || this.$json[propOriginal];
 

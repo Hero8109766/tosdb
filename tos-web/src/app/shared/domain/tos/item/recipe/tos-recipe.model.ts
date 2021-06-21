@@ -17,7 +17,7 @@ export class TOSRecipe extends TOSItem implements ITOSRecipe {
   private TOSRecipeLinkItem(value: TOSRecipeMaterial): Observable<TOSRecipeMaterial> {
     return fromPromise((async () => {
       let object = new TOSRecipeMaterial(value);
-          object.Item = await TOSDomainService.itemsByIdLink(+object.Item).toPromise();
+          object.Item = await TOSDomainService.itemsByIdLink(object.Item.$ID).toPromise();
 
       return object;
     })());

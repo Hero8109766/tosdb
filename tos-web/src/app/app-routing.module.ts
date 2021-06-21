@@ -54,7 +54,7 @@ const ROUTES_REGION: Routes = [
     canDeactivate: [RouteService],
     children: ROUTES_APP,
   },
-  {
+   {
     path: 'ktest',
     children: ROUTES_APP,
     canActivate: [RouteService],

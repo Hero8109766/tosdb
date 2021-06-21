@@ -2,9 +2,10 @@ version: '3'
 services: 
     tos:
         container_name: tos
-        build: .
+        build: 
+            context: .
+            dockerfile: dockerfile
         ports:
-            - "8000:8000"
+            - "8000:80"
         volumes:
             - ./input:/var/www/base/tos-parser/input/
-            - ./distbuild:/var/www/base/tos-build/dist/

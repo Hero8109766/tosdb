@@ -18,6 +18,8 @@ OUTPUT_NPCS = 'npcs'
 OUTPUT_RECIPES = 'recipes'
 OUTPUT_SKILLS = 'skills'
 
+COMPARE_WITH_NEET= False
+
 URL_PATCH = None
 URL_PATCH_iTOS = 'http://drygkhncipyq8.cloudfront.net/toslive/patch/'
 URL_PATCH_jTOS = 'http://d3bbj7hlpo9jjy.cloudfront.net/live/patch/'
@@ -43,7 +45,9 @@ PATH_PARSER = os.path.join('..', 'tos-parser')
 
 PATH_UNPACKER = os.path.join('..', 'ipf_unpacker')
 PATH_UNPACKER_EXE ="./ipf_unpack"
-
+#PATH_UNPACKER_UNIPF ="dotnet"
+#PATH_UNPACKER_UNIPF2 ="./tpIpfToolCmd.dll"
+PATH_UNPACKER_LIBIPF ="unipf"
 PATH_BUILD = os.path.join('..', 'tos-build', 'dist')
 PATH_BUILD_ASSETS = os.path.join(PATH_BUILD, 'assets')
 PATH_BUILD_ASSETS_DATA = None

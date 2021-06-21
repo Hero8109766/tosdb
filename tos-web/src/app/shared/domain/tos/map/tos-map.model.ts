@@ -42,7 +42,7 @@ export class TOSMap extends TOSEntity implements ITOSMap {
   private TOSMapLinkItem(value: TOSMapLinkItem): Observable<TOSMapLinkItem> {
     return fromPromise((async () => {
       let object = new TOSMapLinkItem(value);
-          object.Item = await (object.Item && TOSDomainService.itemsByIdLink(+object.Item).toPromise());
+          object.Item = await (object.Item && TOSDomainService.itemsByIdLink(object.Item.$ID).toPromise());
 
       return object;
     })());
@@ -50,8 +50,8 @@ export class TOSMap extends TOSEntity implements ITOSMap {
   private TOSMapLinkNPC(value: TOSMapLinkNPC): Observable<TOSMapLinkNPC> {
     return fromPromise((async () => {
       let object = new TOSMapLinkNPC(value);
-          object.Item = await (object.Item && TOSDomainService.itemsByIdLink(+object.Item).toPromise());
-          object.NPC = await (object.NPC && TOSDomainService.npcsByIdLink(+object.NPC).toPromise());
+          object.Item = await (object.Item && TOSDomainService.itemsByIdLink(object.Item.$ID).toPromise());
+          object.NPC = await (object.NPC && TOSDomainService.npcsByIdLink(object.NPC.$ID).toPromise());
 
       return object;
     })());

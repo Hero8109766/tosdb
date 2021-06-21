@@ -40,6 +40,6 @@ export class TOSJob extends TOSEntity implements ITOSJob {
 
   get Link_Attributes() { return this.$lazyPropertyLink('Link_Attributes', value => TOSDomainService.attributesById(value)) as Observable<ITOSAttribute[]> }
   get Link_Skills() { return this.$lazyPropertyLink('Link_Skills', value => TOSDomainService.skillsById(value)) as Observable<ITOSSkill[]> }
-  get Link_Skills$ID() { return this.$lazyPropertyLinkOriginal('Link_Skills') as number[] }
+  get Link_Skills$ID() { return this.$lazyPropertyLinkOriginal('Link_Skills') as string[] }
 
 }

@@ -5,6 +5,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+
   ViewChild
 } from '@angular/core';
 import {faSearch, faTimes} from "@fortawesome/free-solid-svg-icons";
@@ -58,10 +59,16 @@ export class HeaderSearchComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.input$ = fromEvent(this.input.nativeElement, 'keyup').pipe(debounceTime(200));
-    this.subscriptionInput = this.input$.subscribe(value => this.onInputChange());
+    
   }
-
+  ngAfterViewInit(){
+    //ad hoc fixing by ebisuke
+      setTimeout(() => {
+        this.input$ = fromEvent(this.input.nativeElement, 'keyup').pipe(debounceTime(200));
+        this.subscriptionInput = this.input$.subscribe(value => this.onInputChange());
+    
+      }, 1000);
+    }
   ngOnDestroy(): void {
     this.subscriptionInput && this.subscriptionInput.unsubscribe();
     this.subscriptionLoad && this.subscriptionLoad.unsubscribe();
@@ -97,7 +104,9 @@ export class HeaderSearchComponent implements OnDestroy, OnInit {
   onKeyboardNavigate(i: number) {
     document.activeElement && document.activeElement['blur']();
     this.onFocus(false);
-    this.router.navigate([this.results[i].Url]);
+    if(this.results && this.results[i]){
+      this.router.navigate([this.results[i].Url]);
+    }
   }
   onKeyboardSelect(direction: number) {
     if (this.results && this.results.length) {
@@ -120,7 +129,7 @@ export class HeaderSearchComponent implements OnDestroy, OnInit {
 
   onInputChange() {
     // Ignore empty and duplicate queries
-    if (this.query == null || this.query == '' || this.query.length <= 2) return this.onQueryResult({ page: 0, response: []});
+    if (this.query == null || this.query == '' || this.query.length <= 0) return this.onQueryResult({ page: 0, response: []});
     if (this.query == this.queryPrevious && this.queryPage == this.queryPreviousPage) return;
 
     if (this.query != this.queryPrevious || this.queryDataset != this.queryPreviousDataset) {
@@ -138,8 +147,9 @@ export class HeaderSearchComponent implements OnDestroy, OnInit {
     let query = this.query.trim();
     let words = query.split(' ');
         query = words
-          .map((value, index) => index == words.length - 1 ? '+' + value + '*' : '+' + value)
+          .map((value, index) => (index == words.length - 1 && words.length>1) ? value + '*' : '*' + value + '*')
           .join(' ');
+
 
     this.search
       .search(this.queryDataset, query, this.queryPage)

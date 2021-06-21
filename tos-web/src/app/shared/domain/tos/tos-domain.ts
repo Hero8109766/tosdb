@@ -143,15 +143,17 @@ export const
   TOSElementService.icon = (value: TOSElement) => 'assets/images/element_' + value.toString().toLowerCase() + '.png';
 
 export enum TOSEquipmentGrade {
-  LEGENDARY = 'Legendary',
-  MAGIC = 'Magic',
+  UNUSED='Unused',
   NORMAL = 'Normal',
+  MAGIC = 'Magic',
   RARE = 'Rare',
   UNIQUE = 'Unique',
+  LEGENDARY = 'Legendary',
   GODDESS = 'Goddess',
 }
 export const
   TOSEquipmentGradeService = EnumServiceFactory(TOSEquipmentGrade) as EnumService<TOSEquipmentGrade> & {
+    
     comparator(a: TOSEquipmentGrade, b: TOSEquipmentGrade): -1 | 0 | 1;
     color(value: TOSEquipmentGrade): string;
     order(value: TOSEquipmentGrade): number;
@@ -162,7 +164,11 @@ export const
 
     return (i < j) ? -1 : (i > j) ? 1 : 0;
   };
+  TOSEquipmentGradeService.groupBy = () => {
+    return [{ options: Object.values(TOSEquipmentGrade).filter(x=>x!=TOSEquipmentGrade.UNUSED) }]
+  },
   TOSEquipmentGradeService.color = (value: TOSEquipmentGrade) => {
+    if (value == TOSEquipmentGrade.UNUSED)    return '#000000';
     if (value == TOSEquipmentGrade.NORMAL)    return '#999999';
     if (value == TOSEquipmentGrade.MAGIC)     return '#42BAF7';
     if (value == TOSEquipmentGrade.RARE)      return '#CE69EF';
@@ -172,12 +178,13 @@ export const
     
   };
   TOSEquipmentGradeService.order = (value: TOSEquipmentGrade) => {
-    if (value == TOSEquipmentGrade.NORMAL)    return 0;
-    if (value == TOSEquipmentGrade.MAGIC)     return 1;
-    if (value == TOSEquipmentGrade.RARE)      return 2;
-    if (value == TOSEquipmentGrade.UNIQUE)    return 3;
-    if (value == TOSEquipmentGrade.LEGENDARY) return 4;
-    if (value == TOSEquipmentGrade.GODDESS)   return 5;
+    if (value == TOSEquipmentGrade.UNUSED)    return 0;
+    if (value == TOSEquipmentGrade.NORMAL)    return 1;
+    if (value == TOSEquipmentGrade.MAGIC)     return 2;
+    if (value == TOSEquipmentGrade.RARE)      return 3;
+    if (value == TOSEquipmentGrade.UNIQUE)    return 4;
+    if (value == TOSEquipmentGrade.LEGENDARY) return 5;
+    if (value == TOSEquipmentGrade.GODDESS)   return 6;
     
   };
 
@@ -619,6 +626,9 @@ export interface ITOSBuild {
   StatsBase: ITOSBuildStats;
   StatsBonus: ITOSBuildStats;
   StatsPoints$: Observable<number>;
+  Attribute$:Observable<ITOSAttribute>;
+  Attributes:ITOSAttribute[];
+  
   Version: number;
 
   jobAdd$(job: ITOSJob): Promise<void>;
@@ -641,6 +651,13 @@ export interface ITOSBuild {
   statsIncrementLevel(stat: string, delta: number): void;
   statsIncrementLevelAvailable(stat: string, delta: number): boolean;
   statsPointsMax(): number;
+
+  attributeLevel(attribute: ITOSAttribute): number;
+  attributePointsTotalConsumption$():Promise<number>;
+  attributeIncrementLevel$(attribute: ITOSAttribute, delta: number, force?: boolean):  Promise<void>;
+  attributeIncrementLevelAvailable$(attribute: ITOSAttribute, delta: number):  Observable<boolean>;
+
+
 }
 export interface ITOSBuildEncoded {
   jobs: string[],
@@ -657,7 +674,7 @@ export interface ITOSBuildStats {
 }
 
 export interface ITOSEntity {
-  $ID: number;
+  $ID: string;
   $ID_NAME: string;
   Dataset: TOSDataSet;
   Description: string;
@@ -833,7 +850,7 @@ export interface ITOSJob extends ITOSEntity {
 
   Link_Attributes: Observable<ITOSAttribute[]>;
   Link_Skills: Observable<ITOSSkill[]>;
-  Link_Skills$ID: number[];
+  Link_Skills$ID: string[];
 }
 
 export interface ITOSMap extends ITOSEntity {
@@ -946,7 +963,7 @@ export interface ITOSSkill extends ITOSEntity {
   Link_Attributes: Observable<ITOSAttribute[]>;
   Link_Gem: Observable<ITOSGem>;
   Link_Job: Observable<ITOSJob>;
-  Link_Job$ID: number;
+  Link_Job$ID: string;
 
   BuildCoolDown(build: ITOSBuild): Observable<number>;
   BuildSP(build: ITOSBuild): Observable<number>;
