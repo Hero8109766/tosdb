@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SimpleChanges} from "@angular/core";
 import {TOSEntity} from "../../domain/tos/tos-entity.model";
 import {TOSItem} from "../../domain/tos/item/tos-item.model";
+import { TOSBuff } from "../../domain/tos/buff/tos-buff.model";
 import {TOSMonster} from "../../domain/tos/monster/tos-monster.model";
 import {TOSBook} from "../../domain/tos/item/book/tos-book.model";
 import {TOSCard} from "../../domain/tos/item/card/tos-card.model";
@@ -29,6 +30,7 @@ export class EntityDetailChildComponent {
 
   attribute: TOSAttribute;
   book: TOSBook;
+  buff:TOSBuff;
   card: TOSCard;
   collection: TOSCollection;
   equipment: TOSEquipment;
@@ -47,6 +49,8 @@ export class EntityDetailChildComponent {
     if (changes.entity) {
       this.attribute = this.entity instanceof TOSAttribute ? this.entity as TOSAttribute : null;
       this.book = this.entity instanceof TOSBook ? this.entity as TOSBook : null;
+
+      this.buff = this.entity instanceof TOSBuff ? this.entity as TOSBuff : null;
       this.card = this.entity instanceof TOSCard ? this.entity as TOSCard : null;
       this.collection = this.entity instanceof TOSCollection ? this.entity as TOSCollection : null;
       this.equipment = this.entity instanceof TOSEquipment ? this.entity as TOSEquipment : null;

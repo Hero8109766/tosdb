@@ -8,7 +8,8 @@ import constants
 import globals
 from parserr import parser_translations, parser_assets, parser_attributes, parser_items, parser_items_books, \
     parser_items_cards, parser_items_collections, parser_items_cubes, parser_items_gems, parser_items_equipment, \
-    parser_items_equipment_sets, parser_items_recipes, parser_jobs, parser_maps, parser_monsters, parser_skills
+    parser_items_equipment_sets, parser_items_recipes, parser_jobs, parser_maps, parser_monsters, parser_skills, \
+    parser_buffs
 from utils import luautil
 
 
@@ -78,7 +79,7 @@ def parse(region, is_rebuild, is_version_new):
     parser_items_gems.parse(is_rebuild)
     parser_jobs.parse(is_rebuild)
     parser_skills.parse(is_rebuild)
-
+    parser_buffs.parse();
     # Garbage collect...
     logging.debug('Garbage collect...')
     gc.collect()
@@ -151,6 +152,7 @@ def parse(region, is_rebuild, is_version_new):
     logging.debug('Writing CSVs (2/2)...')
     csv_write(list(globals.books.values()), constants.OUTPUT_BOOKS)
     csv_write(list(globals.cards.values()), constants.OUTPUT_CARDS)
+    csv_write(list(globals.buffs.values()), constants.OUTPUT_BUFFS)
     csv_write(list(globals.collections.values()), constants.OUTPUT_COLLECTIONS)
     csv_write(list(globals.cubes.values()), constants.OUTPUT_CUBES)
     csv_write(list(globals.equipment.values()), constants.OUTPUT_EQUIPMENT)

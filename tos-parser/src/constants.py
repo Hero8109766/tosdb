@@ -4,6 +4,7 @@ from parserr.parser_enums import TOSRegion
 
 OUTPUT_ATTRIBUTES = 'attributes'
 OUTPUT_BOOKS = 'books'
+OUTPUT_BUFFS = 'buffs'
 OUTPUT_CARDS = 'cards'
 OUTPUT_COLLECTIONS = 'collections'
 OUTPUT_CUBES = 'cubes'

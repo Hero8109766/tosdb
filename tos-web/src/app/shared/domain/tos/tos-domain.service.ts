@@ -1,6 +1,7 @@
 import {
   ITOSAttribute,
   ITOSBook,
+  ITOSBuff,
   ITOSCard,
   ITOSCollection,
   ITOSCube,
@@ -48,6 +49,8 @@ export class TOSDomainService {
 
   public static books(page: CRUDPage): Observable<CRUDPageResult<ITOSBook>>                 { return this.repository.find(TOSDataSet.BOOKS, page) };
   public static booksById($ID: string): Observable<ITOSBook>                                { return this.repository.findByIndex(TOSDataSet.BOOKS, '$ID', $ID, true) };
+  public static buffs(page: CRUDPage): Observable<CRUDPageResult<ITOSBuff>>                 { return this.repository.find(TOSDataSet.BUFFS, page) };
+  public static buffsById($ID: string): Observable<ITOSBuff>                                { return this.repository.findByIndex(TOSDataSet.BUFFS, '$ID', $ID, true) };
 
   public static cards(page: CRUDPage): Observable<CRUDPageResult<ITOSCard>>                 { return this.repository.find(TOSDataSet.CARDS, page) };
   public static cardsById($ID: string): Observable<ITOSCard>                                { return this.repository.findByIndex(TOSDataSet.CARDS, '$ID', $ID, true) };

@@ -57,6 +57,7 @@ import {AnalyticsService} from "./service/analytics.service";
 import {TOSMapResolver} from "./domain/tos/map/tos-map.resolver";
 import {CssMaxHeightDirective} from './directives/css-max-height.directive';
 import {TOSNPCResolver} from "./domain/tos/monster/tos-npc.resolver";
+import { TOSBuffResolver } from './domain/tos/buff/tos-buff.resolver';
 
 @NgModule({
   imports: [
@@ -176,6 +177,7 @@ export class SharedModule {
         TableCellTextPipe,
         TOSAttributeResolver,
         TOSBookResolver,
+        TOSBuffResolver,
         TOSCardResolver,
         TOSCollectionResolver,
         TOSCubeResolver,

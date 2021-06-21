@@ -57,6 +57,7 @@ export enum TOSDataSet {
   ATTRIBUTES = 'attributes',
   BOOKS = 'books',
   CARDS = 'cards',
+  BUFFS = 'buffs',
   COLLECTIONS = 'collections',
   CUBES = 'cubes',
   EQUIPMENT = 'equipment',
@@ -78,6 +79,7 @@ export namespace TOSDataSetService {
         TOSDataSet.ATTRIBUTES,
         TOSDataSet.JOBS,
         TOSDataSet.SKILLS,
+       
       ],
     },
     {
@@ -99,6 +101,12 @@ export namespace TOSDataSetService {
       options: [
         TOSDataSet.MAPS,
         TOSDataSet.MONSTERS,
+      ],
+    },
+    {
+      label: 'Other',
+      options: [
+        TOSDataSet.BUFFS,
       ],
     }
   ];
@@ -682,6 +690,12 @@ export interface ITOSEntity {
   Name: string;
   Selected: boolean;
   Url: string;
+}
+
+
+export interface ITOSBuff extends ITOSEntity {
+    UserRemove:boolean;
+ 
 }
 export interface ITOSEntityLink<LINK extends ITOSEntity> {
   Link: LINK;

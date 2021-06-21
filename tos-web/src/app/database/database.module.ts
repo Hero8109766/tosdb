@@ -6,6 +6,7 @@ import {EntityDetailComponent} from "./entity-detail/entity-detail.component";
 import {EntityListComponent} from "./entity-list/entity-list.component";
 import {AttributeListConfigurationResolver} from "./resolvers/attribute-list-configuration.resolver";
 import {BookListConfigurationResolver} from "./resolvers/book-list-configuration.resolver";
+import {BuffListConfigurationResolver} from "./resolvers/buff-list-configuration.resolver";
 import {CardListConfigurationResolver} from "./resolvers/card-list-configuration.resolver";
 import {CollectionListConfigurationResolver} from "./resolvers/collection-list-configuration.resolver";
 import {CubeListConfigurationResolver} from "./resolvers/cube-list-configuration.resolver";
@@ -33,6 +34,7 @@ import {EntityDetailMapComponent} from './entity-detail-v2/entity-detail-map/ent
   providers: [
     AttributeListConfigurationResolver,
     BookListConfigurationResolver,
+    BuffListConfigurationResolver,
     CardListConfigurationResolver,
     CollectionListConfigurationResolver,
     CubeListConfigurationResolver,
