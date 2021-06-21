@@ -11,7 +11,7 @@ import {LoadingService} from "./loading.service";
 export class LoadingComponent implements OnInit, OnDestroy {
 
   isClearCacheAvailable: boolean;
-  isClearCacheAvailableTimeout: number;
+  isClearCacheAvailableTimeout: any;
 
   installComplete: boolean;
   installSupported: boolean;

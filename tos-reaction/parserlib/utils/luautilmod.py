@@ -1,4 +1,5 @@
 import csv
+import glob
 import os
 import re
 import codecs
@@ -39,6 +40,7 @@ class luaclass:
             'function GetAbilityAddSpendValue(pc,classname,column) return 0 end',
             #'function GetSkillOwner(skill) return {} end',
             'function IsServerSection(pc) return 0 end',
+            'function IsServerObj(pc) return 0 end',
             'function GetExProp(entity, name) return entity[name] or 0 end',
             'function GetExProp_Str(entity, name) return tostring(entity[name]) or nil end',
             'function GetIESID(item) end',
@@ -99,7 +101,9 @@ class luaclass:
 
         self.lua.execute(execute)
 
-
+    def ies_add_glob(self,key,pattern):
+        for path in glob.glob(pattern,recursive=True):
+            self.ies_ADD(key,  self.ies.load(path) )
     def init_global_data(self):
         self.ies_ADD = self.lua.execute('''
             ies_by_ClassID = {}
@@ -172,7 +176,8 @@ class luaclass:
         self.ies_ADD('monster', self.ies.load('monster_npc.ies'))
         self.ies_ADD('skill', self.ies.load('skill.ies'))
         self.ies_ADD('SkillRestrict', self.ies.load('SkillRestrict.ies'))
-        self.ies_ADD('ability', self.ies.load('ability.ies'))
+        #self.ies_ADD('ability', self.ies.load('ability.ies'))
+        self.ies_add_glob("ability",'../ies_ability.ipf/ability_*.ies')
         self.ies_ADD('monster_skill', self.ies.load('monster_skill.ies'))
 
         self.ies_ADD('stat_monster', self.ies.load('statbase_monster.ies'))
@@ -296,7 +301,29 @@ class luaclass:
                     return value
                 end
             end
-            
+            function GetMyJobHistoryString(pc)
+                local jobs=LUA_CONTEXT.jobs;
+                local jobstr=''
+                local first=true
+                for k,v in python.iterex(jobs) do
+                    
+                    local cls=GetClassByType('Job',k)
+                    jobstr=jobstr..cls.ClassName
+                    if not first then
+                        jobstr=";"..jobstr
+                    end
+                    first=true
+                end
+                return jobstr
+            end
+             function GetJobHistoryList(pc)
+                local jobs=LUA_CONTEXT.jobs;
+                local list={}
+                for k,v in python.iterex(jobs) do
+                    list[#list+1]=tonumber(k)
+                end
+                return list
+            end
             -- http://lua-users.org/wiki/SplitJoin @PeterPrade
             function StringSplit(text, delimiter)
                local list = {}
@@ -342,7 +369,7 @@ class luaclass:
                 if item == nil then
                     return default
                 end
-                print(debug.traceback("Stack trace"))
+                --print(debug.traceback("Stack trace"))
                 local value = item[prop]
                 
                 if tonumber(value) ~= nil then

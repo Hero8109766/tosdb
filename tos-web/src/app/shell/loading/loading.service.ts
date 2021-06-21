@@ -93,6 +93,9 @@ export class LoadingService {
         // Load one at a time, for reliability
         for (let dataset of Object.values(TOSDataSet)) {
             if(dataset==TOSDataSet.MAPS){
+                //console.log('updateProgress', this.updateProgress.getValue() + 1);
+                this.updateProgress.next(this.updateProgress.getValue() + 1);
+                this.updateProgress.getValue() == this.updateTotal && this.onUpdateComplete();
                 continue;
             }
             await this.domain.load(dataset, region).toPromise();

@@ -58,7 +58,7 @@ export class TOSAttribute extends TOSEntity implements ITOSAttribute {
         for (let value of args)
           if (value == attributeUnlock.UnlockArgStr)
             return true;
-
+    
     return false;
   }
 

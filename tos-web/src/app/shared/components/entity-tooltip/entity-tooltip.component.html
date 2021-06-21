@@ -11,7 +11,7 @@
         <tos-entity-detail-Header class="h5" [entity]="entity"></tos-entity-detail-Header>
 
         <!-- Description -->
-        <tos-entity-detail-Description *ngIf="job"
+        <tos-entity-detail-Description *ngIf="job || buff"
                                        [entity]="entity"></tos-entity-detail-Description>
 
         <!-- Skill -->
@@ -31,7 +31,7 @@
                            [entity]="entity"></tos-entity-detail-Gem>
 
     <!-- Description -->
-    <tos-entity-detail-Description *ngIf="item && !equipment || attribute"
+    <tos-entity-detail-Description *ngIf="item && !equipment || attribute "
                                    [divider]="true"
                                    [entity]="entity"></tos-entity-detail-Description>
 

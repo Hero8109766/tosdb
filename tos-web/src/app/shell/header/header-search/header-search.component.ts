@@ -62,7 +62,7 @@ export class HeaderSearchComponent implements OnDestroy, OnInit {
     
   }
   ngAfterViewInit(){
-    //ad hoc fixing by ebisuke
+     //ad hoc fixing by ebisuke
       setTimeout(() => {
         this.input$ = fromEvent(this.input.nativeElement, 'keyup').pipe(debounceTime(200));
         this.subscriptionInput = this.input$.subscribe(value => this.onInputChange());

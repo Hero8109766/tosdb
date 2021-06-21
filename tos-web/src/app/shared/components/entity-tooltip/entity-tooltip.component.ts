@@ -30,6 +30,7 @@ import {
 import {TOSDatabaseBuild} from "../../domain/tos/tos-build";
 import {TOSRegionService} from "../../domain/tos-region";
 import {TOSNPC} from "../../domain/tos/monster/tos-npc.model";
+import { TOSBuff } from '../../domain/tos/buff/tos-buff.model';
 
 const PADDING = 8;
 
@@ -55,6 +56,8 @@ export class EntityTooltipComponent implements OnChanges, OnDestroy {
   @Input() tooltip: TOSEntity;
 
   entity: TOSEntity;
+  buff: TOSBuff;
+  
   attribute: TOSAttribute;
   card: TOSCard;
   equipment: TOSEquipment;
@@ -79,6 +82,7 @@ export class EntityTooltipComponent implements OnChanges, OnDestroy {
       this.tooltip = this.tooltip instanceof TOSEntityLink ? this.tooltip.Link : this.tooltip;
 
       this.entity = this.tooltip;
+      this.buff = this.entity instanceof TOSBuff ? this.entity as TOSBuff : null;
       this.card = this.entity instanceof TOSCard ? this.entity as TOSCard : null;
       this.attribute = this.entity instanceof TOSAttribute ? this.entity as TOSAttribute : null;
       this.equipment = this.entity instanceof TOSEquipment ? this.entity as TOSEquipment : null;

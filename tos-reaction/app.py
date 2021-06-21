@@ -11,13 +11,20 @@ app = Flask(__name__)
 
 luas={}
 consts={}
-regions=[
-    TOSRegion.iTOS,
-    TOSRegion.jTOS,
-    TOSRegion.kTOS,
-    TOSRegion.twTOS,
-    TOSRegion.kTEST
-]
+DEBUG_MODE=True
+if not DEBUG_MODE:
+    regions=[
+        TOSRegion.iTOS,
+        TOSRegion.jTOS,
+        TOSRegion.kTOS,
+        TOSRegion.twTOS,
+        TOSRegion.kTEST
+    ]
+else:
+    regions = [
+        TOSRegion.jTOS,
+    ]
+
 for region in regions:
     try:
         const = constclass(region)
@@ -40,7 +47,8 @@ def invokelua():
         "CaptionRatio2": "CaptionRatio2",
         "CaptionRatio3": "CaptionRatio3",
         "CaptionTime":"CaptionTime",
-        "SpendItemCount":"SpendItemCount"
+        "SpendItemCount":"SpendItemCount",
+        "Unlock":"Unlock",
     }
     data = request.get_data().decode('utf-8')
     data = json.loads(data)
@@ -64,10 +72,11 @@ def invokelua():
     if luatype=='skill':
         ies=lua.lua.execute("return GetClassByType('Skill',"+classid+")")
         preverb="GetSkill"
-
+        logging.debug("Skill" + str(classid))
     elif luatype=='ability':
         ies = lua.lua.execute("return GetClassByType('Ability'," + classid + ")")
         preverb = "GetAbility"
+        logging.debug("Ability"+str(classid))
     if ies is None:
         logging.error("IES not found :"+classid)
         return 'fail'

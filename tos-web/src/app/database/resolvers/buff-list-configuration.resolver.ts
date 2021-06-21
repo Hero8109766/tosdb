@@ -15,7 +15,8 @@ export class BuffListConfigurationResolver implements Resolve<TOSListConfigurati
         { label: '',              pipe: new TableCellIconPipeDefinition('Icon'), class: 'p-1' },
         { label: '$ID',           pipe: new TableCellTextPipeDefinition('$ID'), hideMobile: true },
         { label: 'Name',          pipe: new TableCellTextPipeDefinition('Name'), wide: true },
-      ]
+        { label: 'Description',   pipe: new TableCellTextPipeDefinition('Description'), wide: true },
+        ]
     };
   }
 }

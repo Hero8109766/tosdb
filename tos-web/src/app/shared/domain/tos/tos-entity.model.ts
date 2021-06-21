@@ -105,7 +105,7 @@ export abstract class TOSEntity extends Comparable implements ITOSEntity {
           observable = Array.isArray(observable) && observable.map(mapper) || mapper(observable);
           observable = Array.isArray(observable) && forkJoin(observable) || observable;
           observable.subscribe(value => {
-            if(value){  //ad hoc fix by ebisuke
+            //if(value){  //ad hoc fix by ebisuke
               if(value.filter){
                 let array=value;
                 array=array.filter(x=>x!=undefined);
@@ -116,7 +116,7 @@ export abstract class TOSEntity extends Comparable implements ITOSEntity {
                 subject.next(value);
                 subject.complete();
               }
-            }
+           //}
           });
 
       return this.$json[prop] = subject.asObservable();
