@@ -100,8 +100,8 @@ def translate(key):
 
     if (key == '' or key not in globals.translations):
         if  key not in globals.clmsgs:
-            if key != '':
-                logging.warn('Missing translation for key: %s', key)
+           # if key != '':
+               # logging.warn('Missing translation for key: %s', key)
             return key
         else:
             if key!=globals.clmsgs[key]:

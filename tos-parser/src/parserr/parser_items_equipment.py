@@ -504,9 +504,10 @@ def parse_equipment(ies):
         obj['Unidentified'] = int(row['NeedAppraisal']) == 1
         obj['UnidentifiedRandom'] = int(row['NeedRandomOption']) == 1
         for vivora in range(1, 3):
-            obj['AdditionalOption_' + str(vivora)]= \
-                parser_translations.translate("tooltip_"+row['AdditionalOption_' + str(vivora)]).replace('{nl}',"\n") \
-                    if ('AdditionalOption_' + str(vivora)) in row else None
+            data=row['AdditionalOption_' + str(vivora)].strip()  if ('AdditionalOption_' + str(vivora)) in row else None
+            if data is not None and data != "":
+                obj['AdditionalOption_' + str(vivora)]= parser_translations.translate("tooltip_"+data).replace('{nl}',"\n")
+
 
         obj['Link_Set'] = None
 

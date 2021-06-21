@@ -30,13 +30,13 @@ export class TOSEquipment extends TOSItem implements ITOSEquipment {
         let hascontents=false
         for(let i=1;i<=2;i++){
             let desc=this.$lazyPropertyString('AdditionalOption_'+i.toString())
-            desc = desc.split('{img green_up_arrow 16 16}').join('<span class="text-success">▲</span> ');
-            desc = desc.split('{img red_down_arrow 16 16}').join('<span class="text-danger">▼</span> ');
+            
             if(desc=="None"){
                 desc=""
             }else{
                 hascontents=true
             }
+            desc=this.tooltipToHTMLGeneric(desc)
             array.push(desc);
         }
         if(!hascontents){

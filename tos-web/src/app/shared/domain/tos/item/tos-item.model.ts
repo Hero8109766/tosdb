@@ -33,11 +33,7 @@ export class TOSItem extends TOSEntity implements ITOSItem {
     get Link_Maps_Exploration() { return this.$lazyPropertyLink('Link_Maps_Exploration', value => this.TOSItemLinkMap(value)) as Observable<TOSItemLinkMap[]> }
     get OptDesc() {
         let desc = this.$lazyPropertyStringMultiline('OptDesc')
-        if(desc){
-            desc = desc.split('{img green_up_arrow 16 16}').join('<span class="text-success">▲</span> ');
-            desc = desc.split('{img red_down_arrow 16 16}').join('<span class="text-danger">▼</span> ');
-        }
-        return desc
+        return this.tooltipToHTMLGeneric(desc)
     }
     get Price() { return this.$lazyPropertyNumber('Price') }
     get TimeCoolDown() { return this.$lazyPropertyNumber('TimeCoolDown') }
