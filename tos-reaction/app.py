@@ -38,7 +38,9 @@ def invokelua():
         "SkillSR":"SkillSR",
         "CaptionRatio":"CaptionRatio",
         "CaptionRatio2": "CaptionRatio2",
+        "CaptionRatio3": "CaptionRatio3",
         "CaptionTime":"CaptionTime",
+        "SpendItemCount":"SpendItemCount"
     }
     data = request.get_data().decode('utf-8')
     data = json.loads(data)
