@@ -57,6 +57,9 @@ import {AnalyticsService} from "./service/analytics.service";
 import {TOSMapResolver} from "./domain/tos/map/tos-map.resolver";
 import {CssMaxHeightDirective} from './directives/css-max-height.directive';
 import {TOSNPCResolver} from "./domain/tos/monster/tos-npc.resolver";
+import { TOSBuffResolver } from './domain/tos/buff/tos-buff.resolver';
+import { EntityDetailOptDescComponent } from './components/entity-detail/entity-detail-OptDesc/entity-detail-OptDesc.component';
+import { EntityDetailViboraComponent } from './components/entity-detail/entity-detail-Vibora/entity-detail-Vibora.component';
 
 @NgModule({
   imports: [
@@ -83,10 +86,12 @@ import {TOSNPCResolver} from "./domain/tos/monster/tos-npc.resolver";
     EntityDetailJobAnimationComponent,
     EntityDetailJobIconComponent,
     EntityDetailHeaderComponent,
+    EntityDetailOptDescComponent,
     EntityDetailSkillComponent,
     EntityDetailSkillFormulaComponent,
     EntityDetailStatsComponent,
     EntityDetailTableComponent,
+    EntityDetailViboraComponent,
     EntityTableComponent,
     EntityTooltipComponent,
     InputNumberComponent,
@@ -126,10 +131,12 @@ import {TOSNPCResolver} from "./domain/tos/monster/tos-npc.resolver";
     EntityDetailJobAnimationComponent,
     EntityDetailJobIconComponent,
     EntityDetailHeaderComponent,
+    EntityDetailOptDescComponent,
     EntityDetailSkillComponent,
     EntityDetailSkillFormulaComponent,
     EntityDetailStatsComponent,
     EntityDetailTableComponent,
+    EntityDetailViboraComponent,
     EntityTableComponent,
     EntityTooltipComponent,
     InputNumberComponent,
@@ -176,6 +183,7 @@ export class SharedModule {
         TableCellTextPipe,
         TOSAttributeResolver,
         TOSBookResolver,
+        TOSBuffResolver,
         TOSCardResolver,
         TOSCollectionResolver,
         TOSCubeResolver,

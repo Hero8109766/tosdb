@@ -40,7 +40,16 @@
           <!-- Bonus Stats and Unidentified -->
           <tos-entity-detail-BonusStatsUnidentified [divider]="true"
                                                     [entity]="entity"></tos-entity-detail-BonusStatsUnidentified>
-
+          <!-- OptDesc -->
+          <tos-entity-detail-OptDesc *ngIf="item"
+                                            [divider]="entity['OptDesc']"
+                                            [entity]="entity"
+                                            [header]="false"></tos-entity-detail-OptDesc>
+          <!-- AdditionalOption -->
+          <tos-entity-detail-Vibora *ngIf="item"
+                                            [divider]="entity['AdditionalOption']"
+                                            [entity]="entity"
+                                            [header]="false"></tos-entity-detail-Vibora>
           <!-- Potential, Durability and Sockets -->
           <tos-entity-detail-DurabilityPotentialSockets [entity]="entity"></tos-entity-detail-DurabilityPotentialSockets>
 
@@ -66,7 +75,7 @@
           <tos-entity-detail-Skill [build]="build"
                                    [entity]="entity"
                                    [input]="true"></tos-entity-detail-Skill>
-
+      
         </div>
       </div>
     </div>

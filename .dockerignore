@@ -7,6 +7,7 @@ distweb/*
 **/.git/*
 .idea
 .git/*
-**/node-modules/
-tos-search/node-modules/
+**/node-modules/*
+tos-html/package-lock.json
+tos-search/node-modules/*
 tos-search/package-lock.json

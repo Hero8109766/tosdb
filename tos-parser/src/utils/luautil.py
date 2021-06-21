@@ -47,6 +47,9 @@ LUA_OVERRIDE = [
     "function Weeklyboss_GetNowWeekNum() return nil end",
     "function GetBuffByProp(self,mode,value) return nil end",
     "function IsRaidField(self)return 0 end",
+    "function IsJoinColonyWarMap(self)return 0 end",
+    "function IsPvPMineMap(self)return 0 end",
+
 ]
 
 LUA_RUNTIME = None
@@ -76,6 +79,7 @@ def init_global_constants(ies_file_name):
 
 
 def init_global_data():
+
     ies_ADD = lua.execute('''
         ies_by_ClassID = {}
         ies_by_ClassName = {}
@@ -118,6 +122,7 @@ def init_global_data():
 
     ies_ADD('ancient', iesutil.load('ancient_info.ies'))
     ies_ADD('ancient_info', iesutil.load('ancient_info.ies'))
+    ies_ADD('clientmessage', iesutil.load('clientmessage.ies'))
     ies_ADD('item', iesutil.load('item_equip.ies'))
     ies_ADD('item', iesutil.load('item_equip_ep12.ies'))
     ies_ADD('item', iesutil.load('item_ep12.ies'))
@@ -153,6 +158,7 @@ def init_global_data():
 
 
 def init_global_functions():
+    global lua_clmsg
     lua.execute("".join((s+"\n" for s in LUA_OVERRIDE))+'\n\n'+'''
     
         app = {

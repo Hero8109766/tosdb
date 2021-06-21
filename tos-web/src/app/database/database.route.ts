@@ -32,6 +32,8 @@ import {MapListConfigurationResolver} from "./resolvers/map-list-configuration.r
 import {TOSMapResolver} from "../shared/domain/tos/map/tos-map.resolver";
 import {EntityDetailMapComponent} from "./entity-detail-v2/entity-detail-map/entity-detail-map.component";
 import {TOSNPCResolver} from "../shared/domain/tos/monster/tos-npc.resolver";
+import { TOSBuffResolver } from '../shared/domain/tos/buff/tos-buff.resolver';
+import { BuffListConfigurationResolver } from './resolvers/buff-list-configuration.resolver';
 
 export const ROUTES_DATABASE: Routes = [
   {
@@ -75,6 +77,25 @@ export const ROUTES_DATABASE: Routes = [
     canDeactivate: [RouteService],
     component: EntityDetailComponent,
     resolve: { response: TOSBookResolver },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+  },
+  {
+    path: 'buffs',
+    canActivate: [RouteService],
+    canDeactivate: [RouteService],
+    component: EntityListComponent,
+    resolve: {
+      configuration: BuffListConfigurationResolver,
+      response: TOSBuffResolver,
+    },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+  },
+  {
+    path: 'buffs/:id',
+    canActivate: [RouteService],
+    canDeactivate: [RouteService],
+    component: EntityDetailComponent,
+    resolve: { response: TOSBuffResolver },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
   },
   {

@@ -434,13 +434,14 @@ equipment_grade_ratios = {}
 
 def parse():
     parse_equipment_grade_ratios()
-    parse_equipment()
+    parse_equipment( 'item_equip.ies')
+    parse_equipment( 'item_equip_ep12.ies')
 
 
-def parse_equipment():
+def parse_equipment(ies):
     logging.debug('Parsing equipment...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'item_equip.ies')
+    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf',ies)
     ies_file = codecs.open(ies_path,'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -502,6 +503,11 @@ def parse_equipment():
         obj['TypeEquipment'] = item_type_equipment
         obj['Unidentified'] = int(row['NeedAppraisal']) == 1
         obj['UnidentifiedRandom'] = int(row['NeedRandomOption']) == 1
+        for vivora in range(1, 3):
+            data=row['AdditionalOption_' + str(vivora)].strip()  if ('AdditionalOption_' + str(vivora)) in row else None
+            if data is not None and data != "":
+                obj['AdditionalOption_' + str(vivora)]= parser_translations.translate("tooltip_"+data).replace('{nl}',"\n")
+
 
         obj['Link_Set'] = None
 

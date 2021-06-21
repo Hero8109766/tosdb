@@ -2,7 +2,7 @@
 import csv
 import logging
 import os
-
+import re
 import constants
 import globals
 from parserr import parser_assets
@@ -162,6 +162,8 @@ def parse_items(file_name):
         obj['$ID'] = int(row['ClassID'])
         obj['$ID_NAME'] = row['ClassName']
         obj['Description'] = parser_translations.translate(row['Desc']) if 'Desc' in row else None
+        obj['OptDesc'] = re.sub("^-",parser_translations.translate(row['OptDesc']),"") if 'OptDesc' in row else None
+
         obj['Icon'] = parser_assets.parse_entity_icon(row['Icon'])
         obj['Name'] = parser_translations.translate(row['Name']) if 'Name' in row else None
 

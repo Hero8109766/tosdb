@@ -19,6 +19,7 @@ import {TOSMonster} from "./monster/tos-monster.model";
 import {TOSRecipe} from "./item/recipe/tos-recipe.model";
 import {TOSSkill} from "./skill/tos-skill.model";
 import {TOSNPC} from "./monster/tos-npc.model";
+import { TOSBuff } from "./buff/tos-buff.model";
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,10 @@ export class TOSDomainRepository implements ITOSDomainRepository {
       factory:            json => new TOSBook(json),
       schema:             { primaryKey: '$ID' },
     },
+    'buffs': {
+        factory:            json => new TOSBuff(json),
+        schema:             { primaryKey: '$ID' },
+      },
     'cards': {
       factory:            json => new TOSCard(json),
       schema:             { primaryKey: '$ID' },
