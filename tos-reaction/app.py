@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 luas={}
 consts={}
-DEBUG_MODE=True
+DEBUG_MODE=False
 if not DEBUG_MODE:
     regions=[
         TOSRegion.iTOS,
