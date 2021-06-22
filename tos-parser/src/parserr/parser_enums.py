@@ -8,7 +8,7 @@ class TOSLanguage(TOSEnum):
     pt = 4  # portugues
     de = 5  # deutsch
     th = 6  # thai
-
+    ru = 7  # russian
     @staticmethod
     def to_string(value):
         return {
@@ -19,6 +19,7 @@ class TOSLanguage(TOSEnum):
             TOSLanguage.pt: 'pt',
             TOSLanguage.de: 'de',
             TOSLanguage.th: 'th',
+            TOSLanguage.ru: 'ru',
 
         }[value]
     @staticmethod
@@ -31,7 +32,7 @@ class TOSLanguage(TOSEnum):
             TOSLanguage.pt: 'Portuguese',
             TOSLanguage.de: 'German',
             TOSLanguage.th: 'Thai',
-
+            TOSLanguage.ru: 'Russian',
         }[value]
     @staticmethod
     def value_of(string):
@@ -43,6 +44,7 @@ class TOSLanguage(TOSEnum):
             'pt': TOSLanguage.pt,
             'de': TOSLanguage.de,
             'th': TOSLanguage.th,
+            'ru': TOSLanguage.ru,
 
             '': None
         }[string]

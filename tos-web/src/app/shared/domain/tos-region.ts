@@ -18,6 +18,7 @@ export enum TOSLanguage {
     pt = 'pt',
     de = 'de',
     th = 'th',
+    ru = 'ru'
 }
 export let HumanReadableLanguage={
     "en":"English",
@@ -26,7 +27,9 @@ export let HumanReadableLanguage={
     "zh":"Taiwanese",
     "pt":"Português",
     "de":"Deutsch",
-    "th":"Thai"
+    "th":"Thai",
+    "ru":"Russian",
+    
 }
 
 export type TOSRegionVersion = { [key in TOSRegion]: { version: string, rebuild: boolean } };
@@ -137,7 +140,8 @@ export namespace TOSRegionService {
                     TOSLanguage.en,
                     TOSLanguage.de,
                     TOSLanguage.pt,
-                    TOSLanguage.th
+                    TOSLanguage.th,
+                    TOSLanguage.ru,
                 ],
             }, {
                 label: TOSRegion.jTOS,

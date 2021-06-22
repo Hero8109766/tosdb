@@ -11,7 +11,7 @@ BASEDIR=/var/www/base/
 cd ${BASEDIR}
 cp -rn ./skeleton_distbuild/* ./tos-build/dist/
 cp -rn ./skeleton_distweb/* ./tos-build/dist/
-
+cp -rn ./supplimental_data/* ./input/
 
 
 cd ${BASEDIR}/tos-parser/src

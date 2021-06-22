@@ -70,6 +70,8 @@ COPY ./tos-sitemap ./tos-sitemap
 COPY ./tos-sw ./tos-sw
 
 COPY ./tos-web-rest ./tos-web-rest
+COPY ./supplimental_data ./supplimental_data 
+
 COPY ./docker/*   ./
 COPY ./skeleton_distweb   ./skeleton_distweb
 COPY ./skeleton_distbuild   ./skeleton_distbuild
