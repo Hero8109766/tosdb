@@ -29,7 +29,6 @@ export abstract class TOSEntity extends Comparable implements ITOSEntity {
 
     protected constructor(readonly Dataset: TOSDataSet, protected $json: TOSEntity) {
         super();
-
         this.$comparators['$ID'] = COMPARATOR_ID;
     }
 
