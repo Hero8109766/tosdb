@@ -12,9 +12,11 @@ from utils.stringutil import is_ascii
 
 TRANSLATION_PREFIX = '@dicID_^*$'
 TRANSLATION_SUFFIX = '$*^'
-
+REGION=None
 
 def parse(region):
+    global REGION
+    REGION=region
     translations = None
     translations = parse_translations('English') if region == TOSRegion.iTOS else translations
     translations = parse_translations('Japanese') if region == TOSRegion.jTOS else translations
@@ -85,7 +87,7 @@ def parse_clmsg():
                 globals.clmsgs[key] = translate(value)
 
 
-def translate(key):
+def translate(key,secondtouch):
 
     try:
         key = str(key.replace('"', ''), 'utf-8')
@@ -93,8 +95,8 @@ def translate(key):
         pass
 
     # In case the key is already in english, there's no need to translate
-    #if is_ascii(key):
-    #    return key
+    if not secondtouch  and is_ascii(key) and globals.REGION==TOSRegion.iTOS:
+        return key
     if not globals.translations:
         return key
 
@@ -105,7 +107,7 @@ def translate(key):
             return key
         else:
             if key!=globals.clmsgs[key]:
-                return translate(globals.clmsgs[key])
+                return translate(globals.clmsgs[key],True)
             else:
                 return key
     return globals.translations[key]
