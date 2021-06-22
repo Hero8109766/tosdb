@@ -95,7 +95,7 @@ import { EntityDetailViboraComponent } from './components/entity-detail/entity-d
     EntityTableComponent,
     EntityTooltipComponent,
     InputNumberComponent,
-
+    
     // Directives
     CssMaxHeightDirective,
     FilterDirective,

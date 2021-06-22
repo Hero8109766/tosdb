@@ -85,14 +85,14 @@ export class LoadingService {
         let region = TOSRegionService.get();
         //console.log('updateCheck', region);
 
-        if (!this.update.updateAvailable())
+        if (!await this.update.updateAvailable())
             return this.onUpdateComplete();
 
         this.updateProgress.next(0);
 
         // Load one at a time, for reliability
         for (let dataset of Object.values(TOSDataSet)) {
-            if(dataset==TOSDataSet.MAPS){
+            if (dataset == TOSDataSet.MAPS) {
                 //console.log('updateProgress', this.updateProgress.getValue() + 1);
                 this.updateProgress.next(this.updateProgress.getValue() + 1);
                 this.updateProgress.getValue() == this.updateTotal && this.onUpdateComplete();

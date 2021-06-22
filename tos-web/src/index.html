@@ -31,10 +31,11 @@
         lang = Object
           .keys(lang)
           .find(value => location.href.indexOf(`/${ value }/`) > 0) || 'en';
-
-    document
-      .getElementsByTagName('html')[0]
-      .setAttribute('lang', lang);
+       
+            document
+            .getElementsByTagName('html')[0]
+            .setAttribute('lang', lang);
+       
   </script>
 
   <!-- Patreon & Regions -->
@@ -75,7 +76,10 @@
     document.body.style.backgroundColor = theme === 1 ? '#222' : '#fafafa';
     document.body.style.color = theme === 1 ? '#fff' : '#212529';
     document.body.style.margin = '0';
-    document.body.onload = () => document.body.setAttribute('style', '');
+    document.body.onload = () => {
+        
+        document.body.setAttribute('style', '');
+    }
   </script>
 
   <app-root>

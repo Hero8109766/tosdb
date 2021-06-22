@@ -1,3 +1,8 @@
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { InjectorInstance } from "src/app/app.module";
+
 export enum TOSRegion {
   iTOS = 'iTOS',
   jTOS = 'jTOS',
@@ -7,8 +12,39 @@ export enum TOSRegion {
 }
 
 export type TOSRegionVersion = { [key in TOSRegion]: { version: string, rebuild: boolean } };
-export const VERSIONS: TOSRegionVersion = JSON.parse(document.getElementById('tos-region').innerText);
+export var VERSIONS: TOSRegionVersion = null;// JSON.parse(document.getElementById('tos-region').innerText);
+function SetVersion(version:TOSRegionVersion){
+    VERSIONS=version
+}
 
+@Injectable({
+    providedIn: 'root'
+})
+export class TOSRegionServiceInitializer {
+    static observer: Observable<TOSRegionVersion>;
+    static initializer:any =  (() => {
+        TOSRegionServiceInitializer.observer = new Observable<TOSRegionVersion>((observer) => {
+            let http = InjectorInstance.get<HttpClient>(HttpClient);
+            let data = http.get("/region.json");
+
+            data.subscribe((value) => {
+                SetVersion(value as TOSRegionVersion);
+                document.getElementById('tos-region').innerText = JSON.stringify(data);
+                observer.next(VERSIONS);
+                observer.complete();
+            });
+
+
+        });
+    })();
+    static async GetVersion():Promise<TOSRegionVersion>{
+        if(VERSIONS!=null){
+            return VERSIONS;
+        }
+        
+        return await TOSRegionServiceInitializer.observer.toPromise();
+    }
+}
 export namespace TOSRegionService {
 
   let Region: TOSRegion = null;
@@ -28,7 +64,7 @@ export namespace TOSRegionService {
   }
 
   export function isRebuild(value: TOSRegion) {
-    return VERSIONS[value].rebuild;
+    return  VERSIONS [value].rebuild;
   }
 
   export function select(region: TOSRegion) {

@@ -1,29 +1,31 @@
-import {Injectable} from '@angular/core';
-import {TOSRegion, TOSRegionService, VERSIONS} from "../domain/tos-region";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
+import { InjectorInstance } from 'src/app/app.module';
+import {  TOSRegion, TOSRegionService, TOSRegionServiceInitializer, TOSRegionVersion, VERSIONS } from "../domain/tos-region";
 
 const KEY_VERSION = 'version';
 const VERSION_HOTFIX = 2;
-
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class UpdateService {
 
-  private readonly region: TOSRegion = TOSRegionService.get();
+    private readonly region: TOSRegion = TOSRegionService.get();
 
-  constructor() {}
+    constructor() { }
 
-  updateAvailable(): boolean { return this.versionNew != this.versionOld }
-  updateVersion(clear?: boolean) {
-    let version = JSON.parse(localStorage.getItem(KEY_VERSION) || '{}');
-        version[this.region] = clear ? '' : this.versionNew;
+    async updateAvailable(): Promise<boolean> { return await this.getVersionNew() != this.versionOld }
+    async updateVersion(clear?: boolean) {
+        let version = JSON.parse(localStorage.getItem(KEY_VERSION) || '{}');
+        version[this.region] = clear ? '' : await this.getVersionNew();
 
-    localStorage.setItem(KEY_VERSION, JSON.stringify(version));
-  }
+        localStorage.setItem(KEY_VERSION, JSON.stringify(version));
+    }
 
-  get versionNew() { return VERSIONS[this.region].version + (VERSION_HOTFIX ? '_hotfix_' + VERSION_HOTFIX : '') }
-  get versionHuman() { return this.region && (this.region.toString() + ' • ' + this.versionNew) }
+    async getVersionNew() { return (await TOSRegionServiceInitializer.GetVersion())[this.region].version; }
+    async getVersionHuman() { return this.region && (this.region.toString() + ' • ' +  await this.getVersionNew()) }
 
-  private get versionOld(): string { return JSON.parse(localStorage.getItem(KEY_VERSION) || '{}')[this.region]; }
+    private get versionOld(): string { return JSON.parse(localStorage.getItem(KEY_VERSION) || '{}')[this.region]; }
 
 }
