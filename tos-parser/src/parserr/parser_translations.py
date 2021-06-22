@@ -95,7 +95,7 @@ def translate(key,secondtouch=False):
         pass
 
     # In case the key is already in english, there's no need to translate
-    if not secondtouch  and is_ascii(key) and globals.REGION==TOSRegion.iTOS:
+    if not secondtouch  and is_ascii(key) and REGION==TOSRegion.iTOS:
         return key
     if not globals.translations:
         return key

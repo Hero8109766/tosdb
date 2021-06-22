@@ -36,7 +36,7 @@ RUN make
 RUN cp -f ./unipf ./ipf /usr/bin/
 RUN cp -f ./libipf.so /usr/lib/
 
-RUN apt purge -y git 
+RUN apt-get purge -y git 
 
 WORKDIR /
 RUN mkdir /var/www/base
