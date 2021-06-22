@@ -20,6 +20,13 @@ export class UpdateService {
     async updateVersion(clear?: boolean) {
         let version = JSON.parse(localStorage.getItem(KEY_VERSION) || '{}');
         version=version || {};
+        if(typeof(version[this.region])=="string"){
+            //remove
+            version[this.region]={}
+        }
+        if (!version[this.region]){
+            version[this.region]={}
+        }
         if (!version[this.region][this.language]){
             version[this.region][this.language]={};
         }

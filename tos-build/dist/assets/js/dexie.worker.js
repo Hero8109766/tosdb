@@ -49,8 +49,8 @@ self.onmessage = async function(event) {
             {
                 let dataset = payload.dataset;
                 let region = payload.region;
-
-                let table = tables[dataset] = tables[dataset] || databaseTable(await databaseInitialize(dataset, region));
+                let language = payload.language;
+                let table = tables[dataset] = tables[dataset] || databaseTable(await databaseInitialize(dataset, region, language));
 
                 let result = await table
                     .where(payload.key)
