@@ -35,16 +35,16 @@
     <tos-entity-detail-Description *ngIf="item && !equipment || attribute "
                                    [divider]="true"
                                    [entity]="entity"></tos-entity-detail-Description>
-    <!-- Vibora -->
-    <tos-entity-detail-Vibora *ngIf="equipment"
-                                    [entity]="entity"></tos-entity-detail-Vibora>
+    
     <!-- Physical and Magical Attack / Defense -->
     <tos-entity-detail-AttackDefense [entity]="entity"></tos-entity-detail-AttackDefense>
 
     <!-- Stats & Unidentified -->
     <tos-entity-detail-BonusStatsUnidentified [divider]="true"
                                               [entity]="entity"></tos-entity-detail-BonusStatsUnidentified>
-
+    <!-- Vibora -->
+    <tos-entity-detail-Vibora *ngIf="equipment"
+                                    [entity]="entity"></tos-entity-detail-Vibora>
     <!-- Potential, Durability and Sockets / Base EXP and Class EXP -->
     <tos-entity-detail-DurabilityPotentialSockets [entity]="entity"></tos-entity-detail-DurabilityPotentialSockets>
 

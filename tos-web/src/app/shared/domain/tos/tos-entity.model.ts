@@ -182,6 +182,8 @@ export abstract class TOSEntity extends Comparable implements ITOSEntity {
         
         description = description.split('{img green_up_arrow 16 16}').join('<span class="text-success">▲</span> ');
         description = description.split('{img red_down_arrow 16 16}').join('<span class="text-danger">▼</span> ');
+        description = description.split('{img green_down_arrow 16 16}').join('<span class="text-success">▼</span> ');
+        description = description.split('{img red_up_arrow 16 16}').join('<span class="text-danger">▲</span> ');
 
         let regexBraceRemover = /\{.*?\}/g;
         description=description.replace(regexBraceRemover,"")
