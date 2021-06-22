@@ -16,8 +16,11 @@ cp -rn ./supplimental_data/* ./tos-parser/input
 
 cd ${BASEDIR}/tos-parser/src
 parallel --no-notice --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist_representative.tsv 
-parallel --no-notice --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist.tsv 
-
+#parallel --no-notice --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist.tsv 
+python3 main.py iTOS pt
+python3 main.py iTOS de
+python3 main.py iTOS th
+python3 main.py iTOS ru
 
 # search
 cd ${BASEDIR}/tos-search/
