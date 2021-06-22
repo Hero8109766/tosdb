@@ -67,11 +67,18 @@ const ROUTES_REGION: Routes = [
     children: ROUTES_APP,
   },
   {
+    path: 'itos/ru',
+    canActivate: [RouteService],
+    canDeactivate: [RouteService],
+    children: ROUTES_APP,
+  },
+  {
     path: 'jtos/ja',
     canActivate: [RouteService],
     canDeactivate: [RouteService],
     children: ROUTES_APP,
   },
+  
    {
     path: 'ktest/ko',
     children: ROUTES_APP,

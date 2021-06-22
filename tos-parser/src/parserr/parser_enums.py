@@ -5,7 +5,7 @@ class TOSLanguage(TOSEnum):
     ja = 1  # japanese
     ko = 2  # korean
     zh = 3  # traditional chinese
-    pt = 4  # portugues
+    pt = 4  # portiugues
     de = 5  # deutsch
     th = 6  # thai
     ru = 7  # russian
@@ -45,7 +45,6 @@ class TOSLanguage(TOSEnum):
             'de': TOSLanguage.de,
             'th': TOSLanguage.th,
             'ru': TOSLanguage.ru,
-
             '': None
         }[string]
 class TOSRegion(TOSEnum):
