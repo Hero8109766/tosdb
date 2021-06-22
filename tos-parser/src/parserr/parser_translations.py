@@ -87,7 +87,7 @@ def parse_clmsg():
                 globals.clmsgs[key] = translate(value)
 
 
-def translate(key,secondtouch):
+def translate(key,secondtouch=False):
 
     try:
         key = str(key.replace('"', ''), 'utf-8')
