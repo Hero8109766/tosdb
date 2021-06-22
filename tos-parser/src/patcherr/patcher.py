@@ -19,6 +19,11 @@ def patch(repatch):
         constants.PATH_INPUT_DATA, constants.PATH_INPUT_DATA_PATCH, constants.PATH_INPUT_DATA_PATCH_URL_FULL, '.ipf',patcher_ipf.unpack,
         constants.PATH_INPUT_DATA_REVISION_URL_FULL,repatch
     )
+    patch_full(
+        constants.PATH_INPUT_RELEASE_PATCH, constants.PATH_INPUT_RELEASE_PATCH_FULL_URL,
+        constants.PATH_INPUT_RELEASE_PATCH_FULL_URL, '.pak',patcher_pak.unpack,
+        constants.PATH_INPUT_RELEASE_FULL_URL,repatch
+    )
 
     # Partial patches
     version_data, version_data_new = patch_partial(

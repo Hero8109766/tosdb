@@ -4,7 +4,7 @@ import { BehaviorSubject, ReplaySubject } from "rxjs";
 import { UpdateService } from "../../shared/service/update.service";
 import { TOSDataSet, TOSDataSetService } from "../../shared/domain/tos/tos-domain";
 import { first, take } from "rxjs/operators";
-import { TOSRegionService } from "../../shared/domain/tos-region";
+import { TOSRegion, TOSRegionService } from "../../shared/domain/tos-region";
 import { TOSDomainService } from "../../shared/domain/tos/tos-domain.service";
 import { SWService } from "../../shared/service/sw.service";
 
@@ -38,7 +38,7 @@ export class LoadingService {
     async clear() {
         let confirm = `
       =====================================
-       Please close all other tos.guru tabs before proceeding
+       Please close all other handtos.mochisuke.jp tabs before proceeding
       =====================================
       
       Are you sure you want to clear the cache?
@@ -82,7 +82,8 @@ export class LoadingService {
     }
 
     private async updateCheck() {
-        let region = TOSRegionService.get();
+        let region = TOSRegionService.getRegion();
+        let language = TOSRegionService.getLanguage()
         //console.log('updateCheck', region);
 
         if (!await this.update.updateAvailable())
@@ -98,7 +99,7 @@ export class LoadingService {
                 this.updateProgress.getValue() == this.updateTotal && this.onUpdateComplete();
                 continue;
             }
-            await this.domain.load(dataset, region).toPromise();
+            await this.domain.load(dataset, region,language).toPromise();
 
             //console.log('updateProgress', this.updateProgress.getValue() + 1);
             this.updateProgress.next(this.updateProgress.getValue() + 1);

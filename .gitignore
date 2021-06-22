@@ -80,7 +80,7 @@ input/*
 result.txt
 **/node_modules
 ipf_unpacker/tmp.ipf
-ipf_unpacker/extract/*
+ipf_unpacker/*/*
 .gitignore
 tos-build/dist/assets/data/*
 .gitignore

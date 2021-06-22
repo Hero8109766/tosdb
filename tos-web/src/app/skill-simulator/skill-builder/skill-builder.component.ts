@@ -27,7 +27,7 @@ export class SkillBuilderComponent implements OnDestroy, OnInit {
   faLink = faLink;
   TOSEntity = TOSEntity;
 
-  build: TOSSimulatorBuild = TOSSimulatorBuild.new(TOSRegionService.get());
+  build: TOSSimulatorBuild = TOSSimulatorBuild.new(TOSRegionService.getRegion());
   buildChanged: number = 0;
   jobs: ITOSJob[] = [];
 
@@ -167,10 +167,10 @@ export class SkillBuilderComponent implements OnDestroy, OnInit {
           this.router.navigate(['.'], { queryParams, relativeTo: this.route });
         });
     } else if (value[PARAM_BUILD]) {
-      this.build = await TOSSimulatorBuild.base64Decode(TOSRegionService.get(), value[PARAM_BUILD]).toPromise();
+      this.build = await TOSSimulatorBuild.base64Decode(TOSRegionService.getRegion(), value[PARAM_BUILD]).toPromise();
       this.buildSubscribe();
     } else {
-      this.build = TOSSimulatorBuild.new(TOSRegionService.get());
+      this.build = TOSSimulatorBuild.new(TOSRegionService.getRegion());
       this.buildSubscribe();
     }
 

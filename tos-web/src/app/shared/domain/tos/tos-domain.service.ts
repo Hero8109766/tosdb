@@ -24,7 +24,7 @@ import {Observable} from "rxjs";
 import {fromPromise} from "rxjs/internal-compatibility";
 import {Inject, Injectable} from "@angular/core";
 import {TOSAttribute} from "./attribute/tos-attribute.model";
-import {TOSRegion} from "../tos-region";
+import {TOSLanguage, TOSRegion} from "../tos-region";
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +37,8 @@ export class TOSDomainService {
     TOSDomainService.repository = repository;
   }
 
-  public load(dataset: TOSDataSet, region: TOSRegion): Observable<object> {
-    return this.repository.load(dataset, region);
+  public load(dataset: TOSDataSet, region: TOSRegion,language:TOSLanguage): Observable<object> {
+    return this.repository.load(dataset, region,language);
   }
 
   //---------------------------------------------------------------------------

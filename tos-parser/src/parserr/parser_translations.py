@@ -7,20 +7,24 @@ import xml.etree.ElementTree as ET
 import constants
 import globals
 import codecs
-from parserr.parser_enums import TOSRegion
+from parserr.parser_enums import TOSRegion, TOSLanguage
 from utils.stringutil import is_ascii
 
 TRANSLATION_PREFIX = '@dicID_^*$'
 TRANSLATION_SUFFIX = '$*^'
 REGION=None
-
-def parse(region):
-    global REGION
+LANGUAGE=None
+def parse(region,language):
+    global REGION,LANGUAGE
     REGION=region
+    LANGUAGE=language
     translations = None
-    translations = parse_translations('English') if region == TOSRegion.iTOS else translations
-    translations = parse_translations('Japanese') if region == TOSRegion.jTOS else translations
-    translations = parse_translations('Taiwanese') if region == TOSRegion.twTOS else translations
+
+    if TOSLanguage.ko!=language:
+        translations=parse_translations(TOSLanguage.to_full_string(language))
+        #translations = parse_translations('English') if region == TOSRegion.iTOS else translations
+        #translations = parse_translations('Japanese') if region == TOSRegion.jTOS else translations
+        #translations = parse_translations('Taiwanese') if region == TOSRegion.twTOS else translations
 
     if translations:
         parse_dictionary(translations)
@@ -95,8 +99,8 @@ def translate(key,secondtouch=False):
         pass
 
     # In case the key is already in english, there's no need to translate
-    if not secondtouch  and is_ascii(key) and REGION==TOSRegion.iTOS:
-        return key
+    #if not secondtouch  and is_ascii(key) and REGION==TOSRegion.iTOS:
+    #    return key
     if not globals.translations:
         return key
 

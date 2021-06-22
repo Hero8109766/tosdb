@@ -39,35 +39,53 @@ const ROUTES_APP: Routes = [
 const ROUTES_REGION: Routes = [
   {
     path: '',
-    redirectTo: '/itos/home',
+    redirectTo: '/itos/en/home',
     pathMatch: 'full'
   },
   {
-    path: 'itos',
+    path: 'itos/en',
     canActivate: [RouteService],
     canDeactivate: [RouteService],
     children: ROUTES_APP,
   },
   {
-    path: 'jtos',
+    path: 'itos/de',
+    canActivate: [RouteService],
+    canDeactivate: [RouteService],
+    children: ROUTES_APP,
+  },
+  {
+    path: 'itos/pt',
+    canActivate: [RouteService],
+    canDeactivate: [RouteService],
+    children: ROUTES_APP,
+  },
+  {
+    path: 'itos/th',
+    canActivate: [RouteService],
+    canDeactivate: [RouteService],
+    children: ROUTES_APP,
+  },
+  {
+    path: 'jtos/ja',
     canActivate: [RouteService],
     canDeactivate: [RouteService],
     children: ROUTES_APP,
   },
    {
-    path: 'ktest',
+    path: 'ktest/ko',
     children: ROUTES_APP,
     canActivate: [RouteService],
     canDeactivate: [RouteService],
   },
   {
-    path: 'ktos',
+    path: 'ktos/ko',
     children: ROUTES_APP,
     canActivate: [RouteService],
     canDeactivate: [RouteService],
   },
   {
-    path: 'twtos',
+    path: 'twtos/zh',
     children: ROUTES_APP,
     canActivate: [RouteService],
     canDeactivate: [RouteService],

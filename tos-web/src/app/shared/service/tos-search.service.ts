@@ -56,7 +56,7 @@ export class TOSSearchService {
 
     this.subscriptionLoad && this.subscriptionLoad.unsubscribe();
     this.subscriptionLoad = this
-      .postMessage(WorkerCommand.LOAD, { region: TOSRegionService.get() })
+      .postMessage(WorkerCommand.LOAD, { region: TOSRegionService.getRegion() ,language:TOSRegionService.getLanguage()})
       .subscribe(value => this.isLoaded.next(true));
   }
 
