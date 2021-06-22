@@ -176,7 +176,7 @@ class luaclass:
         self.ies_ADD('monster', self.ies.load('monster_npc.ies'))
         self.ies_ADD('skill', self.ies.load('skill.ies'))
         self.ies_ADD('SkillRestrict', self.ies.load('SkillRestrict.ies'))
-        #self.ies_ADD('ability', self.ies.load('ability.ies'))
+        self.ies_ADD('ability', self.ies.load('ability.ies'))
         self.ies_add_glob("ability",'../ies_ability.ipf/ability_*.ies')
         self.ies_ADD('monster_skill', self.ies.load('monster_skill.ies'))
 
@@ -270,6 +270,7 @@ class luaclass:
                 return data[name]
             end
             function GetClassByType(ies_key, id)
+            print(ies_key)
                 local data = ies_by_ClassID[string.lower(ies_key)]
                 return data[math.floor(id)]
             end

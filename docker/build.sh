@@ -17,39 +17,39 @@ cd ${BASEDIR}
 cp -rn ./skeleton_distbuild/* ./tos-build/dist/
 cp -rn ./skeleton_distweb/* ./tos-build/dist/
 
-for region in ${REGIONS[@]}
+
+
+cd ${BASEDIR}/tos-parser/src
+for region in ${REGIONS[@]} 
 do
     echo ${region}
-
     # parse
-    cd ${BASEDIR}/tos-parser/src
-    python3 main.py ${region} true ${REPATCH}
-
-    # html
-    cd ${BASEDIR}/tos-html/
-  
-    npm install
-    npm run main ${region}
-    # ->unzip
-    cd ${BASEDIR}/tos-build/dist
-
-    echo ${region,,}.zip
-    if [ $(unzip -o ./${region,,}.zip) -ge 2 ];then
-        exit 1
-    fi
-    echo "complete"
-    
-    # search
-    cd ${BASEDIR}/tos-search/
-    npm install
-    npm run main ${region}
-
-    # sitemap
-    cd ${BASEDIR}/tos-sitemap/
-    npm install
-    npm run main ${region}
-
+   
+    python3 main.py ${region}  ${REPATCH} 
 done
+# # html
+# cd ${BASEDIR}/tos-html/
+# npm install
+# parallel npm run main ${region}
+# # ->unzip
+# cd ${BASEDIR}/tos-build/dist
+# echo ${region,,}.zip
+# if [ $(unzip -o ./${region,,}.zip) -ge 2 ];then
+#     exit 1
+# fi
+#echo "complete"
+
+# search
+cd ${BASEDIR}/tos-search/
+npm install
+
+parallel "npm run main {1}" ::: ${REGIONS[@]}
+
+# sitemap
+cd ${BASEDIR}/tos-sitemap/
+npm install
+parallel "npm run main {1}" ::: ${REGIONS[@]}
+
 
 cd ${BASEDIR}
 

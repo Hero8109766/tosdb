@@ -12,7 +12,7 @@ ENV TZ=Asia/Tokyo
 # add prerequisites
 
 WORKDIR /root
-RUN apt-get update && apt-get install -y -q nodejs npm python3 python3-pip unzip nginx bash build-essential curl wget p7zip git
+RUN apt-get update && apt-get install -y -q nodejs npm python3 python3-pip unzip nginx bash build-essential curl wget p7zip git parallel
 RUN wget https://dot.net/v1/dotnet-install.sh
 RUN chmod 777 ./dotnet-install.sh
 RUN bash ./dotnet-install.sh -c 5.0
@@ -36,8 +36,8 @@ RUN make
 RUN cp -f ./unipf ./ipf /usr/bin/
 RUN cp -f ./libipf.so /usr/lib/
 
-
 RUN apt purge -y git 
+
 WORKDIR /
 RUN mkdir /var/www/base
 
