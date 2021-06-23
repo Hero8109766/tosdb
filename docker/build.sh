@@ -28,20 +28,20 @@ parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} :
 
 
 
-python3 main.py iTOS pt
-python3 main.py iTOS de
-python3 main.py iTOS th
-python3 main.py iTOS ru
+python3 main.py iTOS pt 0
+python3 main.py iTOS de 0
+python3 main.py iTOS th 0
+python3 main.py iTOS ru 0
 
 # search
 cd ${BASEDIR}/tos-search/
-npm install
+npm install --force
 
 parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
 parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
 # sitemap
 cd ${BASEDIR}/tos-sitemap/
-npm install
+npm install --force
 
 parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
 parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
