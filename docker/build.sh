@@ -17,14 +17,14 @@ cp -rn ./supplimental_data/* ./tos-parser/input
 
 
 cd ${BASEDIR}/tos-parser/src
-#parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} :::: ../.././injectionlist_representative.tsv 
+parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} :::: ../.././injectionlist_representative.tsv 
 #parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist.tsv 
 
-python3 main.py iTOS en ${REPATCH}
-python3 main.py jTOS ja ${REPATCH}
-python3 main.py kTOS ko ${REPATCH}
-python3 main.py kTEST ko ${REPATCH}
-python3 main.py twTOS zh ${REPATCH}
+#python3 main.py iTOS en ${REPATCH}
+#python3 main.py jTOS ja ${REPATCH}
+#python3 main.py kTOS ko ${REPATCH}
+#python3 main.py kTEST ko ${REPATCH}
+#python3 main.py twTOS zh ${REPATCH}
 
 
 
