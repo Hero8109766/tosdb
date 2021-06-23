@@ -2,8 +2,10 @@
 set -eu
 echo "ToS database building start."
 
-
-
+REPATCH=0
+if [ $# -ge 1 ]; then
+REPATCH=$1
+fi
 # build
 BASEDIR=/var/www/base/
 
@@ -15,7 +17,7 @@ cp -rn ./supplimental_data/* ./tos-parser/input
 
 
 cd ${BASEDIR}/tos-parser/src
-parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist_representative.tsv 
+parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} :::: ../.././injectionlist_representative.tsv 
 #parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist.tsv 
 python3 main.py iTOS pt
 python3 main.py iTOS de
