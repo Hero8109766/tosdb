@@ -68,7 +68,7 @@ def parse(region, version_update):
     parse_icons('baseskinset.xml', region, version_update)
     parse_icons('classicon.xml', region, version_update)
     parse_icons('itemicon.xml', region, version_update)
-    parse_icons('mongem.xml', region, version_update)
+    #parse_icons('mongem.xml', region, version_update)
     parse_icons('monillust.xml', region, version_update)
     parse_icons('skillicon.xml', region, version_update)
 
