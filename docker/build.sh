@@ -15,8 +15,8 @@ cp -rn ./supplimental_data/* ./tos-parser/input
 
 
 cd ${BASEDIR}/tos-parser/src
-parallel --no-notice --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist_representative.tsv 
-#parallel --no-notice --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist.tsv 
+parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist_representative.tsv 
+#parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} 0 :::: ../.././injectionlist.tsv 
 python3 main.py iTOS pt
 python3 main.py iTOS de
 python3 main.py iTOS th
@@ -26,14 +26,14 @@ python3 main.py iTOS ru
 cd ${BASEDIR}/tos-search/
 npm install
 
-parallel --no-notice --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
-parallel --no-notice --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
 # sitemap
 cd ${BASEDIR}/tos-sitemap/
 npm install
 
-parallel --no-notice --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
-parallel --no-notice --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
 
 cd ${BASEDIR}
 
