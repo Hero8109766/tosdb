@@ -1,0 +1,11 @@
+version: '3'
+services: 
+    tosrepatch:
+       
+        build: 
+            context: .
+            dockerfile: dockerfile
+        command: /bin/bash /var/www/base/build.sh 1 
+        volumes:
+            - ./input:/var/www/base/tos-parser/input
+            
