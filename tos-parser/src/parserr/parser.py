@@ -58,7 +58,7 @@ def csv_write(data, dataset):
     file.close()
 
 
-def parse(region, is_rebuild, is_version_new):
+def parse(region,language, is_rebuild, is_version_new):
     # Initialize LUA environment
     luautil.init()
 
@@ -66,7 +66,7 @@ def parse(region, is_rebuild, is_version_new):
     parser_assets.parse(region, is_version_new)
     parser_jobs.parse_jobs_images(region, is_version_new)
     #parser_maps.parse_maps_images(region, is_version_new)
-    parser_translations.parse(region)
+    parser_translations.parse(region,language)
 
     # Garbage collect...
     logging.debug('Garbage collect...')

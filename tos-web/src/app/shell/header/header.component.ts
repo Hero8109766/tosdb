@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isUpdateAvailable: boolean;
   isUpdateCheck: boolean;
   isUpdateCheckManual: boolean;
-  isUpdateCheckTimeout: number;
+  isUpdateCheckTimeout: any;
   isUpdateInstall: boolean;
   isOpenSearch: boolean;
 
@@ -73,8 +73,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return TOSUrlService.Route(url);
   }
 
-  regionSelect(region: any): boolean {
-    TOSRegionService.select(region);
+  regionAndLanguageSelect(region: any,language:any): boolean {
+    TOSRegionService.select(region,language);
     return false;
   }
 

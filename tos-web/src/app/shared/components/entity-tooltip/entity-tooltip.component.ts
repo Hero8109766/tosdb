@@ -96,7 +96,7 @@ export class EntityTooltipComponent implements OnChanges, OnDestroy {
         if (this.build == null || this.build instanceof TOSDatabaseBuild) {
           this.build = null;
           this.skill.Link_Job.subscribe(async value => {
-            let build = TOSDatabaseBuild.new(TOSRegionService.get());
+            let build = TOSDatabaseBuild.new(TOSRegionService.getRegion());
             await build.jobAdd$(value); // Note: we need to add them 3 times, as on pre-Re:Build the level max scales with the selected Job circle
             await build.jobAdd$(value);
             await build.jobAdd$(value);

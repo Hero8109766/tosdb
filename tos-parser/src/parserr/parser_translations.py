@@ -7,18 +7,24 @@ import xml.etree.ElementTree as ET
 import constants
 import globals
 import codecs
-from parserr.parser_enums import TOSRegion
+from parserr.parser_enums import TOSRegion, TOSLanguage
 from utils.stringutil import is_ascii
 
 TRANSLATION_PREFIX = '@dicID_^*$'
 TRANSLATION_SUFFIX = '$*^'
-
-
-def parse(region):
+REGION=None
+LANGUAGE=None
+def parse(region,language):
+    global REGION,LANGUAGE
+    REGION=region
+    LANGUAGE=language
     translations = None
-    translations = parse_translations('English') if region == TOSRegion.iTOS else translations
-    translations = parse_translations('Japanese') if region == TOSRegion.jTOS else translations
-    translations = parse_translations('Taiwanese') if region == TOSRegion.twTOS else translations
+
+    if TOSLanguage.ko!=language:
+        translations=parse_translations(TOSLanguage.to_full_string(language))
+        #translations = parse_translations('English') if region == TOSRegion.iTOS else translations
+        #translations = parse_translations('Japanese') if region == TOSRegion.jTOS else translations
+        #translations = parse_translations('Taiwanese') if region == TOSRegion.twTOS else translations
 
     if translations:
         parse_dictionary(translations)
@@ -85,7 +91,7 @@ def parse_clmsg():
                 globals.clmsgs[key] = translate(value)
 
 
-def translate(key):
+def translate(key,secondtouch=False):
 
     try:
         key = str(key.replace('"', ''), 'utf-8')
@@ -93,7 +99,7 @@ def translate(key):
         pass
 
     # In case the key is already in english, there's no need to translate
-    #if is_ascii(key):
+    #if not secondtouch  and is_ascii(key) and REGION==TOSRegion.iTOS:
     #    return key
     if not globals.translations:
         return key
@@ -105,7 +111,7 @@ def translate(key):
             return key
         else:
             if key!=globals.clmsgs[key]:
-                return translate(globals.clmsgs[key])
+                return translate(globals.clmsgs[key],True)
             else:
                 return key
     return globals.translations[key]

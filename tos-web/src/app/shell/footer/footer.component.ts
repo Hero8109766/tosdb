@@ -37,8 +37,8 @@ export class FooterComponent implements OnDestroy {
     this.changeDetector.markForCheck();
   }
 
-  onUpdateComplete() {
-    this.updateVersion = this.update.versionHuman;
+  async onUpdateComplete() {
+    this.updateVersion =await this.update.getVersionHuman();
     this.changeDetector.markForCheck();
   }
 

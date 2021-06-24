@@ -2,54 +2,49 @@
 set -eu
 echo "ToS database building start."
 
-
-
+REPATCH=0
+if [ $# -ge 1 ]; then
+REPATCH=$1
+fi
 # build
 BASEDIR=/var/www/base/
-REGIONS=(jTOS iTOS kTOS twTOS kTEST)
-#REGIONS=(jTOS)
-REPATCH=0
-if [ $# -ge 1 ];then
-    REPATCH=$1
-fi
+
 
 cd ${BASEDIR}
 cp -rn ./skeleton_distbuild/* ./tos-build/dist/
 cp -rn ./skeleton_distweb/* ./tos-build/dist/
+cp -rn ./supplimental_data/* ./tos-parser/input
 
-for region in ${REGIONS[@]}
-do
-    echo ${region}
 
-    # parse
-    cd ${BASEDIR}/tos-parser/src
-    python3 main.py ${region} true ${REPATCH}
+cd ${BASEDIR}/tos-parser/src
+parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} :::: ../.././injectionlist_representative.tsv 
+#parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} :::: ../.././injectionlist.tsv 
 
-    # html
-    cd ${BASEDIR}/tos-html/
-  
-    npm install
-    npm run main ${region}
-    # ->unzip
-    cd ${BASEDIR}/tos-build/dist
+#python3 main.py iTOS en ${REPATCH}
+#python3 main.py jTOS ja ${REPATCH}
+#python3 main.py kTOS ko ${REPATCH}
+#python3 main.py kTEST ko ${REPATCH}
+#python3 main.py twTOS zh ${REPATCH}
 
-    echo ${region,,}.zip
-    if [ $(unzip -o ./${region,,}.zip) -ge 2 ];then
-        exit 1
-    fi
-    echo "complete"
-    
-    # search
-    cd ${BASEDIR}/tos-search/
-    npm install
-    npm run main ${region}
 
-    # sitemap
-    cd ${BASEDIR}/tos-sitemap/
-    npm install
-    npm run main ${region}
 
-done
+python3 main.py iTOS pt 0
+python3 main.py iTOS de 0
+python3 main.py iTOS th 0
+python3 main.py iTOS ru 0
+
+# search
+cd ${BASEDIR}/tos-search/
+npm install --force
+
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
+# sitemap
+cd ${BASEDIR}/tos-sitemap/
+npm install --force
+
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
 
 cd ${BASEDIR}
 

@@ -57,14 +57,19 @@
       <!-- Region selector -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle tos-link" href="javascript:void(0);" style="text-transform: initial;">
-          {{ TOSRegionService.get() }}
-          <div class="dropdown-menu dropdown-menu-right">
-            <a *ngFor="let region of REGION" class="dropdown-item" style="text-transform: initial;"
-               [href]="'#' + region"
-               [ngClass]="{ 'active': TOSRegionService.get() == region }"
-               (click)="regionSelect(region)">
-              {{ region }}&nbsp;
-            </a>
+          {{ TOSRegionService.getRegion() }} &nbsp; {{ TOSRegionService.getLanguage() }}
+
+          <div class="dropdown-menu dropdown-menu-right" >
+           
+            <div *ngFor="let group of TOSRegionService.getTree(); index as i">
+                <div class="dropdown-header">{{ group.label }}</div>
+                <a *ngFor="let language of group.option" class="dropdown-item" style="text-transform: initial;"
+                [href]="'#' + group.label +'_'+language "
+                [ngClass]="{ 'active': (TOSRegionService.getRegion() == region)&&(TOSRegionService.getLanguage() == language) }"
+                (click)="regionAndLanguageSelect(group.label,language)">
+                {{ TOSRegionService.languageToHumanReadable(language) }}&nbsp;
+                </a>
+            </div>
           </div>
         </a>
       </li>
