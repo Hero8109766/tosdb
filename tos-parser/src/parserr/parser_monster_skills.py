@@ -13,41 +13,18 @@ from parserr.parser_jobs import TOSJobTree
 from utils import luautil
 from utils.tosenum import TOSEnum
 
-EFFECT_DEPRECATE = {
-    'SkillAtkAdd': 'SkillFactor'
-}
 
-
-class TOSRequiredStanceCompanion(TOSEnum):
-    BOTH = 0
-    NO = 1
-    SELF = 2
-    YES = 3
-
-    @staticmethod
-    def value_of(string):
-        return {
-            'BOTH': TOSRequiredStanceCompanion.BOTH,
-            '': TOSRequiredStanceCompanion.NO,
-            'SELF': TOSRequiredStanceCompanion.SELF,
-            'YES': TOSRequiredStanceCompanion.YES,
-        }[string.upper()]
-
-
-EFFECTS = []
 
 
 def parse(is_rebuild):
-    parse_skills(is_rebuild)
+    parse_monster_skills(is_rebuild)
 
 
-def parse_skills(is_rebuild):
-    logging.debug('Parsing skills...')
+def parse_monster_skills(is_rebuild):
+    logging.debug('Parsing monster skills...')
 
-    LUA_RUNTIME = luautil.LUA_RUNTIME
-    LUA_SOURCE = luautil.LUA_SOURCE
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'skill.ies')
+    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'skill_mon.ies')
 
     with codecs.open(ies_path, 'r','utf-8',errors="replace") as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
@@ -160,14 +137,10 @@ def parse_skills(is_rebuild):
                 obj['SP'] = parse_skills_lua_source(row['SpendSP'])
                 #obj['SP'] = parse_skills_lua_source_to_javascript(row, obj['SP'])
 
-            globals.skills[obj['$ID']] = obj
-            globals.skills_by_name[obj['$ID_NAME']] = obj
+            globals.monster_skills[obj['$ID']] = obj
+            globals.monster_skills_by_name[obj['$ID_NAME']] = obj
 
-    # HotFix: make sure all skills have the same Effect columns (2/2)
-    for skill in list(globals.skills.values()):
-        for effect in EFFECTS:
-            if effect not in skill:
-                skill[effect] = None
+
 
 
 def parse_skills_lua_source(function):
