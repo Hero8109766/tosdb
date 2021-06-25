@@ -60,6 +60,10 @@ import {TOSNPCResolver} from "./domain/tos/monster/tos-npc.resolver";
 import { TOSBuffResolver } from './domain/tos/buff/tos-buff.resolver';
 import { EntityDetailOptDescComponent } from './components/entity-detail/entity-detail-OptDesc/entity-detail-OptDesc.component';
 import { EntityDetailViboraComponent } from './components/entity-detail/entity-detail-Vibora/entity-detail-Vibora.component';
+import { TOSMonsterSkillResolver } from './domain/tos/monsterskill/tos-monster-skill.resolver';
+import { TableCellConvertiblePipe } from './components/entity-table/pipes/table-cell-convertible.pipe';
+import { EntityDetailMonsterSkillComponent } from './components/entity-detail/entity-detail-MonsterSkill/entity-detail-MonsterSkill.component';
+import { ColorizeHTMLPipe } from './directives/colorize-html.pipe';
 
 @NgModule({
   imports: [
@@ -86,6 +90,7 @@ import { EntityDetailViboraComponent } from './components/entity-detail/entity-d
     EntityDetailJobAnimationComponent,
     EntityDetailJobIconComponent,
     EntityDetailHeaderComponent,
+    EntityDetailMonsterSkillComponent,
     EntityDetailOptDescComponent,
     EntityDetailSkillComponent,
     EntityDetailSkillFormulaComponent,
@@ -104,6 +109,7 @@ import { EntityDetailViboraComponent } from './components/entity-detail/entity-d
     SortGroupDirective,
 
     // Pipes
+    ColorizeHTMLPipe,
     SanitizeCSSPipe,
     SanitizeHTMLPipe,
     TableCellPipe,
@@ -112,6 +118,7 @@ import { EntityDetailViboraComponent } from './components/entity-detail/entity-d
     TableCellLinkPipe,
     TableCellNumberPipe,
     TableCellTextPipe,
+    TableCellConvertiblePipe,
     TimePipe,
     CssMaxHeightDirective,
   ],
@@ -131,6 +138,7 @@ import { EntityDetailViboraComponent } from './components/entity-detail/entity-d
     EntityDetailJobAnimationComponent,
     EntityDetailJobIconComponent,
     EntityDetailHeaderComponent,
+    EntityDetailMonsterSkillComponent,
     EntityDetailOptDescComponent,
     EntityDetailSkillComponent,
     EntityDetailSkillFormulaComponent,
@@ -157,6 +165,7 @@ import { EntityDetailViboraComponent } from './components/entity-detail/entity-d
     RouterModule,
 
     // Pipes
+    ColorizeHTMLPipe,
     SanitizeCSSPipe,
     SanitizeHTMLPipe,
     TableCellBadgePipe,
@@ -164,6 +173,7 @@ import { EntityDetailViboraComponent } from './components/entity-detail/entity-d
     TableCellLinkPipe,
     TableCellNumberPipe,
     TableCellTextPipe,
+    TableCellConvertiblePipe,
     TimePipe,
   ],
 })
@@ -181,6 +191,7 @@ export class SharedModule {
         TableCellLinkPipe,
         TableCellNumberPipe,
         TableCellTextPipe,
+        TableCellConvertiblePipe,
         TOSAttributeResolver,
         TOSBookResolver,
         TOSBuffResolver,
@@ -194,6 +205,7 @@ export class SharedModule {
         TOSJobResolver,
         TOSMapResolver,
         TOSMonsterResolver,
+        TOSMonsterSkillResolver,
         TOSNPCResolver,
         TOSRecipeResolver,
         TOSSkillResolver,

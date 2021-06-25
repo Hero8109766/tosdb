@@ -86,7 +86,7 @@ class TOSElement(TOSEnum):
     MELEE = 6
     POISON = 7
     SOUL = 8
-
+    MAGIC = 9
     @staticmethod
     def to_string(value):
         return {
@@ -100,6 +100,7 @@ class TOSElement(TOSEnum):
             TOSElement.MELEE: 'None',
             TOSElement.POISON: 'Poison',
             TOSElement.SOUL: 'Soul',
+            TOSElement.MAGIC:'Magic',
         }[value]
 
     @staticmethod
@@ -115,6 +116,7 @@ class TOSElement(TOSEnum):
             'MELEE': TOSElement.MELEE,
             'POISON': TOSElement.POISON,
             'SOUL': TOSElement.SOUL,
+            'MAGIC':TOSElement.MAGIC,
             '': None
         }[string.upper()]
 
@@ -134,6 +136,7 @@ class TOSAttackType(TOSEnum):
     TRUE = 11
     UNKNOWN = 12
     RESPONSIVE = 13
+    PAD=14
     @staticmethod
     def to_string(value):
         return {
@@ -150,6 +153,7 @@ class TOSAttackType(TOSEnum):
             TOSAttackType.MELEE_THRUST: 'Thrust',
             TOSAttackType.TRUE: 'True Damage',
             TOSAttackType.RESPONSIVE: 'Responsive',
+            TOSAttackType.PAD:'Ground',
             TOSAttackType.UNKNOWN: '',
         }[value]
 
@@ -164,10 +168,12 @@ class TOSAttackType(TOSEnum):
             'MAGIC': TOSAttackType.MAGIC,
             'MELEE': TOSAttackType.MELEE,
             'MISSILE': TOSAttackType.MISSILE,
+            'MISSLE': None,             # bug
             'SLASH': TOSAttackType.MELEE_SLASH,
             'STRIKE': TOSAttackType.MELEE_STRIKE,
             'THRUST': TOSAttackType.MELEE_THRUST,
             'TRUEDAMAGE': TOSAttackType.TRUE,
             'RESPONSIVE':TOSAttackType.RESPONSIVE,
+            'PAD':TOSAttackType.PAD,
             '': TOSAttackType.UNKNOWN
         }[string.upper()]

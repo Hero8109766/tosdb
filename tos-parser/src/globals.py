@@ -40,6 +40,8 @@ recipes = {}
 recipes_by_name = {}
 skills = {}
 skills_by_name = {}
+monster_skills = {}
+monster_skills_by_name = {}
 translations = {}
 clmsgs={}
 all_items_by_name = [
@@ -110,6 +112,11 @@ def get_map_link(name):
 
 def get_monster_link(name):
     return _get_entity_link(name, monsters_by_name)
+def get_monster_skills_link(name):
+    return _get_entity_link(name, monster_skills_by_name)
+
+def get_buff_link(name):
+    return _get_entity_link(name, buffs_by_name)
 
 
 def get_npc_link(name):
@@ -152,6 +159,7 @@ def _get_entity_link(name, collection):
     collection_path = constants.OUTPUT_NPCS if collection == npcs_by_name else collection_path
     collection_path = constants.OUTPUT_RECIPES if collection == recipes_by_name else collection_path
     collection_path = constants.OUTPUT_SKILLS if collection == skills_by_name else collection_path
+    collection_path = constants.OUTPUT_BUFFS if collection == buffs_by_name else collection_path
 
     return Link(collection[name], collection_path[:-4])
 

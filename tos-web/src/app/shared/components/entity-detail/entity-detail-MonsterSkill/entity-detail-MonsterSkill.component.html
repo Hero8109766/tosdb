@@ -1,0 +1,32 @@
+<div>
+  <div class="w-100" *ngIf="divider"><hr></div>
+  <h5 *ngIf="header">Monster Skills</h5>
+   
+  <p class="text-multiline mb-0" [innerHTML]="((entity['Description'] || '') + (entity['DescriptionRequired'] || '')) | sanitizeHTML"></p>
+  <div class="row mt-1" *ngIf="item">
+    <div class="col">
+      <div class="row text-center">
+        <div class="col">
+        <table class="table table-borderless table-sm">
+            <thead>
+            <tr class="table-primary">
+            <th scope="col">Attack Type</th>
+            <th scope="col">AOE</th>
+            <th scope="col">CoolDown</th>
+            <th scope="col">SkillFactor</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>{{ monster_skill.Description | string }}</td>
+            <td>{{ monster_skill.SR | number }}</td>
+            <td>{{ monster_skill.CoolDown | number }}sec</td>
+            <td>{{ monster_skill.SkillFactor | number }}%</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

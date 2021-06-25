@@ -110,6 +110,7 @@ def parse_jobs():
             obj['Stat_DEX'] = int(row['DEX'])
             obj['Stat_INT'] = int(row['INT'])
             obj['Stat_SPR'] = int(row['MNA'])
+            obj['Stat_SPR'] = int(row['MNA'])
             obj['Stat_STR'] = int(row['STR'])
             obj['StatBase_CON'] = 0
             obj['StatBase_DEX'] = 0

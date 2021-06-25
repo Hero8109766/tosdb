@@ -13,6 +13,7 @@ import {
   ITOSJob,
   ITOSMap,
   ITOSMonster,
+  ITOSMonsterSkill,
   ITOSRecipe,
   ITOSSkill,
   TOSDataSet,
@@ -51,6 +52,7 @@ export class TOSDomainService {
   public static booksById($ID: string): Observable<ITOSBook>                                { return this.repository.findByIndex(TOSDataSet.BOOKS, '$ID', parseInt($ID), true) };
   public static buffs(page: CRUDPage): Observable<CRUDPageResult<ITOSBuff>>                 { return this.repository.find(TOSDataSet.BUFFS, page) };
   public static buffsById($ID: string): Observable<ITOSBuff>                                { return this.repository.findByIndex(TOSDataSet.BUFFS, '$ID', parseInt($ID), true) };
+  public static buffsByIdName($ID_NAME: string): Observable<ITOSBuff>                       { return this.repository.findByIndex(TOSDataSet.BUFFS, '$ID_NAME', $ID_NAME, true) };
 
   public static cards(page: CRUDPage): Observable<CRUDPageResult<ITOSCard>>                 { return this.repository.find(TOSDataSet.CARDS, page) };
   public static cardsById($ID: string): Observable<ITOSCard>                                { return this.repository.findByIndex(TOSDataSet.CARDS, '$ID', parseInt($ID), true) };
@@ -97,6 +99,11 @@ export class TOSDomainService {
 
   public static monsters(page: CRUDPage): Observable<CRUDPageResult<ITOSMonster>>           { return this.repository.find(TOSDataSet.MONSTERS, page) };
   public static monstersById($ID): Observable<ITOSMonster>                                  { return this.repository.findByIndex(TOSDataSet.MONSTERS, '$ID',parseInt($ID), true) };
+  public static monstersByIdName($ID_NAME): Observable<ITOSMonster>                         { return this.repository.findByIndex(TOSDataSet.MONSTERS, '$ID_NAME',$ID_NAME, true) };
+
+  public static monster_skills(page: CRUDPage): Observable<CRUDPageResult<ITOSMonsterSkill>>                   { return this.repository.find(TOSDataSet.MONSTERSKILLS, page) };
+  public static monster_skillsById($ID): Observable<ITOSMonsterSkill>                                          { return this.repository.findByIndex(TOSDataSet.MONSTERSKILLS, '$ID', parseInt($ID), true) };
+
 
   public static npcs(page: CRUDPage): Observable<CRUDPageResult<ITOSMonster>>               { return this.repository.find(TOSDataSet.NPCS, page) };
   public static npcsById($ID): Observable<ITOSMonster>                                      { return this.repository.findByIndex(TOSDataSet.NPCS, '$ID', parseInt($ID), true) };
@@ -116,5 +123,7 @@ export class TOSDomainService {
   public static skillsById($ID: string): Observable<ITOSSkill>                              { return this.repository.findByIndex(TOSDataSet.SKILLS, '$ID', parseInt($ID), true) };
   public static skillsByIdName($ID_NAME: string): Observable<ITOSSkill>                     { return this.repository.findByIndex(TOSDataSet.SKILLS, '$ID_NAME', $ID_NAME,  true) };
   public static skillsByJob(job: ITOSJob): Observable<ITOSSkill[]>                          { return this.repository.findByIndex(TOSDataSet.SKILLS, 'Link_Job', job.$ID) };
+
+
 
 }

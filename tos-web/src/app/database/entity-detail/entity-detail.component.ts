@@ -30,6 +30,7 @@ import {TOSRegionService} from "../../shared/domain/tos-region";
 import {TOSMap} from "../../shared/domain/tos/map/tos-map.model";
 import {ITOSEntity} from "../../shared/domain/tos/tos-domain";
 import {MapListConfigurationResolver} from "../resolvers/map-list-configuration.resolver";
+import { TOSMonsterSkill } from 'src/app/shared/domain/tos/monsterskill/tos-monster-skill.model';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,8 +74,10 @@ export class EntityDetailComponent implements OnDestroy, OnInit {
   job: TOSJob;
   map: TOSMap;
   monster: TOSMonster;
+  monsterskill:TOSMonsterSkill;
   recipe: TOSRecipe;
   skill: TOSSkill;
+  
 
   anvilLevel: number = 0;
   transcendLevel: number = 0;
@@ -112,6 +115,8 @@ export class EntityDetailComponent implements OnDestroy, OnInit {
       this.job = this.entity instanceof TOSJob ? this.entity as TOSJob : null;
       this.map = this.entity instanceof TOSMap ? this.entity as TOSMap : null;
       this.monster = this.entity instanceof TOSMonster ? this.entity as TOSMonster : null;
+      this.monsterskill = this.entity instanceof TOSMonsterSkill ? this.entity as TOSMonsterSkill : null;
+
       this.recipe = this.entity instanceof TOSRecipe ? this.entity as TOSRecipe : null;
       this.skill = this.entity instanceof TOSSkill ? this.entity as TOSSkill : null;
 

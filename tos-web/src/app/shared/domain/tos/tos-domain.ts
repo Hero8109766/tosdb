@@ -32,6 +32,8 @@ export enum TOSAttackType {
     MELEE_STRIKE = 'Strike',
     MELEE_THRUST = 'Thrust',
     TRUE = 'True Damage',
+    RESPONSIVE = 'Responsive',
+    PAD = "Ground",
     UNKNOWN = '',
 }
 
@@ -70,6 +72,7 @@ export enum TOSDataSet {
     NPCS = 'npcs',
     RECIPES = 'recipes',
     SKILLS = 'skills',
+    MONSTERSKILLS = 'monster_skills'
 }
 export namespace TOSDataSetService {
     export const VALUES: { label: string, options: TOSDataSet[] }[] = [
@@ -101,6 +104,7 @@ export namespace TOSDataSetService {
             options: [
                 TOSDataSet.MAPS,
                 TOSDataSet.MONSTERS,
+                TOSDataSet.MONSTERSKILLS,  //HIDDEN
             ],
         },
         {
@@ -142,6 +146,7 @@ export enum TOSElement {
     MELEE = 'None',
     POISON = 'Poison',
     PSYCHOKINESIS = 'Psychokinesis',
+    MAGIC = 'Magic',
 }
 
 export const
@@ -316,6 +321,7 @@ TOSEquipmentTypeService.groupBy = () => [
             TOSEquipmentType.ARK,
             TOSEquipmentType.SEAL,
             TOSEquipmentType.TRINKET,
+            
         ]
     },
 ];
@@ -933,6 +939,7 @@ export interface ITOSMonster extends ITOSEntity {
 
     Link_Items: Observable<ITOSMonsterLinkItem[]>;
     Link_Maps: Observable<ITOSMonsterLinkMap[]>;
+    Link_MonsterSkills:Observable<ITOSMonsterLinkMonsterSkill[]>;
 }
 export interface ITOSMonsterLinkItem extends ITOSEntityLink<ITOSEntity> {
     Chance: number;
@@ -945,7 +952,9 @@ export interface ITOSMonsterLinkMap extends ITOSEntityLink<ITOSMap> {
     TimeRespawn: number;
     Url: string;
 }
-
+export interface ITOSMonsterLinkMonsterSkill extends ITOSEntityLink<ITOSMonsterSkill> {
+    Url: string;
+}
 export interface ITOSNPC extends ITOSMonster { }
 
 export interface ITOSRecipe extends ITOSItem {
@@ -984,6 +993,23 @@ export interface ITOSSkill extends ITOSEntity {
     BuildSP(build: ITOSBuild): Observable<number>;
     EffectDescription(build: ITOSBuild, showFactors: boolean): Observable<string>;
     EffectFormula(prop: string, build: ITOSBuild): Observable<string>;
+}
+
+export interface ITOSMonsterSkill extends ITOSEntity {
+    CoolDown: number;
+    Element: TOSElement;
+    SP: number;
+    TypeAttack: TOSAttackType;
+    SkillFactor:number;
+    HitCount:number;
+    TargetBuffs: Observable<ITOSAddBuff[]>;
+    SelfBuffs: Observable<ITOSAddBuff[]>;
+}
+
+export interface ITOSAddBuff{
+    Link_Buff:Observable<ITOSBuff>
+    Duration:number
+    Chance:number
 }
 export interface ITOSSkillRequiredStance {
     Icon: string;

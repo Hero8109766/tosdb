@@ -1,4 +1,4 @@
-<div *ngIf="attribute || item || job || monster || skill">
+<div *ngIf="attribute || item || job || monster || skill || monster_skill">
   <div class="w-100" *ngIf="divider"><hr></div>
   <h5 *ngIf="header">Information</h5>
 
@@ -99,4 +99,8 @@
       </table>
     </div>
   </div>
+
+
+  <tos-entity-detail-MonsterSkill *ngIf="monster_skill">
+  </tos-entity-detail-MonsterSkill>
 </div>

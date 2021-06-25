@@ -34,6 +34,8 @@ import {EntityDetailMapComponent} from "./entity-detail-v2/entity-detail-map/ent
 import {TOSNPCResolver} from "../shared/domain/tos/monster/tos-npc.resolver";
 import { TOSBuffResolver } from '../shared/domain/tos/buff/tos-buff.resolver';
 import { BuffListConfigurationResolver } from './resolvers/buff-list-configuration.resolver';
+import { TOSMonsterSkillResolver } from '../shared/domain/tos/monsterskill/tos-monster-skill.resolver';
+import { MonsterSkillListConfigurationResolver } from './resolvers/monster-skill-list-configuration.resolver';
 
 export const ROUTES_DATABASE: Routes = [
   {
@@ -345,6 +347,25 @@ export const ROUTES_DATABASE: Routes = [
     canDeactivate: [RouteService],
     component: EntityDetailComponent,
     resolve: { response: TOSSkillResolver },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+  },
+  {
+    path: 'monster_skills',
+    canActivate: [RouteService],
+    canDeactivate: [RouteService],
+    component: EntityListComponent,
+    resolve: {
+      configuration: MonsterSkillListConfigurationResolver,
+      response: TOSMonsterSkillResolver,
+    },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+  },
+  {
+    path: 'monster_skills/:id',
+    canActivate: [RouteService],
+    canDeactivate: [RouteService],
+    component: EntityDetailComponent,
+    resolve: { response: TOSMonsterSkillResolver },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
   },
 ];

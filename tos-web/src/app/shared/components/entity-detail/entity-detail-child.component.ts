@@ -14,6 +14,7 @@ import {TOSMap} from "../../domain/tos/map/tos-map.model";
 import {TOSJob} from "../../domain/tos/job/tos-job.model";
 import {TOSAttribute} from "../../domain/tos/attribute/tos-attribute.model";
 import {TOSClassTree, TOSElementService, TOSItemTradability, TOSMonsterRaceService} from "../../domain/tos/tos-domain";
+import { TOSMonsterSkill } from "../../domain/tos/monsterskill/tos-monster-skill.model";
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +43,7 @@ export class EntityDetailChildComponent {
   monster: TOSMonster;
   recipe: TOSRecipe;
   skill: TOSSkill;
+  monster_skill:TOSMonsterSkill;
 
   constructor(protected changeDetector: ChangeDetectorRef) { }
 
@@ -60,8 +62,10 @@ export class EntityDetailChildComponent {
       this.job = this.entity instanceof TOSJob ? this.entity as TOSJob : null;
       this.map = this.entity instanceof TOSMap ? this.entity as TOSMap : null;
       this.monster = this.entity instanceof TOSMonster ? this.entity as TOSMonster : null;
+      this.monster_skill = this.monster_skill instanceof TOSMonsterSkill ? this.entity as TOSMonsterSkill : null;
       this.recipe = this.entity instanceof TOSRecipe ? this.entity as TOSRecipe : null;
       this.skill = this.entity instanceof TOSSkill ? this.entity as TOSSkill : null;
+
     }
   }
 

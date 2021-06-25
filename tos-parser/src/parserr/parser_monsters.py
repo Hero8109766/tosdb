@@ -165,7 +165,7 @@ def parse_monsters(file_name):
         obj['Icon'] = parser_assets.parse_entity_icon(row['Icon']) if row['Icon'] != 'ui_CreateMonster' else None
         obj['Name'] = parser_translations.translate(row['Name'])
         obj['Type'] = TOSMonsterType.value_of(row['GroupName'])
-
+        obj['Link_MonsterSkills']=[]
         if obj['Type'] == TOSMonsterType.MONSTER:
             obj['Armor'] = TOSEquipmentMaterial.value_of(row['ArmorMaterial'])
             obj['Element'] = TOSElement.value_of(row['Attribute'])

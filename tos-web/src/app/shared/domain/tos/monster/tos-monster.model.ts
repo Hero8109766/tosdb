@@ -4,6 +4,8 @@ import {
   ITOSMonster,
   ITOSMonsterLinkItem,
   ITOSMonsterLinkMap,
+  ITOSMonsterLinkMonsterSkill,
+  ITOSMonsterSkill,
   TOSDataSet,
   TOSElement,
   TOSEquipmentMaterial,
@@ -29,7 +31,7 @@ export class TOSMonster extends TOSEntity implements ITOSMonster {
 
     this.Selected = this.Type != TOSMonsterType.MONSTER;
   }
-
+ 
   get Armor() { return this.$lazyPropertyEnum('Armor', TOSEquipmentMaterial) }
   get Element() { return this.$lazyPropertyEnum('Element', TOSElement) }
   get EXP() { return this.$lazyPropertyNumber('EXP') }
@@ -62,6 +64,8 @@ export class TOSMonster extends TOSEntity implements ITOSMonster {
 
   get Link_Items() { return this.$lazyPropertyLink('Link_Items', value => this.TOSMonsterLinkItem(value)) as Observable<TOSMonsterLinkItem[]> }
   get Link_Maps() { return this.$lazyPropertyLink('Link_Maps', value => this.TOSMonsterLinkMap(value)) as Observable<TOSMonsterLinkMap[]> }
+  get Link_MonsterSkills(): Observable<ITOSMonsterLinkMonsterSkill[]> { return this.$lazyPropertyLink('Link_MonsterSkills', 
+  value => this.TOSMonsterLinkMonsterSkill(value)) as Observable<ITOSMonsterLinkMonsterSkill[]> }
 
   private TOSMonsterLinkItem(value: TOSMonsterLinkItem): Observable<TOSMonsterLinkItem> {
     return fromPromise((async () => {
@@ -75,6 +79,14 @@ export class TOSMonster extends TOSEntity implements ITOSMonster {
     return fromPromise((async () => {
       let object = new TOSMonsterLinkMap(value);
           object.Map = await TOSDomainService.mapsById(object.Map.$ID).toPromise();
+
+      return object;
+    })());
+  }
+  private TOSMonsterLinkMonsterSkill(value: TOSMonsterLinkMonsterSkill): Observable<TOSMonsterLinkMonsterSkill> {
+    return fromPromise((async () => {
+      let object = new TOSMonsterLinkMonsterSkill(value);
+          object.MonsterSkill = await TOSDomainService.monster_skillsById(object.MonsterSkill.$ID).toPromise();
 
       return object;
     })());
@@ -117,3 +129,16 @@ export class TOSMonsterLinkMap extends TOSEntityLink<ITOSMap> implements ITOSMon
   get Link() { return this.Map }
 
 }
+export class TOSMonsterLinkMonsterSkill extends TOSEntityLink<ITOSMonsterSkill> implements ITOSMonsterLinkMonsterSkill {
+    MonsterSkill: ITOSMonsterSkill;
+  
+    constructor(json: TOSMonsterLinkMonsterSkill) {
+      super();
+  
+      this.MonsterSkill = json.MonsterSkill;
+    }
+  
+    get Link() { return this.MonsterSkill }
+  
+  }
+  
