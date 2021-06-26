@@ -20,15 +20,15 @@ export class TableCellConvertiblePipe extends TableCellPipeBase<TableCellConvert
         let value = definition.converter ? definition.converter(obj) : obj;
 
 
-        return obj && obj.pipe(
+        return value && value.pipe(
             map(async v => {
 
                 let html: string = '';
-                let array:Observable<any>[] = Array.isArray(v) ? v : [v];
+                let array:any[] = Array.isArray(v) ? v : [v];
 
 
                 for (let i = 0; i < array.length; i++) {
-                    let entity = await array[i].toPromise()
+                    let entity = array[i]
 
                     let value = definition.transformValue ? definition.transformValue(entity) : null;
 

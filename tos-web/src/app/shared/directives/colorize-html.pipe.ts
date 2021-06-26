@@ -4,7 +4,7 @@ import { TagToHtml } from "../utils/tag-to-html";
 
 
 @Pipe({
-  name: 'colorizeHTMLPipe'
+  name: 'colorizeHTML'
 })
 export class ColorizeHTMLPipe implements PipeTransform {
 

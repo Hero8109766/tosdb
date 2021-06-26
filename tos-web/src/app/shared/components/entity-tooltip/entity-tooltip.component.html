@@ -32,10 +32,13 @@
                            [entity]="entity"></tos-entity-detail-Gem>
 
     <!-- Description -->
-    <tos-entity-detail-Description *ngIf="item && !equipment || attribute || monster_skill"
+    <tos-entity-detail-Description *ngIf="item && !equipment || attribute"
                                    [divider]="true"
                                    [entity]="entity"></tos-entity-detail-Description>
-    
+     <!-- Description -->
+    <tos-entity-detail-MonsterSkill *ngIf="monster_skill"
+                                   [divider]="true"
+                                   [entity]="entity"></tos-entity-detail-MonsterSkill>
     <!-- Physical and Magical Attack / Defense -->
     <tos-entity-detail-AttackDefense [entity]="entity"></tos-entity-detail-AttackDefense>
 

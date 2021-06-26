@@ -997,6 +997,7 @@ export interface ITOSSkill extends ITOSEntity {
 
 export interface ITOSMonsterSkill extends ITOSEntity {
     CoolDown: number;
+    SkillSR: number;
     Element: TOSElement;
     SP: number;
     TypeAttack: TOSAttackType;
@@ -1006,7 +1007,7 @@ export interface ITOSMonsterSkill extends ITOSEntity {
     SelfBuffs: Observable<ITOSAddBuff[]>;
 }
 
-export interface ITOSAddBuff{
+export interface ITOSAddBuff extends ITOSBuff{
     Link_Buff:Observable<ITOSBuff>
     Duration:number
     Chance:number

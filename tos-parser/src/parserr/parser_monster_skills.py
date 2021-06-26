@@ -181,22 +181,21 @@ def parse_links():
     logging.debug('Parsing MonsterSkills <> Monster...')
 
     # monsterskill <> monster
-    for monster in list(globals.monster_skills.values()):
-        links=None
-        if monster['Link_Monsters']:
-            links = []
-            for v in monster['Link_Monsters']:
-                if v in globals.monsters_by_name:
-                    mnst=globals.monsters_by_name[v]
-                    mnst['Link_MonsterSkills'].append(globals.get_monster_skills_link(mnst))
-                    globals.monsters_by_name[v]=mnst
-                    globals.monsters[mnst['$ID']]=mnst
+    for skl in globals.monster_skills.values():
 
-                    link=globals.get_monster_link(v)
+        if(len(skl['Link_Monsters'])>0 and type(skl['Link_Monsters'][0])==str):
+            links = []
+            for classname in skl['Link_Monsters']:
+                link=globals.get_monster_link(classname)
+                if link:
                     links.append(link)
-        monster['Link_Monsters']=links
-        globals.monster_skills[monster['$ID']] = monster
-        globals.monster_skills_by_name[monster['$ID_NAME']] = monster
+                    ln=globals.get_monster_skills_link(skl['$ID_NAME'])
+                    if ln:
+                        # counterpart
+                        link['Link_MonsterSkills'].append(ln)
+            skl['Link_Monsters']=links
+        #globals.monster_skills[skl['$ID']] = skl
+        #globals.monster_skills_by_name[skl['$ID_NAME']] = skl
 
 
 

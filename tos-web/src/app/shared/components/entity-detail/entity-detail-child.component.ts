@@ -62,7 +62,7 @@ export class EntityDetailChildComponent {
       this.job = this.entity instanceof TOSJob ? this.entity as TOSJob : null;
       this.map = this.entity instanceof TOSMap ? this.entity as TOSMap : null;
       this.monster = this.entity instanceof TOSMonster ? this.entity as TOSMonster : null;
-      this.monster_skill = this.monster_skill instanceof TOSMonsterSkill ? this.entity as TOSMonsterSkill : null;
+      this.monster_skill = this.entity instanceof TOSMonsterSkill ? this.entity as TOSMonsterSkill : null;
       this.recipe = this.entity instanceof TOSRecipe ? this.entity as TOSRecipe : null;
       this.skill = this.entity instanceof TOSSkill ? this.entity as TOSSkill : null;
 
