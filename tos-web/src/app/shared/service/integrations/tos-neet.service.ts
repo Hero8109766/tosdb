@@ -15,7 +15,7 @@ export class TosNeetService {
 
   decode(encoded: string): Observable<TOSSimulatorBuild> {
     return fromPromise((async () => {
-      let build: TOSSimulatorBuild = TOSSimulatorBuild.new(TOSRegionService.get());
+      let build: TOSSimulatorBuild = TOSSimulatorBuild.new(TOSRegionService.getRegion());
 
       let partsEncoded = encoded.split('.');
       let jobsDecoded: ITOSJob[] = [];

@@ -140,7 +140,7 @@ export class RemoteLUAService {
         //httprequest
         let request = {
             context: jsoncontext,
-            region: TOSRegionService.get().toString(),
+            region: TOSRegionService.getRegion().toString(),
             type:type.toString(),
             classid:id$,
             mode:element

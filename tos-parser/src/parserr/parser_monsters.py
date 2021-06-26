@@ -165,7 +165,7 @@ def parse_monsters(file_name):
         obj['Icon'] = parser_assets.parse_entity_icon(row['Icon']) if row['Icon'] != 'ui_CreateMonster' else None
         obj['Name'] = parser_translations.translate(row['Name'])
         obj['Type'] = TOSMonsterType.value_of(row['GroupName'])
-
+        obj['Link_MonsterSkills']=[]
         if obj['Type'] == TOSMonsterType.MONSTER:
             obj['Armor'] = TOSEquipmentMaterial.value_of(row['ArmorMaterial'])
             obj['Element'] = TOSElement.value_of(row['Attribute'])
@@ -240,6 +240,23 @@ def parse_monsters_statbase(file_name, destination):
 
 def parse_links():
     parse_links_items()
+    #parse_links_skills()
+def parse_links_skills():
+    logging.debug('Parsing Monsters <> Skills...')
+
+    # monsterskill <> monster
+    for skl in list(globals.monster_skills.values()):
+        if skl['Link_Monsters']:
+            for v in skl['Link_Monsters']:
+                if v in globals.monsters_by_name.value():
+                    mnst=v
+                    link=globals.get_monster_skills_link(mnst)
+                    if link:
+
+                        alink=globals.get_monster_skills_link(v['$ID_NAME'])
+                        mnst['Link_MonsterSkills'].append(alink)
+                        globals.monsters_by_name[mnst['$ID_NAME']] = mnst
+                        globals.monsters[mnst['$ID']] = mnst
 
 
 def parse_links_items():

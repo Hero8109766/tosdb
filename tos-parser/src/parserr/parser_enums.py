@@ -1,6 +1,52 @@
 from utils.tosenum import TOSEnum
 
+class TOSLanguage(TOSEnum):
+    en = 0  # english
+    ja = 1  # japanese
+    ko = 2  # korean
+    zh = 3  # traditional chinese
+    pt = 4  # portiugues
+    de = 5  # deutsch
+    th = 6  # thai
+    ru = 7  # russian
+    @staticmethod
+    def to_string(value):
+        return {
+            TOSLanguage.en: 'en',
+            TOSLanguage.ja: 'ja',
+            TOSLanguage.ko: 'ko',
+            TOSLanguage.zh: 'zh',
+            TOSLanguage.pt: 'pt',
+            TOSLanguage.de: 'de',
+            TOSLanguage.th: 'th',
+            TOSLanguage.ru: 'ru',
 
+        }[value]
+    @staticmethod
+    def to_full_string(value):
+        return {
+            TOSLanguage.en: 'English',
+            TOSLanguage.ja: 'Japanese',
+            TOSLanguage.ko: 'Korean',
+            TOSLanguage.zh: 'Taiwanese',
+            TOSLanguage.pt: 'Portuguese',
+            TOSLanguage.de: 'German',
+            TOSLanguage.th: 'Thai',
+            TOSLanguage.ru: 'Russian',
+        }[value]
+    @staticmethod
+    def value_of(string):
+        return {
+            'en': TOSLanguage.en,
+            'ja': TOSLanguage.ja,
+            'ko': TOSLanguage.ko,
+            'zh': TOSLanguage.zh,
+            'pt': TOSLanguage.pt,
+            'de': TOSLanguage.de,
+            'th': TOSLanguage.th,
+            'ru': TOSLanguage.ru,
+            '': None
+        }[string]
 class TOSRegion(TOSEnum):
     iTOS = 0
     jTOS = 1
@@ -40,7 +86,7 @@ class TOSElement(TOSEnum):
     MELEE = 6
     POISON = 7
     SOUL = 8
-
+    MAGIC = 9
     @staticmethod
     def to_string(value):
         return {
@@ -54,6 +100,7 @@ class TOSElement(TOSEnum):
             TOSElement.MELEE: 'None',
             TOSElement.POISON: 'Poison',
             TOSElement.SOUL: 'Soul',
+            TOSElement.MAGIC:'Magic',
         }[value]
 
     @staticmethod
@@ -69,6 +116,7 @@ class TOSElement(TOSEnum):
             'MELEE': TOSElement.MELEE,
             'POISON': TOSElement.POISON,
             'SOUL': TOSElement.SOUL,
+            'MAGIC':TOSElement.MAGIC,
             '': None
         }[string.upper()]
 
@@ -88,6 +136,7 @@ class TOSAttackType(TOSEnum):
     TRUE = 11
     UNKNOWN = 12
     RESPONSIVE = 13
+    PAD=14
     @staticmethod
     def to_string(value):
         return {
@@ -104,6 +153,7 @@ class TOSAttackType(TOSEnum):
             TOSAttackType.MELEE_THRUST: 'Thrust',
             TOSAttackType.TRUE: 'True Damage',
             TOSAttackType.RESPONSIVE: 'Responsive',
+            TOSAttackType.PAD:'Ground',
             TOSAttackType.UNKNOWN: '',
         }[value]
 
@@ -118,10 +168,12 @@ class TOSAttackType(TOSEnum):
             'MAGIC': TOSAttackType.MAGIC,
             'MELEE': TOSAttackType.MELEE,
             'MISSILE': TOSAttackType.MISSILE,
+            'MISSLE': None,             # bug
             'SLASH': TOSAttackType.MELEE_SLASH,
             'STRIKE': TOSAttackType.MELEE_STRIKE,
             'THRUST': TOSAttackType.MELEE_THRUST,
             'TRUEDAMAGE': TOSAttackType.TRUE,
             'RESPONSIVE':TOSAttackType.RESPONSIVE,
+            'PAD':TOSAttackType.PAD,
             '': TOSAttackType.UNKNOWN
         }[string.upper()]

@@ -20,6 +20,6 @@
   padding: 10px;
 }
 
-@include media-breakpoint-down(xs) {
+@include media-breakpoint-down(md) {
   .tos-job, .tos-skill { width: 100%; }
 }

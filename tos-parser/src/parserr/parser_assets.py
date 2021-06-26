@@ -97,8 +97,8 @@ def parse_icons_step(file_name, region, version_update, work):
 
     if image.get('file') is None or image.get('name') is None:
         return
-    if file_name == 'baseskinset.xml' and image_category not in WHITELIST_BASESKINSET:
-        return
+    #if file_name == 'baseskinset.xml' and image_category not in WHITELIST_BASESKINSET:
+    #    return
 
     image_extension = '.jpg' if image_category in WHITELIST_RGB else '.png'
     image_file = image.get('file').split('\\')[-1].lower()
@@ -110,26 +110,35 @@ def parse_icons_step(file_name, region, version_update, work):
     copy_from = os.path.join(copy_from, image_file)
     copy_to = os.path.join(constants.PATH_BUILD_ASSETS_ICONS, image_name + image_extension)
 
+    if os.path.isfile(copy_to):
+        # suppress overwrite
+        # Store mapping for later use
+        globals.assets_icons[image_name] = image_name
+        return
     if not os.path.isfile(copy_from):
         # Note for future self:
         # if you find missing files due to wrong casing, go to the Hotfix at unpacker.py and force lowercase
         #logging.warning('Non-existing icon: %s', copy_from)
         return
+    try:
+        if region == TOSRegion.kTEST and version_update or not os.path.isfile(copy_to):
+            shutil.copy(copy_from, copy_to)
 
-    if region == TOSRegion.kTEST and version_update or not os.path.isfile(copy_to):
-        shutil.copy(copy_from, copy_to)
+            # Crop, Resize, Optimize and convert to JPG/PNG
+            image_mode = 'RGB' if image_extension == '.jpg' else 'RGBA'
+            if image_category<=len(IMAGE_SIZE):
+                image_size = IMAGE_SIZE[image_category] if image_category in IMAGE_SIZE else (image_rect[2], image_rect[3])
+            else:
+                image_size = (image_rect[2], image_rect[3])
+            image_size = (80, 80) if file_name == 'classicon.xml' else image_size
+            image_size = (80, 80) if file_name == 'skillicon.xml' else image_size
 
-        # Crop, Resize, Optimize and convert to JPG/PNG
-        image_mode = 'RGB' if image_extension == '.jpg' else 'RGBA'
-        image_size = IMAGE_SIZE[image_category] if image_category in IMAGE_SIZE else (image_rect[2], image_rect[3])
-        image_size = (80, 80) if file_name == 'classicon.xml' else image_size
-        image_size = (80, 80) if file_name == 'skillicon.xml' else image_size
+            imageutil.optimize(copy_to, image_mode, image_rect, image_size)
 
-        imageutil.optimize(copy_to, image_mode, image_rect, image_size)
-
-    # Store mapping for later use
-    globals.assets_icons[image_name] = image_name
-
+        # Store mapping for later use
+        globals.assets_icons[image_name] = image_name
+    except Exception as e:
+        logging.warning(str(e))
 
 #def parse_clean(version_update):
 #    if not version_update:

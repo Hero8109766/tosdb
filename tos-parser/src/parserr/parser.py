@@ -9,7 +9,7 @@ import globals
 from parserr import parser_translations, parser_assets, parser_attributes, parser_items, parser_items_books, \
     parser_items_cards, parser_items_collections, parser_items_cubes, parser_items_gems, parser_items_equipment, \
     parser_items_equipment_sets, parser_items_recipes, parser_jobs, parser_maps, parser_monsters, parser_skills, \
-    parser_buffs
+    parser_buffs, parser_monster_skills
 from utils import luautil
 
 
@@ -27,7 +27,8 @@ def csv_write(data, dataset):
                 if len(cell) > 0 and isinstance(cell[0], globals.Link):
                     cell.sort()
 
-                data[row][col] = json.dumps(cell, sort_keys=True) if len(cell) > 0 else None
+                #data[row][col] = json.dumps(cell, sort_keys=True) if len(cell) > 0 else None
+                data[row][col] = json.dumps(cell, sort_keys=True)
             elif isinstance(cell, dict):
                 data[row][col] = json.dumps(cell, sort_keys=True)
 
@@ -58,7 +59,7 @@ def csv_write(data, dataset):
     file.close()
 
 
-def parse(region, is_rebuild, is_version_new):
+def parse(region,language, is_rebuild, is_version_new):
     # Initialize LUA environment
     luautil.init()
 
@@ -66,7 +67,7 @@ def parse(region, is_rebuild, is_version_new):
     parser_assets.parse(region, is_version_new)
     parser_jobs.parse_jobs_images(region, is_version_new)
     #parser_maps.parse_maps_images(region, is_version_new)
-    parser_translations.parse(region)
+    parser_translations.parse(region,language)
 
     # Garbage collect...
     logging.debug('Garbage collect...')
@@ -110,7 +111,8 @@ def parse(region, is_rebuild, is_version_new):
     globals.jobs_by_name = None
     globals.skills = None
     globals.skills_by_name = None
-
+    globals.monster_skills = None
+    globals.monster_skills_by_name = None
     # Garbage collect...
     logging.debug('Garbage collect...')
     gc.collect()
@@ -126,7 +128,7 @@ def parse(region, is_rebuild, is_version_new):
     parser_items_recipes.parse()
     #parser_maps.parse(region, is_version_new)
     parser_monsters.parse()
-
+    parser_monster_skills.parse()
     # Garbage collect & Destroy LUA...
     logging.debug('Garbage collect...')
     luautil.destroy()
@@ -141,7 +143,9 @@ def parse(region, is_rebuild, is_version_new):
     parser_items_equipment.parse_links()
     parser_items_equipment_sets.parse_links()
     parser_items_recipes.parse_links()
+
     #parser_maps.parse_links()
+    parser_monster_skills.parse_links()
     parser_monsters.parse_links()
 
     # Garbage collect...
@@ -161,5 +165,6 @@ def parse(region, is_rebuild, is_version_new):
     csv_write(list(globals.items.values()), constants.OUTPUT_ITEMS)
     csv_write(list(globals.maps.values()), constants.OUTPUT_MAPS)
     csv_write(list(globals.monsters.values()), constants.OUTPUT_MONSTERS)
+    csv_write(list(globals.monster_skills.values()), constants.OUTPUT_MONSTER_SKILLS)
     csv_write(list(globals.npcs.values()), constants.OUTPUT_NPCS)
     csv_write(list(globals.recipes.values()), constants.OUTPUT_RECIPES)

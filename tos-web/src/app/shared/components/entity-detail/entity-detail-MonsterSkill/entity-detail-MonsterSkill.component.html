@@ -1,0 +1,31 @@
+<div>
+  <div class="w-100" *ngIf="divider"><hr></div>
+  <h5 *ngIf="header">Skill Information</h5>
+   
+  <p class="text-multiline mb-0" [innerHTML]="((entity['Description'] || '') + (entity['DescriptionRequired'] || '')) | colorizeHTML | sanitizeHTML"></p>
+  <div class="row mt-1" >
+    <div class="col">
+      <div class="row text-center">
+        <div class="col">
+        <table class="table table-borderless table-sm">
+            <thead>
+            <tr class="table-primary">
+
+            <th scope="col">AOE</th>
+            <th scope="col">CoolDown</th>
+            <th scope="col">SkillFactor</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>{{ monster_skill.SkillSR | number }}</td>
+            <td>{{ monster_skill.CoolDown/1000.0 | number }}sec</td>
+            <td>{{ monster_skill.SkillFactor | number }}%</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

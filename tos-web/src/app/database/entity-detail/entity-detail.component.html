@@ -91,11 +91,15 @@
       </tos-entity-detail-Table>
 
       <!-- Description -->
-      <tos-entity-detail-Description *ngIf="!attribute && !skill"
+      <tos-entity-detail-Description *ngIf="!attribute && !skill&& !monster_skill"
                                      [divider]="entity['Link_RecipeTarget']"
                                      [entity]="entity"
                                      [header]="true"></tos-entity-detail-Description>
-
+      <!-- MonsterSkill -->
+      <tos-entity-detail-MonsterSkill *ngIf="monster_skill"
+                                     [divider]="entity['Description']"
+                                     [entity]="entity"
+                                     [header]="true"></tos-entity-detail-MonsterSkill>
       <!-- Information (CoolDown/Level, LifeTime, Weight, Price, Tradability) -->
       <tos-entity-detail-Information *ngIf="!skill"
                                      [entity]="entity"
@@ -164,11 +168,21 @@
                                [entity]="entity"
                                [header]="'Skill'"
       ></tos-entity-detail-Table>
+
+
+
     </div>
 
   </div>
-
+  <!-- Monster Skills -->
+    <tos-entity-detail-Table *ngIf="entity['Link_MonsterSkills'] && monster"  class="col-md-auto mb-4"
+                            [columns]="COLUMNS_MONSTERSKILLS_MINI"
+                            [data$]="entity['Link_MonsterSkills']"
+                            [entity]="entity"
+                            [header]="'Monster Skills'">
+    </tos-entity-detail-Table>
   <div class="row">
+  
     <!-- Attributes -->
     <tos-entity-detail-Table *ngIf="entity['Link_Attributes']" class="col-md-6 mb-4"
                              [columns]="COLUMNS_ATTRIBUTES"
@@ -186,12 +200,34 @@
     ></tos-entity-detail-Table>
 
     <!-- Dropped by -->
-    <tos-entity-detail-Table *ngIf="entity['Link_Monsters']" class="col-md-6 mb-4"
+    <tos-entity-detail-Table *ngIf="entity['Link_Monsters'] && !monster_skill" class="col-md-6 mb-4"
                              [columns]="COLUMNS_ITEMS_MONSTERS"
                              [data$]="entity['Link_Monsters']"
                              [entity]="entity"
                              [header]="'Dropped by'">
     </tos-entity-detail-Table>
+    <!-- Add Buff -->
+    <tos-entity-detail-Table *ngIf="entity['TargetBuffs'] && monster_skill" class="col-md-6 mb-4"
+                             [columns]="COLUMNS_ADDBUFF"
+                             [data$]="entity['TargetBuffs']"
+                             [entity]="entity"
+                             [header]="'Target Buff/Debuffs'">
+    </tos-entity-detail-Table>
+    <!-- Add Buff -->
+    <tos-entity-detail-Table *ngIf="entity['SelfBuffs'] && monster_skill" class="col-md-6 mb-4"
+                             [columns]="COLUMNS_ADDBUFF"
+                             [data$]="entity['SelfBuffs']"
+                             [entity]="entity"
+                             [header]="'Self Buff/Debuffs'">
+    </tos-entity-detail-Table>
+    <!-- Used by -->
+    <tos-entity-detail-Table *ngIf="entity['Link_Monsters'] && monster_skill" class="col-md-6 mb-4"
+                             [columns]="COLUMNS_MONSTERS"
+                             [data$]="entity['Link_Monsters']"
+                             [entity]="entity"
+                             [header]="'Used by'">
+    </tos-entity-detail-Table>
+
 
     <!-- Exploration Reward from -->
     <tos-entity-detail-Table *ngIf="entity['Link_Maps_Exploration']" class="col-md-6 mb-4"
@@ -218,7 +254,7 @@
     </tos-entity-detail-Table>
 
     <!-- Items (Monster) -->
-    <tos-entity-detail-Table *ngIf="entity['Link_Items'] && monster" class="col-md-6 mb-4"
+    <tos-entity-detail-Table *ngIf="entity['Link_Items'] && monster  && !monster_skill" class="col-md-6 mb-4"
                              [columns]="COLUMNS_MONSTERS_DROPS"
                              [data$]="entity['Link_Items']"
                              [entity]="entity"
@@ -249,6 +285,7 @@
                              [entity]="entity"
                              [header]="'Spawn Locations'">
     </tos-entity-detail-Table>
+
 
     <!-- Spawn Locations (Item) -->
     <tos-entity-detail-Table *ngIf="entity['Link_Maps'] && item" class="col-md-6 mb-4"

@@ -24,13 +24,15 @@ const REGION_jTOS = 'jTOS';
 const REGION_kTEST = 'kTEST';
 const REGION_kTOS = 'kTOS';
 const REGION_twTOS = 'twTOS';
+
 const REGION = process.argv[2] || REGION_iTOS;
+const LANGUAGE = process.argv[3] || "en";
 
 if ([REGION_iTOS, REGION_jTOS, REGION_kTOS, REGION_kTEST, REGION_twTOS].indexOf(REGION) === -1)
     throw Error('Invalid region: ' + REGION);
 
 let documents = {};
-let folder = path.join('..', 'tos-build', 'dist', 'assets', 'data', REGION.toLowerCase());
+let folder = path.join('..', 'tos-build', 'dist', 'assets', 'data', REGION.toLowerCase(), LANGUAGE.toLowerCase());
 
 // Load Documents
 log('Loading documents...');
@@ -54,35 +56,35 @@ files.forEach((fileName) => {
 var idx;
 kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenizer) => {
 
-    
+
     // Build index
     log('Building index...');
-    idx = lunr(function () {
-        if (REGION === REGION_jTOS){
+    idx = lunr(function() {
+        if (REGION === REGION_jTOS) {
             this.use(lunr.multiLanguage('en', "jp"));
-        
+
         }
-        if (REGION === REGION_kTOS || REGION === REGION_kTEST){
+        if (REGION === REGION_kTOS || REGION === REGION_kTEST) {
             this.use(lunr.multiLanguage('en', 'kr'));
             // Disable stemmer
             this.pipeline.remove(lunr.stemmer);
-       
+
         }
-        if (REGION === REGION_twTOS){
+        if (REGION === REGION_twTOS) {
             this.use(lunr.multiLanguage('en', 'ch'));
             // Disable stemmer
             this.pipeline.remove(lunr.stemmer);
 
         }
-            
-        
+
+
         this.ref('$ID_lunr');
         this.field('$ID');
         this.field('$ID_NAME');
         this.field('Name');
         //this.field('Icon');
         //this.field('Description');
-        
+
         if (REGION == REGION_jTOS && false) {
 
 
@@ -118,7 +120,7 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
                                     $ID: doc['$ID'],
                                     $ID_lunr: dataset + '#' + doc['$ID'],
                                     $ID_NAME: doc['$ID_NAME'],
-                                    Name: path.map(x=>x.surface_form).join("/"),
+                                    Name: path.map(x => x.surface_form).join("/"),
                                     //Icon: doc['Icon'],
                                     //Description: doc['Description']
                                 });
@@ -179,4 +181,3 @@ kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, tokenize
     fs.writeFileSync(path.join(folder, 'index.json'), JSON.stringify(idx));
 
 });
-

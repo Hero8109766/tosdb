@@ -16,7 +16,7 @@
                [style.width]="(updateProgress * 100 / updateTotal) + '%'"></div>
         </div>
         <div class="mt-2">
-          Updating to the latest patch... <span *ngIf="updateProgress">{{ updateProgress }}/{{ updateTotal }}</span><br/>
+          Initializing... <span *ngIf="updateProgress">{{ updateProgress }}/{{ updateTotal }}</span><br/>
           <span class="font-italic text-muted">{{ updateVersion }}</span>
         </div>
       </div>

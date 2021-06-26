@@ -46,6 +46,7 @@ export class MonsterListConfigurationResolver implements Resolve<TOSListConfigur
     { label: 'Respawn',       pipe: new TableCellTextPipeDefinition('TimeRespawn', TableCellTextPipeFormat.TIME), class: 'text-nowrap' },
   ];
 
+
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TOSListConfiguration> | Promise<TOSListConfiguration> | TOSListConfiguration {
     return {
       filter: [
