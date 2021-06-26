@@ -146,6 +146,7 @@ def _get_entity_link(name, collection):
     collection_path = None
     collection_path = constants.OUTPUT_ATTRIBUTES if collection == attributes_by_name else collection_path
     collection_path = constants.OUTPUT_BOOKS if collection == books_by_name else collection_path
+    collection_path = constants.OUTPUT_BUFFS if collection == buffs_by_name else collection_path
     collection_path = constants.OUTPUT_CARDS if collection == cards_by_name else collection_path
     collection_path = constants.OUTPUT_JOBS if collection == jobs_by_name else collection_path
     collection_path = constants.OUTPUT_COLLECTIONS if collection == collections_by_name else collection_path
@@ -156,6 +157,7 @@ def _get_entity_link(name, collection):
     collection_path = constants.OUTPUT_ITEMS if collection == items_by_name else collection_path
     collection_path = constants.OUTPUT_MAPS if collection == maps_by_name else collection_path
     collection_path = constants.OUTPUT_MONSTERS if collection == monsters_by_name else collection_path
+    collection_path = constants.OUTPUT_MONSTER_SKILLS if collection == monster_skills_by_name else collection_path
     collection_path = constants.OUTPUT_NPCS if collection == npcs_by_name else collection_path
     collection_path = constants.OUTPUT_RECIPES if collection == recipes_by_name else collection_path
     collection_path = constants.OUTPUT_SKILLS if collection == skills_by_name else collection_path

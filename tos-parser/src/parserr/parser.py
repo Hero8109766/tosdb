@@ -27,7 +27,8 @@ def csv_write(data, dataset):
                 if len(cell) > 0 and isinstance(cell[0], globals.Link):
                     cell.sort()
 
-                data[row][col] = json.dumps(cell, sort_keys=True) if len(cell) > 0 else None
+                #data[row][col] = json.dumps(cell, sort_keys=True) if len(cell) > 0 else None
+                data[row][col] = json.dumps(cell, sort_keys=True)
             elif isinstance(cell, dict):
                 data[row][col] = json.dumps(cell, sort_keys=True)
 
@@ -144,8 +145,9 @@ def parse(region,language, is_rebuild, is_version_new):
     parser_items_recipes.parse_links()
 
     #parser_maps.parse_links()
-    parser_monsters.parse_links()
     parser_monster_skills.parse_links()
+    parser_monsters.parse_links()
+
     # Garbage collect...
     logging.debug('Garbage collect...')
     gc.collect()
