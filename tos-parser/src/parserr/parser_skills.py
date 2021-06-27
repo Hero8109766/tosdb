@@ -38,19 +38,20 @@ EFFECTS = []
 
 
 def parse(is_rebuild):
-    parse_skills(is_rebuild)
+    parse_skills('skill.ies')
+    parse_skills('skill_common.ies')
     parse_skills_overheats()
     parse_skills_simony()
     parse_skills_stances()
 
 
-def parse_skills(is_rebuild):
+def parse_skills(path):
     logging.debug('Parsing skills...')
 
     LUA_RUNTIME = luautil.LUA_RUNTIME
     LUA_SOURCE = luautil.LUA_SOURCE
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'skill.ies')
+    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf',path)
 
     with codecs.open(ies_path, 'r','utf-8',errors="replace") as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
