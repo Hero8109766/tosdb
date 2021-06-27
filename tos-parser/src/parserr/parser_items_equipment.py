@@ -466,13 +466,13 @@ def parse_equipment(ies):
         tooltip_script = 'SCR_REFRESH_HAIRACC' if not tooltip_script and 'HairAcc_' in row['MarketCategory'] else tooltip_script
         tooltip_script = 'SCR_REFRESH_WEAPON' if not tooltip_script and ('Weapon_' in row['MarketCategory'] or 'ChangeEquip_' in row['MarketCategory']) else tooltip_script
 
-        if tooltip_script:
+        if tooltip_script and tooltip_script in LUA_RUNTIME:
             try:
                 LUA_RUNTIME[tooltip_script](row)
             except LuaError as error:
                 if row['ClassID'] not in ['11130', '635061']:
                     logging.warning('LUA error when processing item ClassID: %s', row['ClassID'])
-                    ##raise error
+                    raise error
 
         # Add additional fields
         obj['AnvilATK'] = []
