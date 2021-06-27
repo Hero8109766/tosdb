@@ -145,7 +145,7 @@ abstract class TOSBuild implements ITOSBuild {
     skillEffectFormula$(skill: ITOSSkill, prop: string): Observable<string> {
         return skill.EffectFormula(prop, this);
     }
-    skillLevel(skill: ITOSSkill): number { return this.skillLevelsById[skill.$ID] || 1}
+    skillLevel(skill: ITOSSkill): number { return this.skillLevelsById[skill.$ID]}
 
     abstract skillLevelMax$(skill: ITOSSkill): Observable<number>; // TODO: after Re:Build we can switch from an Observable to a plain number
     async skillLevelIncrement$(skill: ITOSSkill, delta: number, force?: boolean, rollOver?: boolean) {
