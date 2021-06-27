@@ -56,8 +56,8 @@ def parse_skills(path):
     with codecs.open(ies_path, 'r','utf-8',errors="replace") as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
             # Ignore 'Common_' skills (e.g. Bokor's Summon abilities)
-            if row['ClassName'].find('Common_') == 0:
-                continue
+            #if row['ClassName'].find('Common_') == 0:
+            #    continue
 
             obj = {}
             obj['$ID'] = int(row['ClassID'])

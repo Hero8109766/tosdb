@@ -22,10 +22,11 @@ def parse_account_attributes():
             obj = {}
             obj['$ID'] = int(row['ClassID'])
             obj['$ID_NAME'] = row['ClassName']
+            obj['Description']=''
             #obj['Description'] = parser_translations.translate(row['Description']).strip() + '{nl}'
             obj['Icon'] = parser_assets.parse_entity_icon(row['Icon'])
             obj['Name'] = parser_translations.translate(row['Name'])
-
+            obj['IsToggleable']='NO'
             #obj['IsToggleable'] = row['AlwaysActive'] == 'NO'
 
             obj['DescriptionRequired'] = None
