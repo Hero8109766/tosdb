@@ -235,9 +235,9 @@ def parse_items(file_name):
         elif item_type in ITEM_GROUP_ITEM_WHITELIST:
             globals.items[obj['$ID']] = obj
             globals.items_by_name[obj['$ID_NAME']] = obj
-        #elif item_type in ITEM_GROUP_EQUIPMENT_WHITELIST and item_type_equipment is not None:
-        #    globals.equipment[obj['$ID']] = obj
-        #    globals.equipment_by_name[obj['$ID_NAME']] = obj
+        elif item_type in ITEM_GROUP_EQUIPMENT_WHITELIST:
+            globals.equipment[obj['$ID']] = obj
+            globals.equipment_by_name[obj['$ID_NAME']] = obj
         else:
             globals.items[obj['$ID']] = obj
             globals.items_by_name[obj['$ID_NAME']] = obj
