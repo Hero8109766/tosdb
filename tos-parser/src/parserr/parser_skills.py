@@ -398,9 +398,9 @@ def parse_clean():
     skills_to_remove = []
 
     # Find which skills are no longer active
-    for skill in list(globals.skills.values()):
-        if skill['Link_Job'] is None:
-            skills_to_remove.append(skill)
+    #for skill in list(globals.skills.values()):
+    #    if skill['Link_Job'] is None:
+    #        skills_to_remove.append(skill)
 
     # Remove all inactive skills
     for skill in skills_to_remove:
