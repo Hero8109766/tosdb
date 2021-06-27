@@ -69,10 +69,7 @@ def parse_skills(path):
             obj['Effect'] = parser_translations.translate(row['Caption2'])
             obj['Element'] = TOSElement.value_of(row['Attribute'])
             obj['IsShinobi'] = row['CoolDown'] == 'SCR_GET_SKL_COOLDOWN_BUNSIN' or (row['CoolDown'] and 'Bunshin_Debuff' in LUA_SOURCE[row['CoolDown']])
-            obj['OverHeat'] = {
-                'Value': int(row['SklUseOverHeat']),
-                'Group': row['OverHeatGroup']
-            } if not is_rebuild else int(row['SklUseOverHeat'])  # Re:Build overheat is now simpler to calculate
+            obj['OverHeat'] = int(row['SklUseOverHeat'])  # Re:Build overheat is now simpler to calculate
             obj['Prop_BasicCoolDown'] = int(row['BasicCoolDown'])
             obj['Prop_BasicPoison'] = int(row['BasicPoison'])
             obj['Prop_BasicSP'] = int(math.floor(float(row['BasicSP'])))
