@@ -35,7 +35,7 @@ def parse_account_attributes():
             obj['UpgradePrice'] = []
             obj['Link_Jobs'] = []
             #obj['Link_Skills'] = [skill for skill in row['SkillCategory'].split(';') if len(skill)]
-
+            obj['Link_Skills'] = []
             globals.attributes[obj['$ID']] = obj
             globals.attributes_by_name[obj['$ID_NAME']] = obj
 
