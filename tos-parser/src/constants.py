@@ -37,7 +37,10 @@ PATH_INPUT_DATA_PATCH_URL_FULL = None
 PATH_INPUT_DATA_REVISION = None
 PATH_INPUT_DATA_REVISION_URL = None
 PATH_INPUT_DATA_REVISION_URL_FULL = None
-
+PATH_INPUT_KTOS = None
+PATH_INPUT_DATA_KTOS = None
+PATH_INPUT_ITOS = None
+PATH_INPUT_DATA_ITOS = None
 PATH_INPUT_RELEASE = None
 PATH_INPUT_RELEASE_PATCH = None
 PATH_INPUT_RELEASE_PATCH_URL = None
@@ -72,6 +75,10 @@ def region(region,language):
         PATH_INPUT_DATA_REVISION, \
         PATH_INPUT_DATA_REVISION_URL, \
         PATH_INPUT_DATA_REVISION_URL_FULL, \
+        PATH_INPUT_KTOS, \
+        PATH_INPUT_DATA_KTOS, \
+        PATH_INPUT_ITOS, \
+        PATH_INPUT_DATA_ITOS, \
         PATH_INPUT_RELEASE, \
         PATH_INPUT_RELEASE_PATCH, \
         PATH_INPUT_RELEASE_PATCH_URL, \
@@ -94,6 +101,10 @@ def region(region,language):
     PATH_UNPACKER = os.path.join('..', 'ipf_unpacker')
     PATH_INPUT = os.path.join(PATH_PARSER, 'input', region_str)
     PATH_INPUT_DATA = os.path.join(PATH_INPUT, 'data')
+    PATH_INPUT_KTOS = os.path.join(PATH_PARSER, 'input', "kTOS","ko")
+    PATH_INPUT_DATA_KTOS = os.path.join(PATH_INPUT_KTOS, 'data')
+    PATH_INPUT_ITOS = os.path.join(PATH_PARSER, 'input', "iTOS", "en")
+    PATH_INPUT_DATA_ITOS = os.path.join(PATH_INPUT_ITOS, 'data')
     PATH_INPUT_DATA_PATCH = os.path.join(PATH_INPUT_DATA, 'patch')
     PATH_INPUT_DATA_PATCH_URL = URL_PATCH + 'partial/data/'
     PATH_INPUT_DATA_PATCH_URL_FULL = URL_PATCH + 'full/data/'

@@ -264,7 +264,7 @@ def parse_links_items():
 
     for monster in list(globals.monsters.values()):
         ies_file = monster['$ID_NAME'] + '.ies'
-        ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_drop.ipf', ies_file.lower())
+        ies_path = os.path.join(constants.PATH_INPUT_DATA_ITOS, 'ies_drop.ipf', ies_file.lower())
 
         try:
             with codecs.open(ies_path,'r','utf-8',errors='replace') as ies_file:
