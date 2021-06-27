@@ -8,6 +8,9 @@ BASEDIR=/var/www/base/
 cd ${BASEDIR}/tos-build/
 cp -rf ../tos-web/dist/* ./dist/
 
-# merge
+# enable crontab
+cd ${BASEDIR}
+
+crontab ./tos.crontab
 
 echo "Done."

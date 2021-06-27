@@ -43,7 +43,6 @@ RUN mkdir /var/www/base
 
 WORKDIR /var/www/base
 COPY ./docker/*   ./
-RUN crontab ./tos.crontab
 # apply chmod
 RUN chown -R www-data:www-data ./
 RUN chmod -R 755 ./
@@ -87,5 +86,5 @@ COPY ./httpserver/http.conf /etc/nginx/conf.d/default.conf
 COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 # expose http server
 EXPOSE 80
-# freqently change ENVs
+
 CMD ["/bin/sh","/var/www/base/entrypoint.sh"]
