@@ -42,7 +42,7 @@ export class EntityDetailMarketPriceComponent extends EntityDetailChildComponent
     public async marketPrice(server: number): Promise<string> {
         let http = InjectorInstance.get<HttpClient>(HttpClient);
         let host = "https://tosmarket.mochisuke.jp"
-        host = "http://localhost:5000"
+        //host = "http://localhost:5000"
         const httpOptions = {
             headers: new HttpHeaders({
                 'Access-Control-Allow-Origin': '*',
