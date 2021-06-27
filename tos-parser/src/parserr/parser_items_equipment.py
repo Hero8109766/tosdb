@@ -581,6 +581,9 @@ def parse_equipment_grade_ratios():
     for row in ies_reader:
         equipment_grade_ratios[int(row['Grade'])] = row
 
+    # dummy goddess grade by ebisuke
+    equipment_grade_ratios[6] =  equipment_grade_ratios[5]
+
     ies_file.close()
 
 
