@@ -34,6 +34,9 @@ export class EntityDetailSkillComponent extends EntityDetailChildComponent imple
         this.skillLevel = this.build.skillLevel(this.skill);
         this.effectHTML = await this.build.skillEffect$(this.skill, this.input).toPromise();
         this.changeDetector.markForCheck();
+
+        //fire change event
+        await this.build.skillLevelIncrement$(this.skill, 0, true);
     }
 
     onSkillLevelIncrement(value: number) {
