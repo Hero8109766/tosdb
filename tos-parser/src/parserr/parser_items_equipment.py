@@ -471,8 +471,8 @@ def parse_equipment(ies):
                 LUA_RUNTIME[tooltip_script](row)
             except LuaError as error:
                 if row['ClassID'] not in ['11130', '635061']:
-                    logging.error('LUA error when processing item ClassID: %s', row['ClassID'])
-                    raise error
+                    logging.warning('LUA error when processing item ClassID: %s', row['ClassID'])
+                    ##raise error
 
         # Add additional fields
         obj['AnvilATK'] = []
