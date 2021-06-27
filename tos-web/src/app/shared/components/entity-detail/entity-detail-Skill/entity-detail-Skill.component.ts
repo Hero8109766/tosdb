@@ -1,10 +1,12 @@
 import {
+    AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     Input,
     OnChanges,
     OnDestroy,
+    OnInit,
     SimpleChanges
 } from '@angular/core';
 import { EntityDetailChildComponent } from "../entity-detail-child.component";
@@ -18,7 +20,7 @@ import { filter } from "rxjs/operators";
     templateUrl: './entity-detail-Skill.component.html',
     styleUrls: ['./entity-detail-Skill.component.scss']
 })
-export class EntityDetailSkillComponent extends EntityDetailChildComponent implements OnChanges, OnDestroy {
+export class EntityDetailSkillComponent extends EntityDetailChildComponent implements AfterViewInit,OnChanges, OnDestroy {
 
     @Input() build: ITOSBuild;
     @Input() divider: boolean;
@@ -29,14 +31,17 @@ export class EntityDetailSkillComponent extends EntityDetailChildComponent imple
     subscriptionSkill: Subscription;
 
     constructor(changeDetector: ChangeDetectorRef) { super(changeDetector) }
+    async ngAfterViewInit() {
+        this.build.skillLevelIncrement$(this.skill, 1, true);
+    }
+
 
     async onSkillChange() {
         this.skillLevel = this.build.skillLevel(this.skill);
         this.effectHTML = await this.build.skillEffect$(this.skill, this.input).toPromise();
         this.changeDetector.markForCheck();
-
-        //fire change event
-        await this.build.skillLevelIncrement$(this.skill, 0, true);
+        
+       
     }
 
     onSkillLevelIncrement(value: number) {
@@ -53,10 +58,13 @@ export class EntityDetailSkillComponent extends EntityDetailChildComponent imple
                     .pipe(filter(value => value && value.$ID == this.skill.$ID))
                     .subscribe(value => this.onSkillChange());
             }
+            
             this.onSkillChange()
+            
         } else if (!this.skill) {
             this.subscriptionSkill && this.subscriptionSkill.unsubscribe();
         }
+        this.changeDetector.detectChanges()
     }
 
     ngOnDestroy(): void {
