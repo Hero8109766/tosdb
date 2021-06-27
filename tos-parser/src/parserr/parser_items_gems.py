@@ -24,14 +24,15 @@ class TOSGemType(TOSEnum):
 
 
 def parse(is_rebuild):
-    parse_gems()
+    parse_gems('item_gem.ies')
+    #parse_gems('item_gem_relic.ies')
     parse_gems_bonus(is_rebuild)
 
 
-def parse_gems():
+def parse_gems(path):
     logging.debug('Parsing gems...')
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'item_gem.ies')
+    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf',path)
     ies_file = codecs.open(ies_path, 'r','utf-8',errors="replace")
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 

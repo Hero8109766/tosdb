@@ -435,6 +435,9 @@ equipment_grade_ratios = {}
 def parse():
     parse_equipment_grade_ratios()
     parse_equipment( 'item_equip.ies')
+    parse_equipment('item_event_equip.ies')
+
+    parse_equipment('item_petequip.ies')
     parse_equipment( 'item_equip_ep12.ies')
 
 

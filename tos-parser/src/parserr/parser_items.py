@@ -45,6 +45,9 @@ class TOSItemGroup(TOSEnum):
     UNUSED = 30
     WEAPON = 31
     RELIC=32
+    ENTRANCE_TICKET=33
+    CONSUME=34
+    GEM_RELIC=35
     @staticmethod
     def value_of(string):
         return {
@@ -81,6 +84,9 @@ class TOSItemGroup(TOSEnum):
             'UNUSED': TOSItemGroup.UNUSED,
             'WEAPON': TOSItemGroup.WEAPON,
             'RELIC':TOSItemGroup.RELIC,
+            'ENTRANCE_TICKET': TOSItemGroup.ENTRANCE_TICKET,
+            'CONSUME': TOSItemGroup.CONSUME,
+            'GEM_RELIC': TOSItemGroup.GEM_RELIC,
         }[string.upper()]
 
 
@@ -113,16 +119,26 @@ ITEM_GROUP_EQUIPMENT_WHITELIST = [
 ITEM_GROUP_FASHION_WHITELIST = [
     TOSItemGroup.ARMBAND,
     TOSItemGroup.HELMET,
-    TOSItemGroup.PREMIUM,
+   #TOSItemGroup.PREMIUM,
 ]
 
 
 def parse():
     parse_items('item.ies')
+    parse_items('item_event.ies')
     parse_items('item_colorspray.ies')
     parse_items('item_gem.ies')
+    parse_items('item_gem_relic.ies')
     parse_items('item_equip.ies')
     parse_items('item_equip_ep12.ies')
+    parse_items('item_GuildHousing.ies')
+    parse_items('item_PersonalHousing.ies')
+    parse_items('item_ep12.ies')
+    parse_items('item_hiddenability.ies')
+
+    parse_items('item_reputation.ies')
+   #parse_items('item_skillmake_costume.ies')
+
     parse_items('item_premium.ies')
     parse_items('item_quest.ies')
     parse_items('recipe.ies')
@@ -206,18 +222,25 @@ def parse_items(file_name):
         elif item_type == TOSItemGroup.RECIPE:
             globals.recipes[obj['$ID']] = obj
             globals.recipes_by_name[obj['$ID_NAME']] = obj
+        elif item_type == TOSItemGroup.GEM_RELIC:
+            obj['Description']= parser_translations.translate('RelicGem_'+row['RelicGemOption']+'_DescText') if 'RelicGemOption' in row else None
+            globals.items[obj['$ID']] = obj
+            globals.items_by_name[obj['$ID_NAME']] = obj
+
         elif item_type in ITEM_GROUP_FASHION_WHITELIST\
-                or item_type_equipment in TYPE_EQUIPMENT_COSTUME_LIST\
-                or 'ClassType2' in row and row['ClassType2'] == 'Premium':
+                or item_type_equipment in TYPE_EQUIPMENT_COSTUME_LIST:
+                #or 'ClassType2' in row and row['ClassType2'] == 'Premium':
             globals.equipment[obj['$ID']] = obj
             globals.equipment_by_name[obj['$ID_NAME']] = obj
         elif item_type in ITEM_GROUP_ITEM_WHITELIST:
             globals.items[obj['$ID']] = obj
             globals.items_by_name[obj['$ID_NAME']] = obj
-        elif item_type in ITEM_GROUP_EQUIPMENT_WHITELIST and item_type_equipment is not None:
-            globals.equipment[obj['$ID']] = obj
-            globals.equipment_by_name[obj['$ID_NAME']] = obj
-
+        #elif item_type in ITEM_GROUP_EQUIPMENT_WHITELIST and item_type_equipment is not None:
+        #    globals.equipment[obj['$ID']] = obj
+        #    globals.equipment_by_name[obj['$ID_NAME']] = obj
+        else:
+            globals.items[obj['$ID']] = obj
+            globals.items_by_name[obj['$ID_NAME']] = obj
     ies_file.close()
 
 

@@ -41,7 +41,14 @@ self.onmessage = function(event) {
             try {
                 //console.log('query', payload.query, 'dataset', dataset)
                 result = idx.search(payload.query);
-                result = !!dataset ? result.filter(value => value['ref'].split('#')[0] === dataset) : result;
+                if (!!dataset) {
+                    if (dataset.startsWith("!")) {
+                        result = result.filter(value => value['ref'].split('#')[0] != dataset.slice(1))
+                    } else {
+                        result = result.filter(value => value['ref'].split('#')[0] === dataset);
+                    }
+                }
+
                 result = result.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
             } catch (e) {}
 
