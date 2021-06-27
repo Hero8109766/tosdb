@@ -44,10 +44,10 @@ abstract class TOSBuild implements ITOSBuild {
     get Attributes(): ITOSAttribute[] {
         var retval = []
         this.jobs.forEach(async (job, idx) => {
-            let attributes=await job.Link_Attributes.toPromise();
+            let attributes = await job.Link_Attributes.toPromise();
             retval.push(attributes);
-            let skills=await job.Link_Skills.toPromise();
-            skills.forEach(async (skill)=>{
+            let skills = await job.Link_Skills.toPromise();
+            skills.forEach(async (skill) => {
                 retval.push(await skill.Link_Attributes.toPromise());
             });
         })
@@ -145,28 +145,40 @@ abstract class TOSBuild implements ITOSBuild {
     skillEffectFormula$(skill: ITOSSkill, prop: string): Observable<string> {
         return skill.EffectFormula(prop, this);
     }
-    skillLevel(skill: ITOSSkill): number { return this.skillLevelsById[skill.$ID] }
+    skillLevel(skill: ITOSSkill): number { return this.skillLevelsById[skill.$ID] || 1}
 
     abstract skillLevelMax$(skill: ITOSSkill): Observable<number>; // TODO: after Re:Build we can switch from an Observable to a plain number
     async skillLevelIncrement$(skill: ITOSSkill, delta: number, force?: boolean, rollOver?: boolean) {
         let skillLevel = this.skillLevel(skill);
-        let skillPoints = this.skillPointsByJob[skill.Link_Job$ID];
+        if (skill.Link_Job$ID) {
+            let skillPoints = this.skillPointsByJob[skill.Link_Job$ID];
 
-        if (!force && !(await this.skillLevelIncrementAvailable$(skill, delta).toPromise())) {
-            let levelMax = await this.skillLevelMax$(skill).toPromise();
+            if (!force && !(await this.skillLevelIncrementAvailable$(skill, delta).toPromise())) {
+                let levelMax = await this.skillLevelMax$(skill).toPromise();
 
+                if (rollOver && skillLevel == 0)
+                    delta = Math.min(levelMax, skillPoints);
+                else if (rollOver && (skillLevel == levelMax || skillPoints == 0))
+                    delta = -skillLevel;
+                else
+                    throw new Error("Can't increment " + skill.$ID_NAME + "'s level or it gets out of bounds");
+            }
+            this.skillLevelsById[skill.$ID] += delta;
+            this.skillPointsByJob[skill.Link_Job$ID] -= delta;
+            // Propagate update
+            this.skillChange.next(skill);
+        } else {
+            let levelMax = skill.Prop_MaxLevel
             if (rollOver && skillLevel == 0)
-                delta = Math.min(levelMax, skillPoints);
-            else if (rollOver && (skillLevel == levelMax || skillPoints == 0))
+                delta = Math.min(levelMax, delta);
+            else if (rollOver && (skillLevel == levelMax))
                 delta = -skillLevel;
-            else
-                throw new Error("Can't increment " + skill.$ID_NAME + "'s level or it gets out of bounds");
+            this.skillLevelsById[skill.$ID] += delta;
+            // Propagate update
+            this.skillChange.next(skill);
         }
 
-        // Propagate update
-        this.skillLevelsById[skill.$ID] += delta;
-        this.skillPointsByJob[skill.Link_Job$ID] -= delta;
-        this.skillChange.next(skill);
+
     }
     skillLevelIncrementAvailable$(skill: ITOSSkill, delta: number): Observable<boolean> { // TODO: after Re:Build we can switch from an Observable to a plain boolean
         let skillLevel = this.skillLevelsById[skill.$ID];
@@ -262,7 +274,7 @@ abstract class TOSBuild implements ITOSBuild {
         this.attributeChange.next(attribute);
     }
     attributeIncrementLevelAvailable$(attribute: ITOSAttribute, delta: number): Observable<boolean> {
-        return  fromPromise(Promise.resolve(true)); //@TODO ebisuke
+        return fromPromise(Promise.resolve(true)); //@TODO ebisuke
     }
 
 
@@ -384,15 +396,19 @@ class TOSBuild_20 extends TOSBuild {
 
     skillLevelMax$(skill: ITOSSkill): Observable<number> {
         // Taken from shared.ipf/script/skill/skill_enable_get_shared.lua :: GET_LIMIT_SKILL_LEVEL
-        return skill.Link_Job.pipe(map(value => {
-            let defMaxLevel = skill.Prop_MaxLevel;
-            let pcJobLv = this.jobCircleMax(value) * 15;
-            let pcCircle = Math.floor((pcJobLv - 1) / 15) + 1;
-            let sklCircle = Math.floor((skill.Prop_UnlockClassLevel - 1) / 15) + 1;
-            let applyCircle = pcCircle - sklCircle + 1;
+        if(skill.Link_Job$ID && skill.Link_Job$ID!='None'){
+            return skill.Link_Job.pipe(map(value => {
+                let defMaxLevel = skill.Prop_MaxLevel;
+                let pcJobLv = this.jobCircleMax(value) * 15;
+                let pcCircle = Math.floor((pcJobLv - 1) / 15) + 1;
+                let sklCircle = Math.floor((skill.Prop_UnlockClassLevel - 1) / 15) + 1;
+                let applyCircle = pcCircle - sklCircle + 1;
 
-            return Math.min(applyCircle * 5, defMaxLevel);
-        }));
+                return Math.min(applyCircle * 5, defMaxLevel);
+            }));
+        }else{
+            return of(skill.Prop_MaxLevel)
+        }
     }
 
     statsPointsMax(): number {
@@ -425,7 +441,7 @@ export class TOSDatabaseBuild implements ITOSBuild {
     }
 
     private constructor(private build: TOSBuild) { }
-    get Attribute$(){
+    get Attribute$() {
         return this.build.Attribute$;
     }
     Attributes: ITOSAttribute[];
@@ -436,10 +452,10 @@ export class TOSDatabaseBuild implements ITOSBuild {
         return this.build.attributePointsTotalConsumption$()
     }
     attributeIncrementLevel$(attribute: ITOSAttribute, delta: number, force?: boolean): Promise<void> {
-        return this.build.attributeIncrementLevel$(attribute,delta,force)
+        return this.build.attributeIncrementLevel$(attribute, delta, force)
     }
     attributeIncrementLevelAvailable$(attribute: ITOSAttribute, delta: number): Observable<boolean> {
-        return this.build.attributeIncrementLevelAvailable$(attribute,delta)
+        return this.build.attributeIncrementLevelAvailable$(attribute, delta)
     }
 
     get Job$() { return this.build.Job$ }
@@ -526,7 +542,7 @@ export class TOSSimulatorBuild implements ITOSBuild {
     }
 
     private constructor(private build: TOSBuild) { }
-    get Attribute$(){
+    get Attribute$() {
         return this.build.Attribute$
     }
     Attributes: ITOSAttribute[];
@@ -537,10 +553,10 @@ export class TOSSimulatorBuild implements ITOSBuild {
         return this.build.attributePointsTotalConsumption$()
     }
     attributeIncrementLevel$(attribute: ITOSAttribute, delta: number, force?: boolean): Promise<void> {
-        return this.build.attributeIncrementLevel$(attribute,delta,force)
+        return this.build.attributeIncrementLevel$(attribute, delta, force)
     }
     attributeIncrementLevelAvailable$(attribute: ITOSAttribute, delta: number): Observable<boolean> {
-        return this.build.attributeIncrementLevelAvailable$(attribute,delta)
+        return this.build.attributeIncrementLevelAvailable$(attribute, delta)
     }
     get Job$() { return this.build.Job$ }
     get Jobs() { return this.build.Jobs }

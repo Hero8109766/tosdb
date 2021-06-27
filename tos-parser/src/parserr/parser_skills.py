@@ -90,7 +90,7 @@ def parse_skills(path):
             obj['IsPardoner'] = False
             obj['IsRunecaster'] = False
             obj['Prop_LevelPerGrade'] = -1  # Remove when Re:Build goes global
-            obj['Prop_MaxLevel'] = -1
+            obj['Prop_MaxLevel'] = 1
             obj['Prop_UnlockGrade'] = -1  # Remove when Re:Build goes global
             obj['Prop_UnlockClassLevel'] = -1
             obj['SP'] = None
