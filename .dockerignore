@@ -11,6 +11,7 @@ distweb/*
 tos-html/package-lock.json
 tos-search/node-modules/*
 tos-search/package-lock.json
-
 tos-parser/input/*
+tos-web/input/*
+tos-build/input/*
 **/venv
