@@ -131,7 +131,7 @@ def parse():
     parse_items('item_gem_relic.ies')
     parse_items('item_equip.ies')
     parse_items('item_equip_ep12.ies')
-    parse_items('item_guilhousing.ies')
+    parse_items('item_guildhousing.ies')
     parse_items('item_personalhousing.ies')
     parse_items('item_ep12.ies')
     parse_items('item_hiddenability.ies')
