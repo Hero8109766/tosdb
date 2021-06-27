@@ -43,7 +43,8 @@ export enum TOSCardType {
     LEGENDARY = 'Legendary',
     REINFORCE = 'Reinforce Cards',
     STATS = 'Stats',
-    UTILITY = 'Utility'
+    UTILITY = 'Utility',
+    GODDESS = 'Goddess'
 }
 export const TOSCardTypeService = EnumServiceFactory(TOSCardType);
 
