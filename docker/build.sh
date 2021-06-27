@@ -37,6 +37,11 @@ npm install --force
 parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
 parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
 
+# build up!
+cd ${BASEDIR}/tos-web/
+rm -r ./dist/* | true
+ng build --optimization=false --source-map
+
 cd ${BASEDIR}
 
 echo "Done."
