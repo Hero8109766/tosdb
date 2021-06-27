@@ -12,22 +12,21 @@ ENV TZ=Asia/Tokyo
 # add prerequisites
 
 WORKDIR /root
-RUN apt-get update && apt-get install -y -q nodejs npm python3 python3-pip unzip nginx bash build-essential curl wget p7zip git parallel
-RUN wget https://dot.net/v1/dotnet-install.sh
-RUN chmod 777 ./dotnet-install.sh
-RUN bash ./dotnet-install.sh -c 5.0
+RUN apt-get update && apt-get install -y -q nodejs npm python3 \
+    python3-pip unzip nginx bash build-essential curl wget git parallel
 
+
+#RUN wget https://dot.net/v1/dotnet-install.sh
+#RUN chmod 777 ./dotnet-install.sh
+#RUN bash ./dotnet-install.sh -c 5.0
 
 # prepare python environment
 RUN pip3 install pillow lupa unicodecsv pydevd-pycharm~=211.7442
 # prepare nodejs environment
 ENV GYP_DEFINES="javalibdir=/usr/lib/jvm/java-1.8.0-openjdk-amd64/lib/server"
-ENV JAVA_HOME ="/usr/lib/jvm/java-1.8.0-openjdk-amd64/"
-ENV PATH $PATH:/usr/lib/jvm/java-1.8.0-openjdk-amd64/bin
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 RUN npm -g i n yarn && n 16
 RUN npm install -g @angular/cli 
-
 
 # make unipf
 RUN git clone https://github.com/ebisuke/libipf.git
@@ -36,15 +35,16 @@ RUN make
 RUN cp -f ./unipf ./ipf /usr/bin/
 RUN cp -f ./libipf.so /usr/lib/
 
+# remove no longer using softwares
 RUN apt-get purge -y git 
 
 WORKDIR /
 RUN mkdir /var/www/base
 
-
-
-# apply chmod
 WORKDIR /var/www/base
+COPY ./docker/*   ./
+RUN crontab ./tos.crontab
+# apply chmod
 RUN chown -R www-data:www-data ./
 RUN chmod -R 755 ./
 
@@ -72,7 +72,7 @@ COPY ./tos-sw ./tos-sw
 COPY ./tos-web-rest ./tos-web-rest
 COPY ./supplimental_data ./supplimental_data 
 
-COPY ./docker/*   ./
+
 COPY ./skeleton_distweb   ./skeleton_distweb
 COPY ./skeleton_distbuild   ./skeleton_distbuild
 WORKDIR /var/www/base
@@ -88,4 +88,4 @@ COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 # expose http server
 EXPOSE 80
 # freqently change ENVs
-CMD ["/bin/sh","/var/www/base/entrypoint.sh","jTOS"  ]
+CMD ["/bin/sh","/var/www/base/entrypoint.sh"]
