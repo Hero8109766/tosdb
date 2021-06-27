@@ -130,7 +130,7 @@ def parse():
     parse_items('item_gem.ies')
     parse_items('item_gem_relic.ies')
     parse_items('item_equip.ies')
-    parse_items('item_equip_ep12.ies')
+
     parse_items('item_guildhousing.ies')
     parse_items('item_personalhousing.ies')
     parse_items('item_ep12.ies')
@@ -142,7 +142,7 @@ def parse():
     parse_items('item_premium.ies')
     parse_items('item_quest.ies')
     parse_items('recipe.ies')
-
+    parse_items('item_equip_ep12.ies')
     # Hotfix: Insert 'Silver' as an Item
     obj = {}
     obj['$ID'] = -1
@@ -232,12 +232,13 @@ def parse_items(file_name):
                 #or 'ClassType2' in row and row['ClassType2'] == 'Premium':
             globals.equipment[obj['$ID']] = obj
             globals.equipment_by_name[obj['$ID_NAME']] = obj
-        elif item_type in ITEM_GROUP_ITEM_WHITELIST:
-            globals.items[obj['$ID']] = obj
-            globals.items_by_name[obj['$ID_NAME']] = obj
         elif item_type in ITEM_GROUP_EQUIPMENT_WHITELIST:
             globals.equipment[obj['$ID']] = obj
             globals.equipment_by_name[obj['$ID_NAME']] = obj
+        elif item_type in ITEM_GROUP_ITEM_WHITELIST:
+            globals.items[obj['$ID']] = obj
+            globals.items_by_name[obj['$ID_NAME']] = obj
+
         else:
             globals.items[obj['$ID']] = obj
             globals.items_by_name[obj['$ID_NAME']] = obj
