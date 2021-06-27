@@ -64,6 +64,9 @@ import { TOSMonsterSkillResolver } from './domain/tos/monsterskill/tos-monster-s
 import { TableCellConvertiblePipe } from './components/entity-table/pipes/table-cell-convertible.pipe';
 import { EntityDetailMonsterSkillComponent } from './components/entity-detail/entity-detail-MonsterSkill/entity-detail-MonsterSkill.component';
 import { ColorizeHTMLPipe } from './directives/colorize-html.pipe';
+import { EntityDetailMarketPriceComponent } from './components/entity-detail/entity-detail-MarketPrice/entity-detail-MarketPrice.component';
+import { TOSUniversalResolver } from './domain/tos/tos-universal.resolver';
+import { UniversalComponent } from '../database/universal/universal.component';
 
 @NgModule({
   imports: [
@@ -91,6 +94,7 @@ import { ColorizeHTMLPipe } from './directives/colorize-html.pipe';
     EntityDetailJobIconComponent,
     EntityDetailHeaderComponent,
     EntityDetailMonsterSkillComponent,
+    EntityDetailMarketPriceComponent,
     EntityDetailOptDescComponent,
     EntityDetailSkillComponent,
     EntityDetailSkillFormulaComponent,
@@ -100,7 +104,6 @@ import { ColorizeHTMLPipe } from './directives/colorize-html.pipe';
     EntityTableComponent,
     EntityTooltipComponent,
     InputNumberComponent,
-    
     // Directives
     CssMaxHeightDirective,
     FilterDirective,
@@ -139,6 +142,7 @@ import { ColorizeHTMLPipe } from './directives/colorize-html.pipe';
     EntityDetailJobIconComponent,
     EntityDetailHeaderComponent,
     EntityDetailMonsterSkillComponent,
+    EntityDetailMarketPriceComponent,
     EntityDetailOptDescComponent,
     EntityDetailSkillComponent,
     EntityDetailSkillFormulaComponent,
@@ -148,7 +152,6 @@ import { ColorizeHTMLPipe } from './directives/colorize-html.pipe';
     EntityTableComponent,
     EntityTooltipComponent,
     InputNumberComponent,
-
     // Directives
     CssMaxHeightDirective,
     FilterDirective,
@@ -209,6 +212,7 @@ export class SharedModule {
         TOSNPCResolver,
         TOSRecipeResolver,
         TOSSkillResolver,
+        TOSUniversalResolver,
         { provide: 'ITOSDomainRepository', useClass: TOSDomainRepository },
       ]
     }

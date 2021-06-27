@@ -21,6 +21,7 @@ import {SkillListConfigurationResolver} from "./resolvers/skill-list-configurati
 import {MapListConfigurationResolver} from "./resolvers/map-list-configuration.resolver";
 import {EntityDetailMapComponent} from './entity-detail-v2/entity-detail-map/entity-detail-map.component';
 import { MonsterSkillListConfigurationResolver } from './resolvers/monster-skill-list-configuration.resolver';
+import { UniversalComponent } from './universal/universal.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { MonsterSkillListConfigurationResolver } from './resolvers/monster-skill
     EntityListComponent,
     EntityListFilterComponent,
     EntityDetailMapComponent,
+    UniversalComponent,
   ],
   providers: [
     AttributeListConfigurationResolver,

@@ -4,7 +4,7 @@
     <!-- Name and Material/Type -->
     <tos-entity-detail-Header class="col h4 mb-3" [entity]="entity" [idName]="true"></tos-entity-detail-Header>
   </div>
-
+    
   <div class="row mb-4">
 
     <div class="col-lg-6 mb-4 mt-5 pt-5" *ngIf="card">
@@ -244,7 +244,11 @@
                              [entity]="entity"
                              [header]="'Found in'">
     </tos-entity-detail-Table>
-
+    <!-- Market -->
+    <tos-entity-detail-MarketPrice *ngIf="item || gem || card || equipment || recipe" class="col-md-6 mb-4"
+                             [entity]="entity"
+                             [header]="'Latest Market Price(JTOS)'">
+    </tos-entity-detail-MarketPrice>
     <!-- Items -->
     <tos-entity-detail-Table *ngIf="entity['Link_Items'] && !monster" class="col-md-6 mb-4"
                              [columns]="COLUMNS_ITEMS"
