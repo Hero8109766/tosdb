@@ -17,9 +17,13 @@ cp -rn ./supplimental_data/* ./tos-parser/input
 
 
 cd ${BASEDIR}/tos-parser/src
+
+python3 main.py jTOS ko 0 1 | true
 python3 main.py iTOS en 0 1
 python3 main.py kTOS ko 0 1
-parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} 1 :::: ../.././injectionlist_representative_without_itosktos.tsv 
+python3 main.py jTOS ko 0 1 
+python3 main.py kTEST ko 0 1
+python3 main.py twTOS ko 0 1
 
 python3 main.py iTOS pt 0 1
 python3 main.py iTOS de 0 1
