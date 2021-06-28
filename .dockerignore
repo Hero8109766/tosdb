@@ -2,6 +2,8 @@ tos-parser/input
 **/venv
 input/*
 input
+input/**/*
+
 distbuild/*
 distweb/*
 **/.git/*

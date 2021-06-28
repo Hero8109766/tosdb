@@ -101,9 +101,9 @@ def region(region,language):
     PATH_UNPACKER = os.path.join('..', 'ipf_unpacker')
     PATH_INPUT = os.path.join(PATH_PARSER, 'input', region_str)
     PATH_INPUT_DATA = os.path.join(PATH_INPUT, 'data')
-    PATH_INPUT_KTOS = os.path.join(PATH_PARSER, 'input', "kTOS","ko")
+    PATH_INPUT_KTOS = os.path.join(PATH_PARSER, 'input', "kTOS")
     PATH_INPUT_DATA_KTOS = os.path.join(PATH_INPUT_KTOS, 'data')
-    PATH_INPUT_ITOS = os.path.join(PATH_PARSER, 'input', "iTOS", "en")
+    PATH_INPUT_ITOS = os.path.join(PATH_PARSER, 'input', "iTOS")
     PATH_INPUT_DATA_ITOS = os.path.join(PATH_INPUT_ITOS, 'data')
     PATH_INPUT_DATA_PATCH = os.path.join(PATH_INPUT_DATA, 'patch')
     PATH_INPUT_DATA_PATCH_URL = URL_PATCH + 'partial/data/'
