@@ -20,7 +20,7 @@ cd ${BASEDIR}/tos-parser/src
 
 python3 main.py iTOS en ${REPATCH} 1
 python3 main.py kTOS ko ${REPATCH} 1
-parallel --no-notice --ungroup --colsep ' ' python3 main.py ${REPATCH} 1  :::: ../injectionlist_representative.tsv 
+parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} 1  :::: ../../injectionlist_representative_without_itosktos.tsv 
 
 #python3 main.py jTOS ja 0 1 
 #python3 main.py kTEST ko 0 1
@@ -34,13 +34,13 @@ python3 main.py iTOS ru 0 1
 # search
 cd ${BASEDIR}/tos-search/
 npm install --force
-parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
-parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv
 # sitemap
 cd ${BASEDIR}/tos-sitemap/
 npm install --force
-parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
-parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv
 
 # build up!
 cd ${BASEDIR}/tos-web/

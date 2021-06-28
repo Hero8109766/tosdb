@@ -122,7 +122,7 @@ def parse_icons_step(file_name, region, version_update, work):
 
             # Crop, Resize, Optimize and convert to JPG/PNG
             image_mode = 'RGB' if image_extension == '.jpg' else 'RGBA'
-            if image_category<=len(IMAGE_SIZE):
+            if image_category in IMAGE_SIZE:
                 image_size = IMAGE_SIZE[image_category] if image_category in IMAGE_SIZE else (image_rect[2], image_rect[3])
             else:
                 image_size = (image_rect[2], image_rect[3])
