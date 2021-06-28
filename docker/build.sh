@@ -18,10 +18,10 @@ cp -rn ./supplimental_data/* ./tos-parser/input
 
 cd ${BASEDIR}/tos-parser/src
 
-python3 main.py jTOS ko 0 1 | true
+python3 main.py jTOS ja 0 1 | true
 python3 main.py iTOS en 0 1
 python3 main.py kTOS ko 0 1
-python3 main.py jTOS ko 0 1 
+python3 main.py jTOS ja 0 1 
 python3 main.py kTEST ko 0 1
 python3 main.py twTOS ko 0 1
 
