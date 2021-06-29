@@ -32,7 +32,7 @@ export class EntityDetailSkillComponent extends EntityDetailChildComponent imple
 
     constructor(changeDetector: ChangeDetectorRef) { super(changeDetector) }
     async ngAfterViewInit() {
-        this.build.skillLevelIncrement$(this.skill, 1, true);
+        //this.build.skillLevelIncrement$(this.skill, 1, true);
     }
 
 
