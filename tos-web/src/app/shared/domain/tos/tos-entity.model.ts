@@ -98,7 +98,7 @@ export abstract class TOSEntity extends Comparable implements ITOSEntity {
         if (isObservable(this.$json[prop]))
             return this.$json[prop] as Observable<T>;
 
-        if (this.$json[prop]) {
+        if (this.$json[prop] && this.$json[prop] != 'None') {
             let subject = new ReplaySubject<T>(1);
             let observable = /* typeof this.$json[prop] == 'string' && JSON.parse(this.$json[prop]) || */this.$json[prop];
             observable = this.$json[prop + '$original'] = observable;
