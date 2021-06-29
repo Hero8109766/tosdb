@@ -17,34 +17,35 @@ cp -rn ./supplimental_data/* ./tos-parser/input
 
 
 cd ${BASEDIR}/tos-parser/src
-parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} :::: ../.././injectionlist_representative.tsv 
-#parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} :::: ../.././injectionlist.tsv 
 
-#python3 main.py iTOS en ${REPATCH}
-#python3 main.py jTOS ja ${REPATCH}
-#python3 main.py kTOS ko ${REPATCH}
-#python3 main.py kTEST ko ${REPATCH}
-#python3 main.py twTOS zh ${REPATCH}
+python3 main.py iTOS en ${REPATCH} 1
+python3 main.py kTOS ko ${REPATCH} 1
+parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} 1  :::: ../../injectionlist_representative_without_itosktos.tsv 
 
+#python3 main.py jTOS ja 0 1 
+#python3 main.py kTEST ko 0 1
+#python3 main.py twTOS zh 0 1
 
-
-python3 main.py iTOS pt 0
-python3 main.py iTOS de 0
-python3 main.py iTOS th 0
-python3 main.py iTOS ru 0
+python3 main.py iTOS pt 0 1
+python3 main.py iTOS de 0 1
+python3 main.py iTOS th 0 1 
+python3 main.py iTOS ru 0 1
 
 # search
 cd ${BASEDIR}/tos-search/
 npm install --force
-
-parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
-parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv
 # sitemap
 cd ${BASEDIR}/tos-sitemap/
 npm install --force
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv
+parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv
 
-parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
-parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
+# build up!
+cd ${BASEDIR}/tos-web/
+rm -r ./dist/* | true
+ng build --optimization=false --source-map
 
 cd ${BASEDIR}
 

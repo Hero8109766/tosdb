@@ -2,16 +2,15 @@
 set -eu
 echo "ToS database bootstrap start."
 
-echo "Let's go to build up!"
 BASEDIR=/var/www/base/
+/bin/bash ${BASEDIR}/build.sh
 
-# build up!
-cd ${BASEDIR}/tos-web/
-rm -r ./dist/* | true
-ng build --optimization=false --source-map
 cd ${BASEDIR}/tos-build/
 cp -rf ../tos-web/dist/* ./dist/
 
-# merge
+# enable crontab
+cd ${BASEDIR}
+
+crontab ./tos.crontab
 
 echo "Done."

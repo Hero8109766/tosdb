@@ -315,13 +315,10 @@ def init_global_functions():
     ''' + '\n')
 
 
-def init_runtime():
-    global LUA_RUNTIME, LUA_SOURCE
 
-    LUA_RUNTIME = {}
-    LUA_SOURCE = {}
 
-    for root, dirs, file_list in os.walk(constants.PATH_INPUT_DATA):
+def init_runtime_walk(path):
+    for root, dirs, file_list in os.walk(path):
         for file_name in sorted(file_list):
             if file_name.upper().endswith('.LUA'):
                 file_path = os.path.join(root, file_name)
@@ -363,6 +360,13 @@ def init_runtime():
                             print("fail")
                         logging.warning('Failed to load %s, error: %s...', file_path, error)
                         continue
+def init_runtime():
+    global LUA_RUNTIME, LUA_SOURCE
+
+    LUA_RUNTIME = {}
+    LUA_SOURCE = {}
+    init_runtime_walk(constants.PATH_INPUT_DATA)
+    #init_runtime_walk(os.join(constants.PATH_INPUT_DATA_KTOS):
 
 def destroy():
     global lua, LUA_OVERRIDE, LUA_RUNTIME, LUA_SOURCE

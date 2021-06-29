@@ -11,6 +11,34 @@ from utils import luautil
 
 def parse():
     parse_attributes()
+    parse_account_attributes()
+
+def parse_account_attributes():
+    logging.debug('Parsing account attributes...')
+    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'account_ability.ies')
+
+    with codecs.open(ies_path, 'r', 'utf-8') as ies_file:
+        for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
+            obj = {}
+            obj['$ID'] = int(row['ClassID'])
+            obj['$ID_NAME'] = row['ClassName']
+            obj['Description']=''
+            #obj['Description'] = parser_translations.translate(row['Description']).strip() + '{nl}'
+            obj['Icon'] = parser_assets.parse_entity_icon(row['Icon'])
+            obj['Name'] = parser_translations.translate(row['Name'])
+            obj['IsToggleable']='NO'
+            #obj['IsToggleable'] = row['AlwaysActive'] == 'NO'
+
+            obj['DescriptionRequired'] = None
+            obj['LevelMax'] = -1
+            obj['Unlock'] = None
+            obj['UnlockArgs'] = {}
+            obj['UpgradePrice'] = []
+            obj['Link_Jobs'] = []
+            #obj['Link_Skills'] = [skill for skill in row['SkillCategory'].split(';') if len(skill)]
+            obj['Link_Skills'] = []
+            globals.attributes[obj['$ID']] = obj
+            globals.attributes_by_name[obj['$ID_NAME']] = obj
 
 
 def parse_attributes():

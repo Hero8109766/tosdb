@@ -435,6 +435,9 @@ equipment_grade_ratios = {}
 def parse():
     parse_equipment_grade_ratios()
     parse_equipment( 'item_equip.ies')
+    parse_equipment('item_event_equip.ies')
+
+    parse_equipment('item_petequip.ies')
     parse_equipment( 'item_equip_ep12.ies')
 
 
@@ -463,12 +466,12 @@ def parse_equipment(ies):
         tooltip_script = 'SCR_REFRESH_HAIRACC' if not tooltip_script and 'HairAcc_' in row['MarketCategory'] else tooltip_script
         tooltip_script = 'SCR_REFRESH_WEAPON' if not tooltip_script and ('Weapon_' in row['MarketCategory'] or 'ChangeEquip_' in row['MarketCategory']) else tooltip_script
 
-        if tooltip_script:
+        if tooltip_script and tooltip_script in LUA_RUNTIME:
             try:
                 LUA_RUNTIME[tooltip_script](row)
             except LuaError as error:
                 if row['ClassID'] not in ['11130', '635061']:
-                    logging.error('LUA error when processing item ClassID: %s', row['ClassID'])
+                    logging.warning('LUA error when processing item ClassID: %s', row['ClassID'])
                     raise error
 
         # Add additional fields
@@ -577,6 +580,9 @@ def parse_equipment_grade_ratios():
 
     for row in ies_reader:
         equipment_grade_ratios[int(row['Grade'])] = row
+
+    # dummy goddess grade by ebisuke
+    equipment_grade_ratios[6] =  equipment_grade_ratios[5]
 
     ies_file.close()
 

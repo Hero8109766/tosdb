@@ -7,7 +7,7 @@ import { TOSBook } from "../../shared/domain/tos/item/book/tos-book.model";
 import { TOSCollection } from "../../shared/domain/tos/item/collection/tos-collection.model";
 import { TOSMonster } from "../../shared/domain/tos/monster/tos-monster.model";
 import { TOSRecipe } from "../../shared/domain/tos/item/recipe/tos-recipe.model";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { TOSCube } from "../../shared/domain/tos/item/cube/tos-cube.model";
 import { TOSCard } from "../../shared/domain/tos/item/card/tos-card.model";
 import { TOSGem } from "../../shared/domain/tos/item/gem/tos-gem.model";
@@ -33,6 +33,8 @@ import { MapListConfigurationResolver } from "../resolvers/map-list-configuratio
 import { TOSMonsterSkill } from 'src/app/shared/domain/tos/monsterskill/tos-monster-skill.model';
 import { MonsterSkillListConfigurationResolver } from '../resolvers/monster-skill-list-configuration.resolver';
 import { BuffListConfigurationResolver } from '../resolvers/buff-list-configuration.resolver';
+import { TOSDomainService } from 'src/app/shared/domain/tos/tos-domain.service';
+import { fromPromise } from 'rxjs/internal-compatibility';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -127,15 +129,27 @@ export class EntityDetailComponent implements OnDestroy, OnInit {
 
             if (this.skill) {
                 this.subscriptionSkill && this.subscriptionSkill.unsubscribe();
-                this.subscriptionSkill = this.skill.Link_Job.subscribe(async value => {
-                    let build = TOSDatabaseBuild.new(TOSRegionService.getRegion());
-                    await build.jobAdd$(value); // Note: we need to add them 3 times, as on pre-Re:Build the level max scales with the selected Job circle
-                    await build.jobAdd$(value);
-                    await build.jobAdd$(value);
+                if(this.skill.Link_Job$ID && this.skill.Link_Job$ID != "None"){
+                    this.subscriptionSkill = this.skill.Link_Job.subscribe(async value => {
+                        let build = TOSDatabaseBuild.new(TOSRegionService.getRegion());
+                        await build.jobAdd$(value); // Note: we need to add them 3 times, as on pre-Re:Build the level max scales with the selected Job circle
+                        await build.jobAdd$(value);
+                        await build.jobAdd$(value);
 
-                    this.build = build;
-                    this.changeDetector.markForCheck();
-                });
+                        this.build = build;
+                        this.changeDetector.markForCheck();
+                    });
+                }else{
+                    this.subscriptionSkill = fromPromise((async()=>{
+                        let build = TOSDatabaseBuild.new(TOSRegionService.getRegion());
+                    
+                    
+                        await build.jobAdd$(await TOSDomainService.jobsById("1001").toPromise())
+                        this.build = build;
+                        this.changeDetector.markForCheck();
+                    })()).subscribe()
+                    
+                }
             }
 
             this.onInit();

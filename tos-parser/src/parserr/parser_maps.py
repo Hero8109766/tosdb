@@ -162,7 +162,7 @@ def parse_links_items():
         # For some reason IMC uses these 2 types of name formats...
         if not os.path.isfile(ies_path):
             ies_file = 'zonedropitemlist_f_' + map['$ID_NAME'] + '.ies'
-            ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies_drop.ipf', 'zonedrop', ies_file.lower())
+            ies_path = os.path.join(constants.PATH_INPUT_DATA_ITOS, 'ies_drop.ipf', 'zonedrop', ies_file.lower())
 
         try:
             drops = []

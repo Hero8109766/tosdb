@@ -85,5 +85,6 @@ ipf_unpacker/*/*
 tos-build/dist/assets/data/*
 .gitignore
 .pyc
+tos-build/dist/*
 tos-reaction/.idea/*
 tos-reaction/venv/*

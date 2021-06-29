@@ -1,105 +1,110 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, forkJoin, Observable, of, Subject, Subscription} from "rxjs";
-import {TOSEntity} from "../domain/tos/tos-entity.model";
-import {TOSDomainService} from "../domain/tos/tos-domain.service";
-import {TOSRegionService} from "../domain/tos-region";
-import {TOSDataSet, TOSDataSetService} from "../domain/tos/tos-domain";
-import {map, switchMap} from "rxjs/operators";
-import {TOSUrlService} from "./tos-url.service";
-import {LoadingService} from "../../shell/loading/loading.service";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, forkJoin, Observable, of, Subject, Subscription } from "rxjs";
+import { TOSEntity } from "../domain/tos/tos-entity.model";
+import { TOSDomainService } from "../domain/tos/tos-domain.service";
+import { TOSRegionService } from "../domain/tos-region";
+import { TOSDataSet, TOSDataSetService } from "../domain/tos/tos-domain";
+import { map, switchMap } from "rxjs/operators";
+import { TOSUrlService } from "./tos-url.service";
+import { LoadingService } from "../../shell/loading/loading.service";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class TOSSearchService {
 
-  private MESSAGE_ID: number = 0;
+    private MESSAGE_ID: number = 0;
 
-  private static instance: TOSSearchService;
-  static get Instance(): TOSSearchService { return TOSSearchService.instance; }
+    private static instance: TOSSearchService;
+    static get Instance(): TOSSearchService { return TOSSearchService.instance; }
 
-  private isLoaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private isLoaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  private worker: Worker; // Note: we initialize it later so the Service Worker can intercept the call
-  private readonly workerHandlers: { [key: number]: Subject<any> } = {};
+    private worker: Worker; // Note: we initialize it later so the Service Worker can intercept the call
+    private readonly workerHandlers: { [key: number]: Subject<any> } = {};
 
-  private subscriptionLoad: Subscription;
+    private subscriptionLoad: Subscription;
 
-  constructor(private loading: LoadingService) {
-    TOSSearchService.instance = this;
+    constructor(private loading: LoadingService) {
+        TOSSearchService.instance = this;
 
-    this.onWorkerMessage = this.onWorkerMessage.bind(this);
+        this.onWorkerMessage = this.onWorkerMessage.bind(this);
 
-    this.loading.installComplete$.subscribe((value) => this.onInstallComplete(value));
-  }
+        this.loading.installComplete$.subscribe((value) => this.onInstallComplete(value));
+    }
 
-  get isLoaded$(): Observable<boolean> { return this.isLoaded.asObservable(); }
+    get isLoaded$(): Observable<boolean> { return this.isLoaded.asObservable(); }
 
-  public search(dataset: TOSDataSet, query: string, page: number): Observable<TOSSearchResult> {
-    return this
-      .postMessage(WorkerCommand.QUERY, { dataset, page, query }).pipe(
-        switchMap((result: object[]) => result && result.length && forkJoin(
-          result.map(value => {
-            let file = value['ref'].split('#')[0];
-            let id = +value['ref'].split('#')[1];
-            let dataset = Object.values(TOSDataSet).find(value2 => file == value2);
+    public search(dataset: TOSDataSet, query: string, page: number): Observable<TOSSearchResult> {
+        let set:string=dataset
+        if(!dataset){
+            set="!"+TOSDataSet.MONSTERSKILLS
+        }
 
-            return TOSDomainService[TOSDataSetService.toProperty(dataset) + 'ById'](id) as Observable<TOSEntity>;
-          })
-        ) || of([])), // Read more: https://github.com/ReactiveX/rxjs/issues/2816
-        map(value => ({ page, response: value }))
-      );
-  }
+        return this
+            .postMessage(WorkerCommand.QUERY, { dataset:set, page, query }).pipe(
+                switchMap((result: object[]) => result && result.length && forkJoin(
+                    result.map(value => {
+                        let file = value['ref'].split('#')[0];
+                        let id = +value['ref'].split('#')[1];
+                        let dataset = Object.values(TOSDataSet).find(value2 => file == value2);
 
-  private onInstallComplete(value: boolean) {
-    this.isLoaded.next(false);
+                        return TOSDomainService[TOSDataSetService.toProperty(dataset) + 'ById'](id) as Observable<TOSEntity>;
+                    })
+                ) || of([])), // Read more: https://github.com/ReactiveX/rxjs/issues/2816
+                map(value => ({ page, response: value }))
+            );
+    }
 
-    this.subscriptionLoad && this.subscriptionLoad.unsubscribe();
-    this.subscriptionLoad = this
-      .postMessage(WorkerCommand.LOAD, { region: TOSRegionService.getRegion() ,language:TOSRegionService.getLanguage()})
-      .subscribe(value => this.isLoaded.next(true));
-  }
+    private onInstallComplete(value: boolean) {
+        this.isLoaded.next(false);
 
-  private onWorkerMessage(event: MessageEvent) {
-    let message = event.data as WorkerMessage;
-    let subject = this.workerHandlers[message.id];
-    //console.log('onWorkerMessage', this.dataset, message);
+        this.subscriptionLoad && this.subscriptionLoad.unsubscribe();
+        this.subscriptionLoad = this
+            .postMessage(WorkerCommand.LOAD, { region: TOSRegionService.getRegion(), language: TOSRegionService.getLanguage() })
+            .subscribe(value => this.isLoaded.next(true));
+    }
 
-    subject.next(message.payload);
-    subject.complete();
+    private onWorkerMessage(event: MessageEvent) {
+        let message = event.data as WorkerMessage;
+        let subject = this.workerHandlers[message.id];
+        //console.log('onWorkerMessage', this.dataset, message);
 
-    this.workerHandlers[message.id] = null;
-  }
+        subject.next(message.payload);
+        subject.complete();
 
-  private postMessage(cmd: WorkerCommand, payload?: object): Observable<any> {
-    //console.trace('postMessage', this.dataset, cmd);
-    let message = {
-      cmd,
-      id: this.MESSAGE_ID++,
-      payload
-    };
+        this.workerHandlers[message.id] = null;
+    }
 
-    let subject = this.workerHandlers[message.id] = new Subject();
-    let worker = this.worker = this.worker || new Worker(TOSUrlService.WORKER_LUNR());
+    private postMessage(cmd: WorkerCommand, payload?: object): Observable<any> {
+        //console.trace('postMessage', this.dataset, cmd);
+        let message = {
+            cmd,
+            id: this.MESSAGE_ID++,
+            payload
+        };
+
+        let subject = this.workerHandlers[message.id] = new Subject();
+        let worker = this.worker = this.worker || new Worker(TOSUrlService.WORKER_LUNR());
         worker.onmessage = this.onWorkerMessage;
         worker.postMessage(message);
 
-    return subject.asObservable();
-  }
+        return subject.asObservable();
+    }
 
 }
 
 export interface TOSSearchResult {
-  page: number;
-  response: TOSEntity[];
+    page: number;
+    response: TOSEntity[];
 }
 
 enum WorkerCommand {
-  LOAD = 'load',
-  QUERY = 'query',
+    LOAD = 'load',
+    QUERY = 'query',
 }
 interface WorkerMessage {
-  cmd: WorkerCommand,
-  id: number,
-  payload?: any
+    cmd: WorkerCommand,
+    id: number,
+    payload?: any
 }

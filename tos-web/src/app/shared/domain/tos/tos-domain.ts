@@ -43,7 +43,8 @@ export enum TOSCardType {
     LEGENDARY = 'Legendary',
     REINFORCE = 'Reinforce Cards',
     STATS = 'Stats',
-    UTILITY = 'Utility'
+    UTILITY = 'Utility',
+    GODDESS = 'Goddess'
 }
 export const TOSCardTypeService = EnumServiceFactory(TOSCardType);
 
@@ -392,6 +393,11 @@ export enum TOSItemType {
     SUBWEAPON = 'Sub Weapon',
     UNUSED = 'Unused',
     WEAPON = 'Weapon',
+    RELIC = 'Relic',
+    ENTRANCE_TICKET = 'Entrance Voucher',
+    CONSUME = 'Consume',
+    GEM_RELIC = 'Relic Gem',
+    
 }
 export const
     TOSItemTypeService = EnumServiceFactory(TOSItemType);
@@ -403,6 +409,8 @@ TOSItemTypeService.groupBy = () => [
             TOSItemType.EXPORB,
             TOSItemType.HIDDENABILITY,
             TOSItemType.EVENT,
+            TOSItemType.RELIC,
+            TOSItemType.GEM_RELIC, 
             TOSItemType.LEGENDMATERIAL,
             TOSItemType.MATERIAL,
             TOSItemType.MISC,

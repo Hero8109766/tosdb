@@ -38,25 +38,26 @@ EFFECTS = []
 
 
 def parse(is_rebuild):
-    parse_skills(is_rebuild)
+    parse_skills('skill.ies')
+    parse_skills('skill_common.ies')
     parse_skills_overheats()
     parse_skills_simony()
     parse_skills_stances()
 
 
-def parse_skills(is_rebuild):
+def parse_skills(path):
     logging.debug('Parsing skills...')
 
     LUA_RUNTIME = luautil.LUA_RUNTIME
     LUA_SOURCE = luautil.LUA_SOURCE
 
-    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf', 'skill.ies')
+    ies_path = os.path.join(constants.PATH_INPUT_DATA, 'ies.ipf',path)
 
     with codecs.open(ies_path, 'r','utf-8',errors="replace") as ies_file:
         for row in csv.DictReader(ies_file, delimiter=',', quotechar='"'):
             # Ignore 'Common_' skills (e.g. Bokor's Summon abilities)
-            if row['ClassName'].find('Common_') == 0:
-                continue
+            #if row['ClassName'].find('Common_') == 0:
+            #    continue
 
             obj = {}
             obj['$ID'] = int(row['ClassID'])
@@ -68,10 +69,7 @@ def parse_skills(is_rebuild):
             obj['Effect'] = parser_translations.translate(row['Caption2'])
             obj['Element'] = TOSElement.value_of(row['Attribute'])
             obj['IsShinobi'] = row['CoolDown'] == 'SCR_GET_SKL_COOLDOWN_BUNSIN' or (row['CoolDown'] and 'Bunshin_Debuff' in LUA_SOURCE[row['CoolDown']])
-            obj['OverHeat'] = {
-                'Value': int(row['SklUseOverHeat']),
-                'Group': row['OverHeatGroup']
-            } if not is_rebuild else int(row['SklUseOverHeat'])  # Re:Build overheat is now simpler to calculate
+            obj['OverHeat'] = int(row['SklUseOverHeat'])  # Re:Build overheat is now simpler to calculate
             obj['Prop_BasicCoolDown'] = int(row['BasicCoolDown'])
             obj['Prop_BasicPoison'] = int(row['BasicPoison'])
             obj['Prop_BasicSP'] = int(math.floor(float(row['BasicSP'])))
@@ -92,7 +90,7 @@ def parse_skills(is_rebuild):
             obj['IsPardoner'] = False
             obj['IsRunecaster'] = False
             obj['Prop_LevelPerGrade'] = -1  # Remove when Re:Build goes global
-            obj['Prop_MaxLevel'] = -1
+            obj['Prop_MaxLevel'] = 1
             obj['Prop_UnlockGrade'] = -1  # Remove when Re:Build goes global
             obj['Prop_UnlockClassLevel'] = -1
             obj['SP'] = None
@@ -400,9 +398,9 @@ def parse_clean():
     skills_to_remove = []
 
     # Find which skills are no longer active
-    for skill in list(globals.skills.values()):
-        if skill['Link_Job'] is None:
-            skills_to_remove.append(skill)
+    #for skill in list(globals.skills.values()):
+    #    if skill['Link_Job'] is None:
+    #        skills_to_remove.append(skill)
 
     # Remove all inactive skills
     for skill in skills_to_remove:

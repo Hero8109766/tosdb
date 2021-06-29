@@ -36,6 +36,8 @@ import { TOSBuffResolver } from '../shared/domain/tos/buff/tos-buff.resolver';
 import { BuffListConfigurationResolver } from './resolvers/buff-list-configuration.resolver';
 import { TOSMonsterSkillResolver } from '../shared/domain/tos/monsterskill/tos-monster-skill.resolver';
 import { MonsterSkillListConfigurationResolver } from './resolvers/monster-skill-list-configuration.resolver';
+import { TOSUniversalResolver } from '../shared/domain/tos/tos-universal.resolver';
+import { UniversalComponent } from './universal/universal.component';
 
 export const ROUTES_DATABASE: Routes = [
   {
@@ -366,6 +368,14 @@ export const ROUTES_DATABASE: Routes = [
     canDeactivate: [RouteService],
     component: EntityDetailComponent,
     resolve: { response: TOSMonsterSkillResolver },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+  },
+  {
+    path: 'universal/:id',
+    canActivate: [RouteService],
+    canDeactivate: [RouteService],
+    component: UniversalComponent,
+    resolve: { response: TOSUniversalResolver },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
   },
 ];
