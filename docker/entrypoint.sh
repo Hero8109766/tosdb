@@ -18,5 +18,9 @@ echo "Launching tos-reaction"
 cd ${BASEDIR}/tos-reaction/
 python3 app.py &
 
+if [ -e ./_complete.sh ]; then
+    sh ./_complete.sh
+fi
+
 echo "Launching nginx and WAIT"
 /usr/sbin/nginx -g "daemon off;"

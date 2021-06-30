@@ -88,3 +88,5 @@ tos-build/dist/assets/data/*
 tos-build/dist/*
 tos-reaction/.idea/*
 tos-reaction/venv/*
+docker/_*
+.env
