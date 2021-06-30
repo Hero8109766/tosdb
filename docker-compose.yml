@@ -5,9 +5,10 @@ services:
         build: 
             context: .
             dockerfile: dockerfile
+            args:
+                - SERVICE_NAME=$SERVICE_NAME
         restart: always
-        args:
-            - SERVICE_NAME=$SERVICE_NAME
+       
         ports:
             - "8000:80"
         volumes:

@@ -5,8 +5,8 @@ services:
         build: 
             context: .
             dockerfile: dockerfile
-        args:
-            - SERVICE_NAME=$SERVICE_NAME
+            args:
+                - SERVICE_NAME=$SERVICE_NAME
         restart: always
         ports:
             - "8200:80"
