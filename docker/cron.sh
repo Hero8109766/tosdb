@@ -30,6 +30,6 @@ parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../inject
 parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
 
 if [ -e ./_cron.sh ]; then
-    /bin/bash ./_cron.sh
+/bin/bash ./_cron.sh
 fi
 echo "Done."
