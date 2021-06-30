@@ -19,7 +19,7 @@ cd ${BASEDIR}/tos-reaction/
 python3 app.py &
 
 if [ -e ./_complete.sh ]; then
-    sh ./_complete.sh
+    /bin/bash ./_complete.sh
 fi
 
 echo "Launching nginx and WAIT"
