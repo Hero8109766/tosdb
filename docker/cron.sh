@@ -11,7 +11,9 @@ echo "ToS database cron job start."
 cd ${BASEDIR}/tos-parser/src
 
 python3 main.py kTOS ko 0 0
-parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} 0 :::: ../.././injectionlist_representative_without_ktos.tsv 
+python3 main.py iTOS en 0 0
+
+parallel --no-notice --ungroup --colsep ' ' python3 main.py {1} {2} ${REPATCH} 0 :::: ../.././injectionlist_representative_without_itosktos.tsv 
 
 python3 main.py iTOS pt 0 0
 python3 main.py iTOS de 0 0
