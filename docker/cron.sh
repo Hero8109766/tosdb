@@ -29,6 +29,7 @@ cd ${BASEDIR}/tos-sitemap/
 parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist_representative.tsv 
 parallel --no-notice --ungroup --colsep ' ' npm run main {1} {2}  :::: ../injectionlist.tsv 
 
+cd ${BASEDIR}/
 if [ -e ./_cron.sh ]; then
 /bin/bash ./_cron.sh
 fi

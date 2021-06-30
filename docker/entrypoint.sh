@@ -18,6 +18,7 @@ echo "Launching tos-reaction"
 cd ${BASEDIR}/tos-reaction/
 python3 app.py &
 
+cd ${BASEDIR}/
 if [ -e ./_complete.sh ]; then
 /bin/bash ./_complete.sh
 fi
