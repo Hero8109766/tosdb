@@ -6,6 +6,8 @@ services:
             context: .
             dockerfile: dockerfile
         restart: always
+        args:
+            - SERVICE_NAME=$SERVICE_NAME
         ports:
             - "8000:80"
         volumes:

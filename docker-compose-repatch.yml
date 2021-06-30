@@ -6,6 +6,8 @@ services:
             context: .
             dockerfile: dockerfile
         command: /bin/bash /var/www/base/build.sh 1 
+        args:
+            - SERVICE_NAME=$SERVICE_NAME
         volumes:
             - ./input:/var/www/base/tos-parser/input
             

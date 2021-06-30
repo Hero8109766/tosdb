@@ -4,7 +4,8 @@ LABEL author ebisuke
 # ENVs
 ENV LANG=en_EN.UTF-8
 ENV PYTHONIOENCODING=utf-8
-
+ARG SERVICE_NAME
+ENV SERVICE_NAME=/${SERVICE_NAME}
 # avoid apt-get blocking
 RUN apt-get update && apt-get install -y -q tzdata
 ENV TZ=Asia/Tokyo 
