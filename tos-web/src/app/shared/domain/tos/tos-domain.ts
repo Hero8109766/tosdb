@@ -325,7 +325,7 @@ TOSEquipmentTypeService.groupBy = () => [
             TOSEquipmentType.SEAL,
             TOSEquipmentType.TRINKET,
             TOSEquipmentType.RELIC,
-            TOSEquipmentType.ARCANE,
+
         ]
     },
 ];
@@ -421,6 +421,7 @@ TOSItemTypeService.groupBy = () => [
             TOSItemType.QUEST,
             TOSItemType.SPECIALMATERIAL,
             TOSItemType.SUBEXPORB,
+            TOSItemType.ARCANE,
         ]
     },
 ];
