@@ -14,7 +14,7 @@ ENV TZ=Asia/Tokyo
 
 WORKDIR /root
 RUN apt-get update && apt-get install -y -q nodejs npm python3 \
-    python3-pip unzip nginx bash build-essential curl wget git parallel
+    python3-pip unzip nginx bash build-essential curl wget git parallel cron
 
 
 #RUN wget https://dot.net/v1/dotnet-install.sh
