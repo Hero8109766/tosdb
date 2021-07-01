@@ -29,7 +29,7 @@ def parse_buffs(file_name):
 
     for row in ies_reader:
 
-        logging.debug('Parsing buff: %s :: %s', row['ClassID'], row['ClassName'])
+        #logging.debug('Parsing buff: %s :: %s', row['ClassID'], row['ClassName'])
 
         obj = {}
         obj['$ID'] = int(row['ClassID'])

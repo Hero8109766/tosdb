@@ -251,6 +251,8 @@ export enum TOSEquipmentType {
     TWO_HANDED_SPEAR = '2H Spears',
     TWO_HANDED_STAFF = 'Staffs',
     TWO_HANDED_SWORD = '2H Swords',
+    RELIC='Relics',
+    ARCANE='Arcanes',
 }
 export const
     TOSEquipmentTypeService = EnumServiceFactory(TOSEquipmentType) as EnumService<TOSEquipmentType> & {
@@ -322,7 +324,8 @@ TOSEquipmentTypeService.groupBy = () => [
             TOSEquipmentType.ARK,
             TOSEquipmentType.SEAL,
             TOSEquipmentType.TRINKET,
-            
+            TOSEquipmentType.RELIC,
+            TOSEquipmentType.ARCANE,
         ]
     },
 ];
@@ -397,7 +400,7 @@ export enum TOSItemType {
     ENTRANCE_TICKET = 'Entrance Voucher',
     CONSUME = 'Consume',
     GEM_RELIC = 'Relic Gem',
-    
+    ARCANE="Arcane"
 }
 export const
     TOSItemTypeService = EnumServiceFactory(TOSItemType);

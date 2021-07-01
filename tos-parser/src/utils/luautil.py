@@ -49,6 +49,7 @@ LUA_OVERRIDE = [
     "function IsRaidField(self)return 0 end",
     "function IsJoinColonyWarMap(self)return 0 end",
     "function IsPvPMineMap(self)return 0 end",
+    "function SCR_MON_OWNERITEM_ARMOR_CALC(self) return 0 end",
 
 ]
 
@@ -62,6 +63,8 @@ def init():
     init_global_data()
     init_global_functions()
     init_runtime()
+    init_global_functions()
+
     pass
 
 def init_global_constants(ies_file_name):
@@ -124,6 +127,7 @@ def init_global_data():
     ies_ADD('ancient_info', iesutil.load('ancient_info.ies'))
     ies_ADD('clientmessage', iesutil.load('clientmessage.ies'))
     ies_ADD('item', iesutil.load('item_equip.ies'))
+    ies_ADD('itemtranscend', iesutil.load('item_transcend.ies'))
     ies_ADD('item', iesutil.load('item_equip_ep12.ies'))
     ies_ADD('item', iesutil.load('item_ep12.ies'))
     ies_ADD('item', iesutil.load('item_HiddenAbility.ies'))
@@ -168,7 +172,21 @@ def init_global_functions():
         exchange = {
             GetExchangeItemInfoByGuid = function(guid) end
         }
-        
+      
+        geItemTable={
+            GetProp=function(item)
+                return {
+                    GetMaterialExp=function(itemexp)
+                        return 0
+                    end
+                    ,
+                    GetLevel=function(itemexp)
+                        return 1
+                    end,
+                    
+                }
+            end,
+        }
         geTime = {
             GetServerSystemTime = function()
                 local date = os.date("*t")
@@ -235,6 +253,12 @@ def init_global_functions():
             return value,ies_by_ClassIDCount[string.lower(ies_key)]
            
         end
+        
+        function GetClassCount(ies_key)
+
+            return ies_by_ClassIDCount[string.lower(ies_key)]
+
+        end
         function GetClassByIndexFromList(list,idx)
             return list[idx]
         end
@@ -276,8 +300,14 @@ def init_global_functions():
            return list
         end
         
-        function SyncFloor(number)
-            return math.floor(number)
+        function SyncFloor(value)
+            -- ROUND --
+            if(type(value)=='number')then
+                value = math.floor((value*1.0)+0.5) / 1.0;
+                return(value);
+            else
+                return 0
+            end
         end
         
         -- https://stackoverflow.com/a/664557 some LUA table helper functions
@@ -318,14 +348,17 @@ def init_global_functions():
 
 
 def init_runtime_walk(path):
+    blacklist=['lib_math.lua']
+
     for root, dirs, file_list in os.walk(path):
         for file_name in sorted(file_list):
-            if file_name.upper().endswith('.LUA'):
+            if file_name.upper().endswith('.LUA') and file_name.lower() not in blacklist:
                 file_path = os.path.join(root, file_name)
                 lua_function = []
 
                 with codecs.open(file_path, 'r',"utf-8",errors="replace") as file:
                     try:
+                        #logging.debug(file_path)
                         # Remove multiline comments https://stackoverflow.com/a/40454391
                         file_content = file.readlines()
 
@@ -333,6 +366,8 @@ def init_runtime_walk(path):
                         # ignore hangul
                         file_content = file_content.encode("ascii",errors="ignore").decode("ascii")
                         file_content = re.sub(r'--\[(=*)\[(.|\n)*?\]\1\]', '', file_content)
+
+                        lua_function_load(file_content.split('\n'))
 
                         # Load LUA functions
                         for line in file_content.split('\n'):
@@ -348,6 +383,9 @@ def init_runtime_walk(path):
                                 continue
 
                             if bool(re.match(r'(local\s+)?function\s+[\w.:]+\(.*?\)', line)):
+                                #if file_name.upper().endswith("ABILITY_UNLOCK.LUA"):
+                                #    print(line)
+
                                 lua_function_load(lua_function)
                                 lua_function = []
 
@@ -356,8 +394,8 @@ def init_runtime_walk(path):
                         lua_function_load(lua_function)
 
                     except LuaError as error:
-                        if file_name.upper().endswith("CALC_PROPERTY_SKILL.LUA"):
-                            print("fail")
+                        #if file_name.upper().endswith("CALC_PROPERTY_SKILL.LUA"):
+                        #    print("fail")
                         logging.warning('Failed to load %s, error: %s...', file_path, error)
                         continue
 def init_runtime():
@@ -381,19 +419,25 @@ def lua_function_load(function_source):
     if len(function_source) == 0:
         return
 
-    function_execute = [line for line in function_source if not line.startswith('--')]
+    function_execute = [line.strip() for line in function_source if not line.startswith('--')]
+    function_execute = [re.sub(r'local \w+ = require[ (]["\']\w+["\'][ )]*', '', line) for line in function_execute]
+    function_execute = [line.replace('\xef\xbb\xbf', '') for line in function_execute]
+    function_execute = [line.replace('\{', '\\\\{')  for line in function_execute]
+    function_execute = [line.replace('\}', '\\\\}') for line in function_execute]
     function_execute = '\n'.join(function_execute) + '\n'
 
     if function_source[0].startswith('function '):
         function_name = lua_function_name(function_source[0])
-
+        #logging.debug(function_name)
         # Ignore any function that was overridden
         if not any(function_name in s for s in LUA_OVERRIDE):
             lua.execute(function_execute)
+            #lua.execute(function_source)
 
             LUA_SOURCE[function_name] = '\n'.join(function_source)
             LUA_RUNTIME[function_name] = lua_function_reference(function_name)
     else:
+        #lua.execute(function_execute)
         lua.execute(function_execute)
 
 

@@ -48,6 +48,7 @@ class TOSItemGroup(TOSEnum):
     ENTRANCE_TICKET=33
     CONSUME=34
     GEM_RELIC=35
+    ARCANE=36
     @staticmethod
     def value_of(string):
         return {
@@ -87,6 +88,7 @@ class TOSItemGroup(TOSEnum):
             'ENTRANCE_TICKET': TOSItemGroup.ENTRANCE_TICKET,
             'CONSUME': TOSItemGroup.CONSUME,
             'GEM_RELIC': TOSItemGroup.GEM_RELIC,
+            'ARCANE':TOSItemGroup.ARCANE,
         }[string.upper()]
 
 

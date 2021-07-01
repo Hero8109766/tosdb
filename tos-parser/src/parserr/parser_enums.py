@@ -117,6 +117,7 @@ class TOSElement(TOSEnum):
             'POISON': TOSElement.POISON,
             'SOUL': TOSElement.SOUL,
             'MAGIC':TOSElement.MAGIC,
+            'POSION':None,       #typo
             '': None
         }[string.upper()]
 

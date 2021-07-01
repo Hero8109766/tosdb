@@ -269,6 +269,7 @@ class TOSEquipmentType(TOSEnum):
     TWO_HANDED_STAFF = 36
     TWO_HANDED_SWORD = 37
     RELIC=38,
+    ARCANE=39,
     @staticmethod
     def value_of(string):
         return {
@@ -312,6 +313,7 @@ class TOSEquipmentType(TOSEnum):
             'THSWORD': TOSEquipmentType.TWO_HANDED_SWORD,
             'WING': TOSEquipmentType.COSTUME_WING,
             'RELIC':TOSEquipmentType.RELIC,
+            'ARCANE':TOSEquipmentType.ARCANE,
             '': None
         }[string.upper()]
 
