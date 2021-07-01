@@ -12,5 +12,5 @@ cp -rf ../tos-web/dist/* ./dist/
 cd ${BASEDIR}
 
 crontab ./tos.crontab
-
+/etc/init.d/cron start
 echo "Done."

@@ -8,19 +8,18 @@
       tos.guruをベースとしているサイトです。
     </p>
 
-
     <p>
-      <a [routerLink]="routerLink('simulator')">スキルシミュレータ</a> 現在動作確認中です。<br/>
+      <a [routerLink]="routerLink('simulator')">スキルシミュレータ</a><br/>
     </p>
 
-    <!--<p>
+    <p>
       A Database is also available, and currently supports the following datasets:
     </p>
     <ul *ngFor="let group of TOSDataSetService.VALUES; index as i">
       <li *ngFor="let option of group.options">
         <a [routerLink]="routerLink('database/' + TOSDataSetService.toUrl(option))">{{ TOSDataSetService.toLabel(option) }}</a>
       </li>
-    </ul>-->
+    </ul>
 
     <p>
       <b>問題など</b><br/>
@@ -37,6 +36,11 @@
       </div>
       <!--  badge-info  badge-warning badge-success badge-danger -->
       <div class="card-body" style="max-height: calc(100vh - 16rem); overflow-y: auto">
+        <h6>2021/07/23</h6>
+          <li><span class="badge badge-success">追加</span>モンスタースキルを追加 </li>
+          <li><span class="badge badge-success">追加</span>kTEST EP13-2暫定対応 </li>
+          <li><span class="badge badge-warning">修正</span>アイコンの不足をある程度修正 </li>
+          <li><span class="badge badge-warning">修正</span>データバージョン表記がおかしいのを修正 </li>
         <h6>2021/06/23</h6>
         <ul>
           <li><span class="badge badge-success">追加</span>複数言語のサポート（ただしITOSは英語以外不完全です） </li>

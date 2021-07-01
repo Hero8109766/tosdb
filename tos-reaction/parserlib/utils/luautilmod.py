@@ -391,7 +391,11 @@ class luaclass:
                 end 
             
             end
-            
+            function GetClassCount(ies_key)
+
+                return ies_by_ClassIDCount[string.lower(ies_key)]
+    
+            end
             function GetJobGradeByName(pc, name)
                 local cls=GetClass("Job",name)
                 local job=LUA_CONTEXT.jobs[intToString(cls.ClassID)]
@@ -461,7 +465,7 @@ class luaclass:
                             # ignore hangul
                             file_content = file_content.encode("ascii",errors="ignore").decode("ascii")
                             file_content = re.sub(r'--\[(=*)\[(.|\n)*?\]\1\]', '', file_content)
-
+                            self.lua_function_load(file_content.split('\n'))
                             # Load LUA functions
                             for line in file_content.split('\n'):
                                 line = line.strip()
@@ -501,7 +505,11 @@ class luaclass:
         if len(function_source) == 0:
             return
 
-        function_execute = [line for line in function_source if not line.startswith('--')]
+        function_execute = [line.strip() for line in function_source if not line.startswith('--')]
+        function_execute = [re.sub(r'local \w+ = require[ (]["\']\w+["\'][ )]*', '', line) for line in function_execute]
+        function_execute = [line.replace('\xef\xbb\xbf', '') for line in function_execute]
+        function_execute = [line.replace('\{', '\\\\{') for line in function_execute]
+        function_execute = [line.replace('\}', '\\\\}') for line in function_execute]
         function_execute = '\n'.join(function_execute) + '\n'
 
         if function_source[0].startswith('function '):

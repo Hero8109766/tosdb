@@ -251,8 +251,8 @@ export enum TOSEquipmentType {
     TWO_HANDED_SPEAR = '2H Spears',
     TWO_HANDED_STAFF = 'Staffs',
     TWO_HANDED_SWORD = '2H Swords',
-    RELIC='Relics',
-    ARCANE='Arcanes',
+    RELIC = 'Relics',
+    ARCANE = 'Arcanes',
 }
 export const
     TOSEquipmentTypeService = EnumServiceFactory(TOSEquipmentType) as EnumService<TOSEquipmentType> & {
@@ -400,7 +400,7 @@ export enum TOSItemType {
     ENTRANCE_TICKET = 'Entrance Voucher',
     CONSUME = 'Consume',
     GEM_RELIC = 'Relic Gem',
-    ARCANE="Arcane"
+    ARCANE = "Arcane"
 }
 export const
     TOSItemTypeService = EnumServiceFactory(TOSItemType);
@@ -412,8 +412,7 @@ TOSItemTypeService.groupBy = () => [
             TOSItemType.EXPORB,
             TOSItemType.HIDDENABILITY,
             TOSItemType.EVENT,
-            TOSItemType.RELIC,
-            TOSItemType.GEM_RELIC, 
+            TOSItemType.GEM_RELIC,
             TOSItemType.LEGENDMATERIAL,
             TOSItemType.MATERIAL,
             TOSItemType.MISC,
@@ -951,7 +950,7 @@ export interface ITOSMonster extends ITOSEntity {
 
     Link_Items: Observable<ITOSMonsterLinkItem[]>;
     Link_Maps: Observable<ITOSMonsterLinkMap[]>;
-    Link_MonsterSkills:Observable<ITOSMonsterLinkMonsterSkill[]>;
+    Link_MonsterSkills: Observable<ITOSMonsterLinkMonsterSkill[]>;
 }
 export interface ITOSMonsterLinkItem extends ITOSEntityLink<ITOSEntity> {
     Chance: number;
@@ -1013,16 +1012,16 @@ export interface ITOSMonsterSkill extends ITOSEntity {
     Element: TOSElement;
     SP: number;
     TypeAttack: TOSAttackType;
-    SkillFactor:number;
-    HitCount:number;
+    SkillFactor: number;
+    HitCount: number;
     TargetBuffs: Observable<ITOSAddBuff[]>;
     SelfBuffs: Observable<ITOSAddBuff[]>;
 }
 
-export interface ITOSAddBuff extends ITOSBuff{
-    Link_Buff:Observable<ITOSBuff>
-    Duration:number
-    Chance:number
+export interface ITOSAddBuff extends ITOSBuff {
+    Link_Buff: Observable<ITOSBuff>
+    Duration: number
+    Chance: number
 }
 export interface ITOSSkillRequiredStance {
     Icon: string;
@@ -1035,7 +1034,7 @@ export interface ITOSSkillRequiredStance {
 export interface ITOSDomainRepository {
     config: { [key in TOSDataSet]: ITOSDomainRepositoryConfiguration };
 
-    load(dataset: TOSDataSet, region: TOSRegion,language:TOSLanguage): Observable<object>;
+    load(dataset: TOSDataSet, region: TOSRegion, language: TOSLanguage): Observable<object>;
     find(dataset: TOSDataSet, page: CRUDPage): Observable<CRUDPageResult<any>>;
     findByIndex(dataset: TOSDataSet, key: string, value: boolean | number | string, forceSingle?: boolean): Observable<any | any[]>;
 }
