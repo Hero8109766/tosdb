@@ -3,6 +3,7 @@ import logging
 import os
 from math import floor
 
+import lupa
 from lupa import LuaError
 
 import constants
@@ -12,7 +13,7 @@ from parserr.parser_enums import TOSAttackType
 from utils import luautil
 from utils.tosenum import TOSEnum
 import codecs
-
+from lupa import LuaRuntime as Lua
 class TOSEquipmentGrade(TOSEnum):
     NORMAL = 1
     MAGIC = 2
@@ -564,13 +565,19 @@ def parse_equipment(ies):
                     TOSEquipmentStat.UNKNOWN,           # Stat
                     bonus.replace('- ', '').strip()     # Value
                 ])
-
+        lua = Lua()
         # Transcendence
         for lv in range(10):
             row['Transcend'] = lv
-            obj['TranscendPrice'].append(LUA_RUNTIME['GET_TRANSCEND_MATERIAL_COUNT'](row, None))
-
-        obj['TranscendPrice'] = [value for value in obj['TranscendPrice'] if value > 0]
+            v=LUA_RUNTIME['GET_TRANSCEND_MATERIAL_COUNT'](row, lv+1)
+            if(obj['Grade'] == TOSEquipmentGrade.GODDESS and lv==9):
+                obj['TranscendPrice'].append(5)
+            else:
+                if(type(v) is not int  ):
+                    obj['TranscendPrice'].append(v["Premium_item_transcendence_Stone"])
+                else:
+                    obj['TranscendPrice'].append(v)
+        #obj['TranscendPrice'] = [value for value in obj['TranscendPrice'] if value > 0]
 
 
 def parse_equipment_grade_ratios():

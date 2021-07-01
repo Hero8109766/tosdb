@@ -80,6 +80,8 @@ export class TOSDomainService {
 
   public static items(page: CRUDPage): Observable<CRUDPageResult<ITOSItem>>                 { return this.repository.find(TOSDataSet.ITEMS, page) };
   public static itemsById($ID): Observable<ITOSItem>                                        { return this.repository.findByIndex(TOSDataSet.ITEMS, '$ID',parseInt($ID), true) };
+  public static itemsByIdName($ID_NAME): Observable<ITOSItem>                                    { return this.repository.findByIndex(TOSDataSet.ITEMS, '$ID_NAME',$ID_NAME, true) };
+  
   public static itemsByIdLink = ($ID: string) => {
     return fromPromise((async () => {
       return null

@@ -306,8 +306,12 @@ def init_global_functions():
                 value = math.floor((value*1.0)+0.5) / 1.0;
                 return(value);
             else
-                return 0
+                
+                for k,v in pairs(value) do
+                    value[k]=SyncFloor(v)
+                end
             end
+            return value
         end
         
         -- https://stackoverflow.com/a/664557 some LUA table helper functions
@@ -342,6 +346,8 @@ def init_global_functions():
                 return default
             end
         end
+        
+        
     ''' + '\n')
 
 

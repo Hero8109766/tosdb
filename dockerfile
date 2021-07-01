@@ -63,7 +63,6 @@ WORKDIR /var/www/base
 
 COPY ./tos-parser ./tos-parser
 COPY ./tos-build ./tos-build
-COPY ./tos-html ./tos-html
 
 COPY ./tos-search ./tos-search
 COPY ./tos-sitemap ./tos-sitemap

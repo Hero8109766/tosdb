@@ -93,9 +93,9 @@ export class TOSEquipment extends TOSItem implements ITOSEquipment {
         return Array.from({ length: level + 1 }, (x, i) => this.AnvilPrice(i)).reduce((a, b) => a + b, 0)
     }
 
-    TranscendATKRatio(level: number) { return level * 0.1; }
-    TranscendMDEFRatio(level: number) { return level * 0.1; }
-    TranscendPDEFRatio(level: number) { return level * 0.1; }
+    TranscendATKRatio(level: number) { if(this.Grade==TOSEquipmentGrade.GODDESS)return level*0.03; return level * 0.1; }
+    TranscendMDEFRatio(level: number) { if(this.Grade==TOSEquipmentGrade.GODDESS)return level*0.03; return level * 0.1;  }
+    TranscendPDEFRatio(level: number) { if(this.Grade==TOSEquipmentGrade.GODDESS)return level*0.03; return level * 0.1;  }
     TranscendPrice(level: number) {
         let transcendPrice = this.$lazyPropertyJSONArray('TranscendPrice') as number[];
         return level > 0 && transcendPrice && transcendPrice[level - 1] || 0;
