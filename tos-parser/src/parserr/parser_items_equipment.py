@@ -543,7 +543,20 @@ def parse_equipment(ies):
         obj['AnvilPrice'] = [value for value in obj['AnvilPrice'] if value > 0]
         obj['AnvilATK'] = [value for value in obj['AnvilATK'] if value > 0] if len(obj['AnvilPrice']) > 0 else None
         obj['AnvilDEF'] = [value for value in obj['AnvilDEF'] if value > 0] if len(obj['AnvilPrice']) > 0 else None
+        obj['Reinforce_Type'] = row['Reinforce_Type'] if 'Reinforce_Type' in row else None
+        obj['MaxReinforcePoint'] = LUA_RUNTIME['GET_MAX_REINFORCE_POINT'](obj["Level"]) \
+            if obj["Grade"] == TOSEquipmentGrade.GODDESS else 40
+        obj['GoddessReinforceMaterials']=None
+        if obj['Grade']==TOSEquipmentGrade.GODDESS:
+            obj['GoddessReinforceMaterials'] = []
+            for i in range(1,obj['MaxReinforcePoint']+1):
+                obj['GoddessReinforceMaterials'].append([])
+                materials=luautil.lua.execute("return item_goddess_reinforce.get_material_list({0}, '{1}', {2})".format(obj['Level'] , row['ClassType'] , i) )
+                materials=luautil.lua.table_from(materials) if materials is not None else None
+                if materials is not None:
 
+                    for k,v in materials.items():
+                        obj['GoddessReinforceMaterials'][i - 1].append([k,v])
         # Bonus
         for stat in EQUIPMENT_STAT_COLUMNS:
             if stat in row:

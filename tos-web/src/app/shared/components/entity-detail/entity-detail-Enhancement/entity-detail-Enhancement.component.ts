@@ -1,4 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { TOSEquipment, TOSGoddessAnvilMaterial } from 'src/app/shared/domain/tos/item/equipment/tos-equipment.model';
+import { ITOSGoddessAnvilMaterial } from 'src/app/shared/domain/tos/tos-domain';
 import { EntityDetailChildComponent } from "../entity-detail-child.component";
 
 @Component({
@@ -12,11 +14,19 @@ export class EntityDetailEnhancementComponent extends EntityDetailChildComponent
 
     @Input() anvilLevel: number;
     @Output() anvilLevelChange: EventEmitter<number> = new EventEmitter();
+    @Input() goddessAnvilLevel: number;
+    @Output() goddessAnvilLevelChange: EventEmitter<number> = new EventEmitter();
 
     anvilAvailable: boolean;
     anvilBonus: number = 0;
     anvilSilver: number = 0;
     anvilSilverTotal: number = 0;
+    
+    goddessAnvilAvailable: boolean;
+    goddessAnvilBonus: number = 0;
+    goddessAnvilMaterial: TOSGoddessAnvilMaterial[];
+    goddessAnvilMaterialTotal: TOSGoddessAnvilMaterial[];
+    goddessAnvilChance:number=100;
 
     attributeAvailable: boolean;
     attributeLevel: number = 0;
@@ -40,6 +50,7 @@ export class EntityDetailEnhancementComponent extends EntityDetailChildComponent
         this.anvilAvailable = this.equipment && this.equipment.IsAnvilAvailable;
         this.attributeAvailable = !!this.attribute;
         this.transcendAvailable = this.equipment && this.equipment.IsTranscendAvailable;
+        this.goddessAnvilAvailable=this.equipment && this.equipment.IsGoddessAnvilAvailable;
     }
 
     onAnvilChange(newValue) {
@@ -52,7 +63,18 @@ export class EntityDetailEnhancementComponent extends EntityDetailChildComponent
         this.anvilSilver = this.equipment.AnvilPrice(this.anvilLevel);
         this.anvilSilverTotal = this.equipment.AnvilPriceTotal(this.anvilLevel);
     }
+    onGoddessAnvilChange(newValue) {
+        if (this.goddessAnvilLevel == newValue) return;
 
+        this.goddessAnvilLevel = newValue;
+        this.goddessAnvilLevelChange.emit(newValue);
+
+        this.goddessAnvilBonus = this.equipment.AnvilDEF(this.goddessAnvilLevel) || this.equipment.AnvilATK(this.goddessAnvilLevel);
+        this.goddessAnvilMaterial = this.equipment.GoddessAnvilPrice(this.goddessAnvilLevel);
+        this.goddessAnvilMaterialTotal = this.equipment.GoddessAnvilTotalPriceByHalfPercent(this.goddessAnvilLevel);
+        this.goddessAnvilChance=TOSEquipment.GoddessAnvilChance(this.goddessAnvilLevel)
+        
+    }
     onAttributeChange(newValue) {
         if (this.attributeLevel == newValue) return;
 

@@ -10,6 +10,7 @@ import { SharedModule } from './shared/shared.module';
 import { ShellModule } from './shell/shell.module';
 import { LoadingComponent } from "./shell/loading/loading.component";
 import { Injector } from '@angular/core';
+import { RxSubscribeModule } from '@soundng/rx-subscribe';
 
 export let InjectorInstance: Injector;
 
@@ -28,6 +29,7 @@ export let InjectorInstance: Injector;
         SharedModule.forRoot(),
         AppRoutingModule,
         ShellModule,
+        RxSubscribeModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -66,7 +66,7 @@ export class TOSDomainRepository implements ITOSDomainRepository {
         },
         'items': {
             factory: json => new TOSItem(TOSDataSet.ITEMS, json),
-            schema: { primaryKey: '$ID' },
+            schema: { primaryKey: '$ID' ,indexes: ['$ID_NAME'] },
         },
         'jobs': {
             factory: json => new TOSJob(json),

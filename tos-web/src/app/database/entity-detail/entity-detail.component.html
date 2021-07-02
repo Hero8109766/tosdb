@@ -34,6 +34,7 @@
 
           <!-- Physical and Magical Attack / Defense -->
           <tos-entity-detail-AttackDefense [anvilLevel]="anvilLevel"
+                                           [goddessAnvilLevel]="goddessAnvilLevel"
                                            [transcendLevel]="transcendLevel"
                                            [entity]="entity"></tos-entity-detail-AttackDefense>
 
@@ -126,6 +127,7 @@
       <tos-entity-detail-Enhancement *ngIf="attribute || equipment && (equipment.IsAnvilAvailable || equipment.IsTranscendAvailable)"
                                      [header]="attribute ? 'Cost' : 'Enhancement'"
                                      [(anvilLevel)]="anvilLevel"
+                                     [(goddessAnvilLevel)]="goddessAnvilLevel"
                                      [(transcendLevel)]="transcendLevel"
                                      [entity]="entity"></tos-entity-detail-Enhancement>
 

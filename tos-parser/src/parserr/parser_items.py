@@ -162,7 +162,21 @@ def parse():
     globals.items[obj['$ID']] = obj
     globals.items_by_name[obj['$ID_NAME']] = obj
 
+    # Hotfix: Insert 'GabijaCertificate' as an Item
+    obj = {}
+    obj['$ID'] = -2
+    obj['$ID_NAME'] = 'GabijaCertificate'
+    obj['Icon'] = parser_assets.parse_entity_icon('item_season_coin_gabia')
+    obj['Name'] = parser_translations.translate('여신의 증표')
+    obj['Tradability'] = 'FFFF'
+    obj['Type'] = TOSItemGroup.UNUSED
 
+    for key in list(globals.items.values())[0]:
+        if key not in obj:
+            obj[key] = None
+
+    globals.items[obj['$ID']] = obj
+    globals.items_by_name[obj['$ID_NAME']] = obj
 def parse_items(file_name):
     logging.debug('Parsing %s...', file_name)
 

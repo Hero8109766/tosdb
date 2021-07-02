@@ -88,7 +88,7 @@ export class EntityDetailComponent implements OnDestroy, OnInit {
 
     anvilLevel: number = 0;
     transcendLevel: number = 0;
-
+    goddessAnvilLevel:number=0;
     tooltip: ITOSEntity;
 
     private subscriptionRoute: Subscription;

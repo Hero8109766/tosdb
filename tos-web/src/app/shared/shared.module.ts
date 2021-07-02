@@ -67,6 +67,7 @@ import { ColorizeHTMLPipe } from './directives/colorize-html.pipe';
 import { EntityDetailMarketPriceComponent } from './components/entity-detail/entity-detail-MarketPrice/entity-detail-MarketPrice.component';
 import { TOSUniversalResolver } from './domain/tos/tos-universal.resolver';
 import { UniversalComponent } from '../database/universal/universal.component';
+import { RxSubscribeModule } from '@soundng/rx-subscribe';
 
 @NgModule({
   imports: [
@@ -76,6 +77,8 @@ import { UniversalComponent } from '../database/universal/universal.component';
     NgbModule,
     FormsModule,
     RouterModule,
+    RxSubscribeModule,
+    
   ],
   declarations: [
     // Components

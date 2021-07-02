@@ -22,6 +22,47 @@
       <td class="align-middle">{{ anvilSilverTotal | number }}</td>
     </tr>
 
+    <!-- goddess anvil-->
+    <tr *ngIf="goddessAnvilAvailable" class="table-primary">
+      <th width="120">Anvil</th>
+      <th>Bonus</th>
+      <th>Required Materials</th>
+      <th>Chance</th>
+    </tr>
+    <tr *ngIf="goddessAnvilAvailable">
+      <td>
+        <tos-input-number [min]="0"
+                          [max]="30"
+                          [model]="goddessAnvilLevel"
+                          (modelChange)="onGoddessAnvilChange($event)"></tos-input-number>
+      </td>
+      <td class="align-middle">{{ goddessAnvilBonus }}</td>
+      <td class="align-middle">
+        <span *ngFor="let mat of goddessAnvilMaterial">
+           <div *rxSubscribe="mat.Material$; let material">
+            <a [href]="material.Url ">
+            <img height="30" width="30" [src]="material.Icon ">
+            x{{ mat.Amount }} </a>
+            </div>
+        </span>
+      </td>
+
+      <td class="align-middle">{{ goddessAnvilChance }}%</td>
+    </tr>
+    <tr *ngIf="goddessAnvilAvailable" class="table-primary">
+      <th  colspan="4">Number of materials required to make the chance >= 50%</th>
+    </tr>
+    <tr *ngIf="goddessAnvilAvailable">
+        <td  colspan="4">  
+        <span *ngFor="let mat of goddessAnvilMaterialTotal" >
+          <div *rxSubscribe="mat.Material$; let material">
+            <a [href]="material.Url ">
+            <img height="30" width="30" [src]="material.Icon ">
+            x{{ mat.Amount }} </a>
+            </div>
+        </span>
+        </td>
+    </tr>
     <!-- Attribute -->
     <tr *ngIf="attributeAvailable" class="table-primary">
       <th width="120">Level</th>

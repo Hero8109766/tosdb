@@ -819,19 +819,27 @@ export interface ITOSEquipment extends ITOSItem {
     IsAnvilAvailable: boolean;
     IsTranscendAvailable: boolean;
     Link_Set: Observable<ITOSEquipmentSet>;
+    IsGoddessAnvilAvailable: boolean
+    AnvilLimit:number;
 
     AnvilATK(level: number): number;
     AnvilDEF(level: number): number;
     AnvilPrice(level: number): number;
     AnvilPriceTotal(level: number): number;
-
+    GoddessAnvilPrice(level:number):ITOSGoddessAnvilMaterial[]
+    GoddessAnvilTotalPrice(level:number):ITOSGoddessAnvilMaterial[]
     IsUsableBy(tree: TOSClassTree): boolean;
-
     TranscendATKRatio(level: number): number;
     TranscendMDEFRatio(level: number): number;
     TranscendPDEFRatio(level: number): number;
     TranscendPrice(level: number): number;
     TranscendPriceTotal(level: number): number;
+    
+}
+
+export interface ITOSGoddessAnvilMaterial{
+    Material$:Observable<ITOSItem>
+    Amount:number
 }
 export interface ITOSEquipmentBonus {
     Stat: TOSStat;

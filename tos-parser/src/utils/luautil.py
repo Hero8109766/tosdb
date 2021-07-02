@@ -51,6 +51,7 @@ LUA_OVERRIDE = [
     "function IsPvPMineMap(self)return 0 end",
     "function SCR_MON_OWNERITEM_ARMOR_CALC(self) return 0 end",
 
+
 ]
 
 LUA_RUNTIME = None
@@ -221,6 +222,8 @@ def init_global_functions():
                 GetPetEquipObjByGuid = function(guid) end
             }
         }
+        
+        
         
         
         
