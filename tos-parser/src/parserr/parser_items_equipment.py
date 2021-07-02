@@ -545,7 +545,7 @@ def parse_equipment(ies):
         obj['AnvilDEF'] = [value for value in obj['AnvilDEF'] if value > 0] if len(obj['AnvilPrice']) > 0 else None
         obj['Reinforce_Type'] = row['Reinforce_Type'] if 'Reinforce_Type' in row else None
         obj['MaxReinforcePoint'] = LUA_RUNTIME['GET_MAX_REINFORCE_POINT'](obj["Level"]) \
-            if obj["Grade"] == TOSEquipmentGrade.GODDESS else 40
+            if obj["Grade"] == TOSEquipmentGrade.GODDESS and 'GET_MAX_REINFORCE_POINT' in LUA_RUNTIME else 40
         obj['GoddessReinforceMaterials']=None
         if obj['Grade']==TOSEquipmentGrade.GODDESS:
             obj['GoddessReinforceMaterials'] = []
