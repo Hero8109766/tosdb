@@ -1,6 +1,6 @@
 #from multiprocessing import Manager
 
-import constantsmod
+import parserlib.constantsmod
 
 assets_icons = {}
 #assets_icons = Manager().dict()

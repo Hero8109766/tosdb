@@ -8,10 +8,13 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TOSUrlService } from './tos-url.service';
 import { TOSRegionService } from '../domain/tos-region';
 import { InjectorInstance } from 'src/app/app.module';
+import { map } from 'rxjs/operators';
 
 enum LUA_MODE {
     Skill="skill",
-    Attribute="ability"
+    Attribute="ability",
+    Ether="!Ether",
+    Relic="!Relic",
 };
 @Injectable({
     providedIn: 'root'
@@ -79,6 +82,36 @@ export class RemoteLUAService {
     static async evalAttribute(build: ITOSBuild, id$:string,element: string, context?: object): Promise<string> {
         return this.eval(build, id$,element, LUA_MODE.Attribute,context);
     }
+    static async evalRelic(id$:string, mode:string,arg?:any,arg2?:any): Promise<string> {
+        return this.evalLua(id$,"item",mode,arg,arg2);
+    }
+    private static async evalLua(id$:string,iestype:string,mode:string,arg?:any,arg2?:any): Promise<string> {
+        
+    
+
+
+        //httprequest
+        let request = {
+            context: {},
+            region: TOSRegionService.getRegion().toString(),
+            type:iestype.toString(),
+            classid:id$,
+            mode:mode.toString(),
+            arg:arg,
+            arg2:arg2
+        }
+        let http=InjectorInstance.get<HttpClient>(HttpClient);
+
+        let result=http.post(
+            TOSUrlService.WORKER_REACTION(),
+            request,{responseType:"text"}
+        )
+   
+        return result.pipe(map((x:string)=>{
+            let obj:any=JSON.parse(x)
+            return obj['result'] as string
+         })).toPromise()
+    }
     private static async eval(build: ITOSBuild,  id$:string,element: string,  type: LUA_MODE,context?: object): Promise<string> {
     
         let dependencies: string[] = [];
@@ -96,19 +129,6 @@ export class RemoteLUAService {
         context["ClassName"] = 'PC';
         //context.JobHistoryList = build.Jobs && build.Jobs.map(value => value.$ID);
         context["Lv"] = LEVEL_LIMIT; // TODO: get level from build
-
-        // Initialize context
-
-        // func.push('var pc = ' + JSON.stringify(player) + ';');
-        // func.push('var skill = ' + JSON.stringify(skill) + ';');
-        // func = func.concat(LUAService.LUA_CONTEXT);
-
-        // Object
-        //     .keys(context)
-        //     .forEach(key => {
-        //         let value = typeof context[key] == 'object' ? JSON.parse(context[key]) : context[key];
-        //         func.push('var ' + key + ' = ' + value + ';')
-        //     });
 
         jsoncontext.abilities = {}
         for (var key in build.Attributes) {
@@ -159,7 +179,10 @@ export class RemoteLUAService {
         //func = func.concat(source);
         //func.push('}())');
 
-        return result.toPromise()
+        return result.pipe(map((x:string)=>{
+           let obj:any=JSON.parse(x)
+           return obj['result'] as string
+        })).toPromise()
         
     }
 

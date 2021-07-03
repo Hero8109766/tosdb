@@ -4,14 +4,28 @@
                     [min]="1" [max]="10"
                     [(model)]="level"></tos-input-number>
 
-  <table class="table table-borderless mb-0">
-    <tbody>
-      <tr *ngFor="let entry of gem.Bonus(level) | keyvalue">
-        <td class="p-1 align-middle" width="1">
-          <img class="bg-primary rounded-circle p-2" [src]="'assets/images/gem_effect_' + entry.key.toLowerCase() + '.png'" [title]="entry.key" />
-        </td>
-        <td [innerHTML]="entry.value.join('<br/>')"></td>
-      </tr>
-    </tbody>
-  </table>
+    <div *ngIf="gem.IsNormalGem">
+        <table class="table table-borderless mb-0">
+            <tbody>
+            
+            <tr *ngFor="let entry of gem.Bonus(level) | keyvalue" >
+                <td class="p-1 align-middle" width="1">
+                <img class="bg-primary rounded-circle p-2" [src]="'assets/images/gem_effect_' + entry.key.toLowerCase() + '.png'" [title]="entry.key" />
+                </td>
+                <td [innerHTML]="entry.value.join('<br/>')"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+  <div *ngIf="gem.IsRelic" >
+      <div *ngIf="gem.TypeGem==TOSGemType.CYAN" ><span *rxSubscribe="gem.RelicReleaseOptionText$; let optiontext" [innerHTML]="optiontext | colorizeHTML"></span><hr /></div>
+      
+      <span *rxSubscribe="gem.GetRelicOptionByLevelText$(level); let optiontext" [innerHTML]="optiontext | colorizeHTML"></span><br/>
+        <hr />
+        <div class="col text-right">
+     
+          <h6 >{{ gem.SpendRP }}<sub *ngIf='!gem.IsSpendRPPerSec'>RP</sub><sub *ngIf='gem.IsSpendRPPerSec'>RP/sec</sub>&nbsp;</h6>
+        </div>
+  </div>
+
 </div>

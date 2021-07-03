@@ -343,7 +343,13 @@ TOSEquipmentTypeService.toStringHuman = (value: TOSEquipmentType) => {
 export enum TOSGemType {
     SKILL = 'Skill',
     STATS = 'Stats',
+    ETHER = 'Ether',
+    CYAN = 'Cyan',
+    MAGENTA='Magenta',
+    BLACK='Black',
 }
+
+
 export const TOSGemTypeService = EnumServiceFactory(TOSGemType);
 
 export enum TOSGemSlot {
@@ -400,7 +406,8 @@ export enum TOSItemType {
     ENTRANCE_TICKET = 'Entrance Voucher',
     CONSUME = 'Consume',
     GEM_RELIC = 'Relic Gem',
-    ARCANE = "Arcane"
+    ARCANE = "Arcane",
+    GEM_HIGH_COLOR= "Ether Gem"
 }
 export const
     TOSItemTypeService = EnumServiceFactory(TOSItemType);
@@ -858,7 +865,14 @@ export interface ITOSEquipmentSet extends ITOSEntity {
 export interface ITOSGem extends ITOSItem {
     TypeGem: TOSGemType;
     Link_Skill: Observable<ITOSSkill>;
-
+    SpendRP:number;
+    IsSpendRPPerSec:boolean;
+    RelicGemOption:string;
+    RelicReleaseOptionText$:Observable<string>;
+    IsRelic:boolean;
+    IsNormalGem:boolean;
+    IsEther:boolean;
+    CoolDown:number;
     Bonus(level: number): { [key: string]: ITOSGemBonus[] };
 }
 export interface ITOSGemBonus {
@@ -1035,6 +1049,7 @@ export interface ITOSSkillRequiredStance {
     Icon: string;
     Name: string;
 }
+
 
 /*====================================================================================================================+
  | Extras

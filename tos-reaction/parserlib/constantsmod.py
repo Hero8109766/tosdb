@@ -57,6 +57,7 @@ class constclass:
         self.PATH_BUILD_ASSETS_IMAGES = os.path.join(self.PATH_BUILD_ASSETS, 'images')
         self.PATH_BUILD_ASSETS_IMAGES_MAPS = os.path.join(self.PATH_BUILD_ASSETS_IMAGES, 'maps')
         self.region(region)
+        self.REGION=region
     def region(self,region):
 
 

@@ -49,6 +49,7 @@ class TOSItemGroup(TOSEnum):
     CONSUME=34
     GEM_RELIC=35
     ARCANE=36
+    GEM_HIGH_COLOR=37
     @staticmethod
     def value_of(string):
         return {
@@ -89,6 +90,8 @@ class TOSItemGroup(TOSEnum):
             'CONSUME': TOSItemGroup.CONSUME,
             'GEM_RELIC': TOSItemGroup.GEM_RELIC,
             'ARCANE':TOSItemGroup.ARCANE,
+            'GEM_HIGH_COLOR':TOSItemGroup.GEM_HIGH_COLOR,
+
         }[string.upper()]
 
 
@@ -109,7 +112,12 @@ ITEM_GROUP_ITEM_WHITELIST = [
     TOSItemGroup.SPECIALMATERIAL,
     TOSItemGroup.SUBEXPORB
 ]
+ITEM_GROUP_GEM_WHITELIST = [
+    TOSItemGroup.GEM,
+    TOSItemGroup.GEM_HIGH_COLOR,
+    TOSItemGroup.GEM_RELIC
 
+]
 ITEM_GROUP_EQUIPMENT_WHITELIST = [
     TOSItemGroup.ARMOR,
     TOSItemGroup.EQUIPMENT,
@@ -132,6 +140,8 @@ def parse():
     parse_items('item_colorspray.ies')
     parse_items('item_gem.ies')
     parse_items('item_gem_relic.ies')
+    parse_items('item_gem_bernice.ies')
+
     parse_items('item_equip.ies')
 
     parse_items('item_guildhousing.ies')
@@ -181,6 +191,9 @@ def parse_items(file_name):
     logging.debug('Parsing %s...', file_name)
 
     ies_path = os.path.join(constants.PATH_INPUT_DATA, "ies.ipf", file_name)
+    if not os.path.isfile(ies_path):
+        logging.warning(ies_path + 'not found. ignoring')
+        return
     ies_file = codecs.open(ies_path, 'r','utf-8',errors='replace')
     ies_reader = csv.DictReader(ies_file, delimiter=',', quotechar='"')
 
@@ -233,16 +246,12 @@ def parse_items(file_name):
             globals.cubes[obj['$ID']] = obj
             globals.cubes_by_name[obj['$ID_NAME']] = obj
             globals.cubes_by_stringarg[row['StringArg']] = obj
-        elif item_type == TOSItemGroup.GEM:
+        elif item_type in ITEM_GROUP_GEM_WHITELIST:
             globals.gems[obj['$ID']] = obj
             globals.gems_by_name[obj['$ID_NAME']] = obj
         elif item_type == TOSItemGroup.RECIPE:
             globals.recipes[obj['$ID']] = obj
             globals.recipes_by_name[obj['$ID_NAME']] = obj
-        elif item_type == TOSItemGroup.GEM_RELIC:
-            obj['Description']= parser_translations.translate('RelicGem_'+row['RelicGemOption']+'_DescText') if 'RelicGemOption' in row else None
-            globals.items[obj['$ID']] = obj
-            globals.items_by_name[obj['$ID_NAME']] = obj
 
         elif item_type in ITEM_GROUP_FASHION_WHITELIST\
                 or item_type_equipment in TYPE_EQUIPMENT_COSTUME_LIST:

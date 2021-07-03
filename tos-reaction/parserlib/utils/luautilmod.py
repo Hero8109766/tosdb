@@ -6,6 +6,8 @@ import codecs
 import multiprocessing
 from lupa import LuaRuntime, LuaError
 import logging
+
+import parserlib.parserr.parser_translations
 from parserlib.utils import iesutilmod
 
 class luaclass:
@@ -34,6 +36,8 @@ class luaclass:
         self.lua = LuaRuntime(attribute_handlers=(self.attr_getter, self.attr_setter),
                               unpack_returned_tuples=True)
         self.ies=iesutilmod.iesclass(constants)
+        self.translator=parserlib.parserr.parser_translations.Translator(constants)
+        self.translator.parse(constants.REGION)
         self.LUA_OVERRIDE = [
             'function GET_ITEM_LEVEL(item) return 0 end',  # We cant emulate this function as geItemTable is undefined
             'function IsBuffApplied(pc, buff) return "NO" end',
@@ -61,21 +65,35 @@ class luaclass:
             "function GetBuffByProp(self,mode,value) return nil end",
             "function IsRaidField(self)return 0 end",
         ]
-    def exec_lua_encapsulated(self,cls,context,lua_fn,arg_call):
+    def exec_lua_encapsulated(self,cls,context,lua_fn,arg_call,arg,arg2):
         self.lock.acquire()
         try:
-            func=self.lua.execute(
-                "return function(cls,context,fn_str,arg_call) "
-                "   LUA_CONTEXT=context\n"
-                "   local fn=load(fn_str,fn_str,'t')\n"
-                "   local arg_fn=load(arg_call,arg_call,'t') \n"
-                "   local _,arg_fn2=assert(pcall(arg_fn))\n"
-                "   local _,arg=assert(pcall(arg_fn))\n"
-                "   local _,cls_fn=assert(pcall(fn))\n"
-                "   local _,retval=assert(pcall(cls_fn,arg))\n"
-                "   return result,retval\n"
-                "end\n")
-            return func(cls,context,lua_fn,arg_call)
+            metatable="   cupsulated=setmetatable({io={},os={},package={},require={},loadfile={},dofile={}},{__index=_G})\n"
+            if(arg_call is not None):
+                func=self.lua.execute(
+                    "return function(cls,context,fn_str,arg_call) "
+                    "   LUA_CONTEXT=context\n"
+                    +metatable+ \
+                    "   local fn=load(fn_str,fn_str,'t',cupsulated)\n"
+                    "   local arg_fn=load(arg_call,arg_call,'t',cupsulated) \n"
+                    "   local _,arg_fn2=assert(pcall(arg_fn))\n"
+                    "   local _,arg=assert(pcall(arg_fn))\n"
+                    "   local _,cls_fn=assert(pcall(fn))\n"
+                    "   local result,retval,r2,r3,r4=assert(pcall(cls_fn,arg))\n"
+                    "   return result,retval,r2,r3,r4\n"
+                    "end\n")
+                return func( cls,context,lua_fn,arg_call)
+            else:
+                func = self.lua.execute(
+                    "return function(cls,context,fn_str,arg,arg2) "
+                    "   LUA_CONTEXT=context\n"
+                    + metatable + \
+                    "   local fn=load(fn_str,fn_str,'t',cupsulated)\n"
+                    "   local _,cls_fn=assert(pcall(fn))\n"
+                    "   local result,retval,r2,r3,r4=assert(pcall(cls_fn,cls,arg,arg2))\n"
+                    "   return result,retval,r2,r3,r4\n"
+                    "end\n")
+                return func(cls, context, lua_fn,arg,arg2)
         finally:
             pass
             self.lock.release()
@@ -152,6 +170,8 @@ class luaclass:
         self.ies_ADD('item', self.ies.load('item_ep12.ies'))
         self.ies_ADD('item', self.ies.load('item_HiddenAbility.ies'))
         self.ies_ADD('item', self.ies.load('item_GuildHousing.ies'))
+        self.ies_ADD('item', self.ies.load('item_personalhousing.ies'))
+
         self.ies_ADD('item', self.ies.load('item_ep12.ies'))
         self.ies_ADD('item', self.ies.load('item_gem.ies'))
         self.ies_ADD('item', self.ies.load('item_event.ies'))
@@ -159,6 +179,9 @@ class luaclass:
         self.ies_ADD('item', self.ies.load('item_ep12.ies'))
         self.ies_ADD('item', self.ies.load('item_premium.ies'))
         self.ies_ADD('item', self.ies.load('item_quest.ies'))
+        self.ies_ADD('item', self.ies.load('item_gem_relic.ies'))
+        self.ies_ADD('item', self.ies.load('item_gem_bernice.ies'))
+
         self.ies_ADD('item_grade', self.ies.load('item_grade.ies'))
         self.ies_ADD('item_growth', self.ies.load('item_growth.ies'))
         self.ies_ADD('HiddenAbility_Reinforce', self.ies.load('HiddenAbility_Reinforce.ies'))
@@ -183,11 +206,41 @@ class luaclass:
         self.ies_ADD('stat_monster', self.ies.load('statbase_monster.ies'))
         self.ies_ADD('stat_monster_race', self.ies.load('statbase_monster_race.ies'))
         self.ies_ADD('stat_monster_type', self.ies.load('statbase_monster_type.ies'))
+    def ClMsg(self,msg):
+        return self.translator.translate(msg)
 
-
+    def ScpArgMsg(self,msg,*args):
+        translated=self.translator.translate(msg)
+        step=0
+        dict={}
+        key=''
+        for v in args:
+            if step==0:
+                key=v
+                step=1
+            else:
+                dict[key]=v
+                step=0
+        translated=translated.replace("{","{{").replace("}","}}")
+        for v in dict.keys():
+            translated=translated.replace(f'{{{{{v}}}}}',f'{{{v}}}')
+        try:
+            return translated.format(**dict)
+        except Exception as e:
+            return translated
     def init_global_functions(self):
 
         self.lua.execute("".join((s+"\n" for s in self.LUA_OVERRIDE)))
+        self.lua.execute('''
+            return function(python_fn)
+               _G['ScpArgMsg']=function(msg,...)
+                  return python_fn(msg,...)
+               end
+                _G['ClMsg']=function(msg,...)
+                  return python_fn(msg,...)
+               end
+            end
+        ''')(self.ScpArgMsg)
         self.lua.execute('''
             function setfenv(fn, env)
               local i = 1
@@ -228,9 +281,21 @@ class luaclass:
             }
             
             session = {
-                GetEquipItemByGuid = function(guid) end,
+                GetEquipItemByGuid = function(guid) 
+                    return setmetatable({
+                        GetIESID=function(guid)
+                            return "0"
+                        end
+                    },{__index=GetClassByType("Item",guid)})
+                    end,
                 GetEtcItemByGuid = function(guid) end,
-                GetInvItemByGuid = function(guid) end,
+                GetInvItemByGuid = function(guid) 
+                    return setmetatable({
+                        GetIESID=function(guid)
+                            return "0"
+                        end
+                    },{__index=GetClassByType("Item",guid)})
+                end,
              
                 link = {
                     GetGCLinkObject = function(guid) end
