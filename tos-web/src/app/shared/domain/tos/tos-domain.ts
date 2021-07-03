@@ -869,6 +869,7 @@ export interface ITOSGem extends ITOSItem {
     IsSpendRPPerSec:boolean;
     RelicGemOption:string;
     RelicReleaseOptionText$:Observable<string>;
+    GetEtherProp$(level:number):Observable<string>;
     IsRelic:boolean;
     IsNormalGem:boolean;
     IsEther:boolean;
