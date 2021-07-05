@@ -23,5 +23,5 @@ if [ -e ./_complete.sh ]; then
 /bin/bash ./_complete.sh
 fi
 
-#echo "Launching nginx and WAIT"
-#/usr/sbin/nginx -g "daemon off;"
+echo "Launching nginx and WAIT"
+/usr/sbin/nginx -g "daemon off;"
