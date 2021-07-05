@@ -11,9 +11,7 @@ cp -rf ../tos-web/dist/* ./dist/
 # enable crontab
 cd ${BASEDIR}
 
-#cp -f ./tos.crontab /etc/crontab
+cp -f ./tos.crontab /var/spool/cron/root
+crontab /var/spool/cron/root
 /etc/init.d/cron start
-/etc/init.d/nginx start
-
-
 echo "Done."
