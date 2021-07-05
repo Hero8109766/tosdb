@@ -48,48 +48,40 @@ RUN mkdir /var/www/base
 
 # crontab
 COPY ./docker/tos.crontab /var/spool/cron/tos
-# Add non administrative user
-RUN useradd -m tos 
-# Change user id and group id
-RUN groupmod -g ${LOCAL_GID} tos | true
-RUN usermod -u ${LOCAL_UID}  -aG www-data tos
 
-RUN usermod -aG tos www-data
-
-#USER tos
 WORKDIR /var/www/base
 
-COPY --chown=tos:tos ./docker/*   ./
+COPY ./docker/*   ./
 
 # copy databases
 WORKDIR /var/www/base
-COPY --chown=tos:tos  ./tos-web ./tos-web
+COPY  ./tos-web ./tos-web
 WORKDIR /var/www/base/tos-web
 RUN npm ci -std=c++17 --force
 
 WORKDIR /var/www/base
 # make ipfunpack
-COPY --chown=tos:tos  ./ipf_unpacker ./ipf_unpacker
+COPY  ./ipf_unpacker ./ipf_unpacker
 WORKDIR /var/www/base/ipf_unpacker
 RUN make release
 WORKDIR /var/www/base
 
-COPY --chown=tos:tos ./tos-parser ./tos-parser
-COPY --chown=tos:tos ./tos-build ./tos-build
+COPY ./tos-parser ./tos-parser
+COPY ./tos-build ./tos-build
 
-COPY --chown=tos:tos ./tos-search ./tos-search
-COPY --chown=tos:tos ./tos-sitemap ./tos-sitemap
-COPY --chown=tos:tos ./tos-sw ./tos-sw
+COPY ./tos-search ./tos-search
+COPY ./tos-sitemap ./tos-sitemap
+COPY ./tos-sw ./tos-sw
 
-COPY --chown=tos:tos ./tos-web-rest ./tos-web-rest
-COPY --chown=tos:tos ./supplimental_data ./supplimental_data 
+COPY ./tos-web-rest ./tos-web-rest
+COPY ./supplimental_data ./supplimental_data 
 
 
-COPY --chown=tos:tos ./skeleton_distweb   ./skeleton_distweb
-COPY --chown=tos:tos ./skeleton_distbuild   ./skeleton_distbuild
+COPY ./skeleton_distweb   ./skeleton_distweb
+COPY ./skeleton_distbuild   ./skeleton_distbuild
 WORKDIR /var/www/base
 # reaction server
-COPY --chown=tos:tos ./tos-reaction ./tos-reaction
+COPY ./tos-reaction ./tos-reaction
 RUN pip3 install -r ./tos-reaction/requirements.txt
 WORKDIR /var/www/base
 
