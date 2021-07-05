@@ -12,7 +12,7 @@ cp -rf ../tos-web/dist/* ./dist/
 cd ${BASEDIR}
 
 #cp -f ./tos.crontab /etc/crontab
-#/etc/init.d/cron start
-cron
+/etc/init.d/cron start
+
 
 echo "Done."
