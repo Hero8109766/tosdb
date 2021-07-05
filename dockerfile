@@ -59,6 +59,11 @@ WORKDIR /var/www/base
 RUN chown -R www-data:www-data ./
 RUN chmod -R 755 ./
 
+# copy databases
+WORKDIR /var/www/base
+COPY ./tos-web ./tos-web
+WORKDIR /var/www/base/tos-web
+RUN npm ci -std=c++17 --force
 
 # Change user id and group id
 RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} tos
@@ -66,11 +71,8 @@ USER tos
 
 COPY ./docker/*   ./
 
-# copy databases
-WORKDIR /var/www/base
-COPY ./tos-web ./tos-web
-WORKDIR /var/www/base/tos-web
-RUN npm ci -std=c++17 --force
+
+
 
 WORKDIR /var/www/base
 # make ipfunpack
