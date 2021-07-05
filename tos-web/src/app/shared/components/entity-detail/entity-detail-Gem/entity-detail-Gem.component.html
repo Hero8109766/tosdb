@@ -1,11 +1,7 @@
 <div class="p-2 mt-3" *ngIf="gem">
-    <tos-input-number class="h5 text-center" *ngIf="editable && gem.TypeGem != TOSGemType.SKILL && gem.TypeGem!=TOSGemType.ETHER"
+  <tos-input-number class="h5 text-center" *ngIf="editable && gem.TypeGem != TOSGemType.SKILL"
                     [label]="'Level'"
                     [min]="1" [max]="10"
-                    [(model)]="level"></tos-input-number>
-    <tos-input-number class="h5 text-center" *ngIf="editable && gem.TypeGem ==TOSGemType.ETHER"
-                    [label]="'Level'"
-                    [min]="1" [max]="100"
                     [(model)]="level"></tos-input-number>
 
     <div *ngIf="gem.IsNormalGem">
@@ -31,9 +27,5 @@
           <h6 >{{ gem.SpendRP }}<sub *ngIf='!gem.IsSpendRPPerSec'>RP</sub><sub *ngIf='gem.IsSpendRPPerSec'>RP/sec</sub>&nbsp;</h6>
         </div>
   </div>
-  <div *ngIf="gem.IsEther" >
-      <span *rxSubscribe="gem.GetEtherProp$(level); let prop" [innerHTML]="prop | colorizeHTML"></span>
-      
-      
-  </div>
+
 </div>

@@ -2,8 +2,6 @@ import logging
 
 import flask
 from flask import Flask, request
-
-import luacodes
 from parserlib.utils.luautilmod import luaclass
 from parserlib.parserr.parser_enums import *
 from parserlib.constantsmod import constclass
@@ -56,7 +54,7 @@ def invokelua():
         "Unlock": "Unlock",
         "!RelicReleaseOptions": "!RelicReleaseOptions",
         "!RelicByLevel": "!RelicByLevel",
-        "!EtherPropList":"!EtherPropList"
+
     }
 
     data = request.get_data().decode('utf-8')
@@ -91,8 +89,7 @@ def invokelua():
     elif iestype == 'item':
         ies = lua.lua.execute("return GetClassByType('Item'," + (classid) + ")")
         preverb = ""
-        context["REPLACE_ITEM"] = ies
-        logging.debug("Item" + str(classid))
+        logging.debug("Ability" + str(classid))
     if ies is None:
         logging.error("IES not found :" + classid)
         return 'fail'
@@ -128,9 +125,6 @@ def invokelua():
                 return s
             end
             '''
-    elif mode == '!EtherPropList':
-        fn_str = luacodes.CODE_ETHER_PROP_TOOLTIP
-        ies["AetherGemLevel"]=arg
     else:
         func = ies[mode]
 
@@ -140,10 +134,9 @@ def invokelua():
         fn_str = "return function(obj) \n" \
                  "  return " + func + "(obj" + "" + ")\n" \
                                                     "end"
-
     if (preverb):
         arg_fn = "return " + preverb + "(context,'" + ies["ClassName"] + "')"
-        result, retval, r2, r3, r4 = lua.exec_lua_encapsulated(ies, context, fn_str, arg_fn, None,None)
+        result, retval, r2, r3, r4 = lua.exec_lua_encapsulated(ies, context, fn_str, arg_fn, None)
     else:
         result, retval, r2, r3, r4 = lua.exec_lua_encapsulated(ies, context, fn_str, None, arg,arg2)
     if result == False:

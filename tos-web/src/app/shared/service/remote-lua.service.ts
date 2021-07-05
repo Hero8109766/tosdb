@@ -85,9 +85,6 @@ export class RemoteLUAService {
     static async evalRelic(id$:string, mode:string,arg?:any,arg2?:any): Promise<string> {
         return this.evalLua(id$,"item",mode,arg,arg2);
     }
-    static async evalEther(id$:string, mode:string,arg?:any,arg2?:any): Promise<string> {
-        return this.evalLua(id$,"item",mode,arg,arg2);
-    }
     private static async evalLua(id$:string,iestype:string,mode:string,arg?:any,arg2?:any): Promise<string> {
         
     
