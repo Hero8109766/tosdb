@@ -49,30 +49,25 @@ RUN mkdir /var/www/base
 # Add non administrative user
 RUN useradd -m -N tos 
 # Add group
-RUN groupadd -g  ${LOCAL_GID} tos
-
+RUN groupadd -g ${LOCAL_GID} tos | true
 
 WORKDIR /var/www/base
-
-
 # apply chmod
 RUN chown -R www-data:www-data ./
 RUN chmod -R 755 ./
+
+
+# Change user id and group id
+RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} -G www-data tos
+USER tos
+
+COPY ./docker/*   ./
 
 # copy databases
 WORKDIR /var/www/base
 COPY ./tos-web ./tos-web
 WORKDIR /var/www/base/tos-web
 RUN npm ci -std=c++17 --force
-
-# Change user id and group id
-RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} tos
-USER tos
-
-COPY ./docker/*   ./
-
-
-
 
 WORKDIR /var/www/base
 # make ipfunpack
