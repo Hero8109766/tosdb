@@ -5,6 +5,10 @@ LABEL author ebisuke
 ENV LANG=en_EN.UTF-8
 ENV PYTHONIOENCODING=utf-8
 ARG SERVICE_NAME
+ARG LOCAL_UID
+ARG LOCAL_GID
+
+
 ENV SERVICE_NAME=/${SERVICE_NAME}
 # avoid apt-get blocking
 RUN apt-get update && apt-get install -y -q tzdata
@@ -14,7 +18,7 @@ ENV TZ=Asia/Tokyo
 
 WORKDIR /root
 RUN apt-get update && apt-get install -y -q nodejs npm python3 \
-    python3-pip unzip nginx bash build-essential curl wget git parallel cron
+    python3-pip unzip nginx bash build-essential curl wget git parallel cron uwsgi
 
 
 #RUN wget https://dot.net/v1/dotnet-install.sh
@@ -37,7 +41,7 @@ RUN cp -f ./unipf ./ipf /usr/bin/
 RUN cp -f ./libipf.so /usr/lib/
 
 # remove no longer using softwares
-RUN apt-get purge -y git 
+RUN apt-get purge -y git wget
 
 WORKDIR /
 RUN mkdir /var/www/base
@@ -88,7 +92,7 @@ COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 
 # switch execute user
-RUN useradd tos
+RUN useradd -u ${LOCAL_UID} -g ${LOCAL_GID} tos 
 USER tos
 
 CMD ["/bin/sh","/var/www/base/entrypoint.sh"]
