@@ -64,7 +64,6 @@ class luaclass:
             "function Weeklyboss_GetNowWeekNum() return nil end",
             "function GetBuffByProp(self,mode,value) return nil end",
             "function IsRaidField(self)return 0 end",
-            "function HAS_DRAGON_POWER(pc) return false end",
         ]
     def exec_lua_encapsulated(self,cls,context,lua_fn,arg_call,arg,arg2):
         self.lock.acquire()
