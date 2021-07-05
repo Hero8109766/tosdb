@@ -14,6 +14,5 @@ cd ${BASEDIR}
 #cp -f ./tos.crontab /etc/crontab
 #/etc/init.d/cron start
 cron
-crontab ./tos.crontab 
 
 echo "Done."

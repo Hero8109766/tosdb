@@ -46,6 +46,9 @@ RUN apt-get purge -y git wget
 WORKDIR /
 RUN mkdir /var/www/base
 
+# crontab
+COPY ./docker/tos.crontab /var/spool/cron/tos
+
 # Add non administrative user
 RUN useradd -m tos 
 # Change user id and group id
