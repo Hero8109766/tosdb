@@ -96,8 +96,8 @@ RUN useradd -m tos
 # Add group
 RUN groupadd -g  ${LOCAL_GID} tos
 
-# switch execute user
-RUN useradd -u ${LOCAL_UID} -g ${LOCAL_GID} tos 
+# Change user id and group id
+RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} tos
 USER tos
 
 CMD ["/bin/sh","/var/www/base/entrypoint.sh"]
