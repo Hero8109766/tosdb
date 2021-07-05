@@ -56,7 +56,7 @@ RUN usermod -u ${LOCAL_UID}  -aG www-data tos
 
 RUN usermod -aG tos www-data
 
-USER tos
+#USER tos
 WORKDIR /var/www/base
 
 COPY --chown=tos:tos ./docker/*   ./
