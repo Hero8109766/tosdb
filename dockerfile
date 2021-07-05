@@ -49,8 +49,8 @@ RUN mkdir /var/www/base
 # crontab
 COPY ./docker/tos.crontab /var/spool/cron/tos
 # copy http server conf
-COPY --chown=tos:tos ./httpserver/http.conf /etc/nginx/conf.d/default.conf
-COPY --chown=tos:tos ./httpserver/nginx.conf /etc/nginx/nginx.conf
+COPY ./httpserver/http.conf /etc/nginx/conf.d/default.conf
+COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 RUN /usr/sbin/nginx -g "daemon off;"
 
 # Add non administrative user
