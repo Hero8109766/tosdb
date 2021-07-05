@@ -91,6 +91,11 @@ COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 # expose http server
 EXPOSE 80
 
+# Add non administrative user
+RUN useradd -m tos
+# Add group
+RUN groupadd -g  ${LOCAL_GID} tos
+
 # switch execute user
 RUN useradd -u ${LOCAL_UID} -g ${LOCAL_GID} tos 
 USER tos
