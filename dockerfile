@@ -46,11 +46,23 @@ RUN apt-get purge -y git wget
 WORKDIR /
 RUN mkdir /var/www/base
 
+# Add non administrative user
+RUN useradd -m -N tos 
+# Add group
+RUN groupadd -g  ${LOCAL_GID} tos
+
+# Change user id and group id
+RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} tos
+USER tos
+
 WORKDIR /var/www/base
 COPY ./docker/*   ./
+
 # apply chmod
 RUN chown -R www-data:www-data ./
 RUN chmod -R 755 ./
+
+
 
 # copy databases
 WORKDIR /var/www/base
@@ -90,14 +102,5 @@ COPY ./httpserver/http.conf /etc/nginx/conf.d/default.conf
 COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 # expose http server
 EXPOSE 80
-
-# Add non administrative user
-RUN useradd -m -N tos 
-# Add group
-RUN groupadd -g  ${LOCAL_GID} tos
-
-# Change user id and group id
-RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} tos
-USER tos
 
 CMD ["/bin/sh","/var/www/base/entrypoint.sh"]
