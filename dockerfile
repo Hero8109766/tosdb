@@ -56,9 +56,8 @@ WORKDIR /var/www/base
 RUN chown -R www-data:www-data ./
 RUN chmod -R 755 ./
 
-
 # Change user id and group id
-RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} -G www-data tos
+RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} -aG www-data  tos
 USER tos
 
 COPY ./docker/*   ./
