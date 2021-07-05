@@ -48,13 +48,10 @@ RUN mkdir /var/www/base
 
 # Add non administrative user
 RUN useradd -m tos 
-
-## apply chmod
-#RUN chown -R www-data:www-data ./
-#RUN chmod -R 755 ./
-
 # Change user id and group id
-RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} -aG www-data tos
+RUN groupmod -g ${LOCAL_GID} tos | true
+RUN usermod -u ${LOCAL_UID}  -aG www-data tos
+
 RUN usermod -aG tos www-data
 
 USER tos
