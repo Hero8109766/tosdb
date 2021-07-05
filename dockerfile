@@ -92,7 +92,7 @@ COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 
 # Add non administrative user
-RUN useradd -m tos
+RUN useradd -m -N tos 
 # Add group
 RUN groupadd -g  ${LOCAL_GID} tos
 
