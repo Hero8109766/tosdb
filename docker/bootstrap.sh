@@ -11,9 +11,9 @@ cp -rf ../tos-web/dist/* ./dist/
 # enable crontab
 cd ${BASEDIR}
 
-cp -f ./tos.crontab /var/spool/cron/root
+cp -f ./tos.crontab /etc/crontab
 #/etc/init.d/cron start
 cron
-crontab /var/spool/cron/root
+#crontab /etc/crontab
 
 echo "Done."

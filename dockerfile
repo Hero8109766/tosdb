@@ -87,4 +87,8 @@ COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 # expose http server
 EXPOSE 80
 
+# switch execute user
+RUN useradd tos
+USER tos
+
 CMD ["/bin/sh","/var/www/base/entrypoint.sh"]
