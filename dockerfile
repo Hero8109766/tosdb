@@ -51,18 +51,20 @@ RUN useradd -m -N tos
 # Add group
 RUN groupadd -g  ${LOCAL_GID} tos
 
-# Change user id and group id
-RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} tos
-USER tos
 
 WORKDIR /var/www/base
-COPY ./docker/*   ./
+
 
 # apply chmod
 RUN chown -R www-data:www-data ./
 RUN chmod -R 755 ./
 
 
+# Change user id and group id
+RUN usermod -u ${LOCAL_UID} -g ${LOCAL_GID} tos
+USER tos
+
+COPY ./docker/*   ./
 
 # copy databases
 WORKDIR /var/www/base
