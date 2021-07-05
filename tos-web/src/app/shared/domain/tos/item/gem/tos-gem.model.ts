@@ -1,10 +1,9 @@
 import { TOSItem } from "../tos-item.model";
 import { ITOSGem, ITOSGemBonus, ITOSSkill, TOSDataSet, TOSGemSlot, TOSGemType, TOSStat } from "../../tos-domain";
 import { TOSDomainService } from "../../tos-domain.service";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { RemoteLUAService } from "src/app/shared/service/remote-lua.service";
 import { fromPromise } from "rxjs/internal-compatibility";
-import { map } from "rxjs/operators";
 
 export class TOSGem extends TOSItem implements ITOSGem {
 
@@ -42,12 +41,6 @@ export class TOSGem extends TOSItem implements ITOSGem {
     }
     get IsNormalGem(){
         return !this.IsRelic && !this.IsEther 
-    }
-    GetEtherProp$(level:number){
-        if(!this.IsEther){
-            return of("Fail")
-        }
-        return fromPromise(RemoteLUAService.evalEther(this.$ID,"!EtherPropList",level))
     }
     Bonus(level: number): { [key: string]: TOSGemBonus[] } {
         return Object

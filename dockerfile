@@ -5,6 +5,10 @@ LABEL author ebisuke
 ENV LANG=en_EN.UTF-8
 ENV PYTHONIOENCODING=utf-8
 ARG SERVICE_NAME
+ARG LOCAL_UID
+ARG LOCAL_GID
+
+
 ENV SERVICE_NAME=/${SERVICE_NAME}
 # avoid apt-get blocking
 RUN apt-get update && apt-get install -y -q tzdata
@@ -14,7 +18,7 @@ ENV TZ=Asia/Tokyo
 
 WORKDIR /root
 RUN apt-get update && apt-get install -y -q nodejs npm python3 \
-    python3-pip unzip nginx bash build-essential curl wget git parallel cron
+    python3-pip unzip nginx bash build-essential curl wget git parallel cron uwsgi
 
 
 #RUN wget https://dot.net/v1/dotnet-install.sh
@@ -37,46 +41,55 @@ RUN cp -f ./unipf ./ipf /usr/bin/
 RUN cp -f ./libipf.so /usr/lib/
 
 # remove no longer using softwares
-RUN apt-get purge -y git 
+RUN apt-get purge -y git wget
 
 WORKDIR /
 RUN mkdir /var/www/base
 
+# crontab
+COPY ./docker/tos.crontab /var/spool/cron/tos
+# Add non administrative user
+RUN useradd -m tos 
+# Change user id and group id
+RUN groupmod -g ${LOCAL_GID} tos | true
+RUN usermod -u ${LOCAL_UID}  -aG www-data tos
+
+RUN usermod -aG tos www-data
+
+#USER tos
 WORKDIR /var/www/base
-COPY ./docker/*   ./
-# apply chmod
-RUN chown -R www-data:www-data ./
-RUN chmod -R 755 ./
+
+COPY --chown=tos:tos ./docker/*   ./
 
 # copy databases
 WORKDIR /var/www/base
-COPY ./tos-web ./tos-web
+COPY --chown=tos:tos  ./tos-web ./tos-web
 WORKDIR /var/www/base/tos-web
 RUN npm ci -std=c++17 --force
 
 WORKDIR /var/www/base
 # make ipfunpack
-COPY ./ipf_unpacker ./ipf_unpacker
+COPY --chown=tos:tos  ./ipf_unpacker ./ipf_unpacker
 WORKDIR /var/www/base/ipf_unpacker
 RUN make release
 WORKDIR /var/www/base
 
-COPY ./tos-parser ./tos-parser
-COPY ./tos-build ./tos-build
+COPY --chown=tos:tos ./tos-parser ./tos-parser
+COPY --chown=tos:tos ./tos-build ./tos-build
 
-COPY ./tos-search ./tos-search
-COPY ./tos-sitemap ./tos-sitemap
-COPY ./tos-sw ./tos-sw
+COPY --chown=tos:tos ./tos-search ./tos-search
+COPY --chown=tos:tos ./tos-sitemap ./tos-sitemap
+COPY --chown=tos:tos ./tos-sw ./tos-sw
 
-COPY ./tos-web-rest ./tos-web-rest
-COPY ./supplimental_data ./supplimental_data 
+COPY --chown=tos:tos ./tos-web-rest ./tos-web-rest
+COPY --chown=tos:tos ./supplimental_data ./supplimental_data 
 
 
-COPY ./skeleton_distweb   ./skeleton_distweb
-COPY ./skeleton_distbuild   ./skeleton_distbuild
+COPY --chown=tos:tos ./skeleton_distweb   ./skeleton_distweb
+COPY --chown=tos:tos ./skeleton_distbuild   ./skeleton_distbuild
 WORKDIR /var/www/base
 # reaction server
-COPY ./tos-reaction ./tos-reaction
+COPY --chown=tos:tos ./tos-reaction ./tos-reaction
 RUN pip3 install -r ./tos-reaction/requirements.txt
 WORKDIR /var/www/base
 

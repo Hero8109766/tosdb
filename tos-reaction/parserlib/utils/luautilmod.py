@@ -48,14 +48,13 @@ class luaclass:
             'function GetExProp(entity, name) return entity[name] or 0 end',
             'function GetExProp_Str(entity, name) return tostring(entity[name]) or nil end',
             'function GetIESID(item) end',
-            'function GetIES(ies) return ies end',
             'function GetItemOwner(item) return {} end',
             'function GetOwner(monster) end',
             'function GetServerNation() end',
             'function GetServerGroupID() end',
             'function IsPVPServer(itemOwner) end',
             'function IsPVPField(pc) return 0 end',
-            'function IsInTOSHeroMap(pc) return false end',
+
             'function IMCRandom(min, max) return 0 end',
             'function ScpArgMsg(a, b, c) return "" end',
             'function SCR_MON_OWNERITEM_ARMOR_CALC(self, defType) return 0 end',
@@ -65,6 +64,7 @@ class luaclass:
             "function Weeklyboss_GetNowWeekNum() return nil end",
             "function GetBuffByProp(self,mode,value) return nil end",
             "function IsRaidField(self)return 0 end",
+            "function HAS_DRAGON_POWER(pc) return false end",
         ]
     def exec_lua_encapsulated(self,cls,context,lua_fn,arg_call,arg,arg2):
         self.lock.acquire()
@@ -243,12 +243,6 @@ class luaclass:
             end
         ''')(self.ScpArgMsg)
         self.lua.execute('''
-            ITEM_SOCKET_PROPERTY_TYPE_DEFINITION={
-                "MainOrSubWeapon","ShirtsOrPants","HandOrFoot"
-            }
-
-            ITEM_SOCKET_PROPERTY_TYPE_COUNT=#ITEM_SOCKET_PROPERTY_TYPE_DEFINITION
-
             function setfenv(fn, env)
               local i = 1
               while true do
@@ -267,23 +261,6 @@ class luaclass:
             
               return fn
             end
-            geItemTable={
-                GetProp=function(item)
-                    return {
-                        GetMaterialExp=function(itemexp)
-                            return 0
-                        end
-                        ,
-                        GetLevel=function(itemexp)
-                            return 1
-                        end,
-                    }
-                end,
-                GetSocketPropertyTypeStr=function(type)
-                    -- 暫定的
-                    return ITEM_SOCKET_PROPERTY_TYPE_DEFINITION[type+1]
-                end
-            }
             app = {
                 IsBarrackMode = function() return false end
             }
@@ -303,26 +280,22 @@ class luaclass:
                     }
                 end
             }
-            function Lua_GetItem(clsid)
-                local base={}
-                if(LUA_CONTEXT and LUA_CONTEXT.REPLACE_ITEM and clsid==LUA_CONTEXT.REPLACE_ITEM.ClassID == clsid) then
-                    base = {table.unpack(LUA_CONTEXT.REPLACE_ITEM)}
-                end
-                base.GetIESID=function(self)
-                            return tostring(clsid)
-                        end
-                base.GetObject= function(self)
-                            return self
-                        end
-                return setmetatable(base,{__index=GetClassByType("Item",clsid)})
-            end
+            
             session = {
                 GetEquipItemByGuid = function(guid) 
-                    return Lua_GetItem(guid)
-                end,
+                    return setmetatable({
+                        GetIESID=function(guid)
+                            return "0"
+                        end
+                    },{__index=GetClassByType("Item",guid)})
+                    end,
                 GetEtcItemByGuid = function(guid) end,
                 GetInvItemByGuid = function(guid) 
-                    return Lua_GetItem(guid)
+                    return setmetatable({
+                        GetIESID=function(guid)
+                            return "0"
+                        end
+                    },{__index=GetClassByType("Item",guid)})
                 end,
              
                 link = {
@@ -363,11 +336,7 @@ class luaclass:
                 return data[name]
             end
             function GetClassByType(ies_key, id)
-                if(id==nil)then
-                    print('nil')
-                    return nil
-                end
-                id=tonumber(id)
+            print(ies_key)
                 local data = ies_by_ClassID[string.lower(ies_key)]
                 return data[math.floor(id)]
             end

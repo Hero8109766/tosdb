@@ -12,8 +12,6 @@ cp -rf ../tos-web/dist/* ./dist/
 cd ${BASEDIR}
 
 cp -f ./tos.crontab /var/spool/cron/root
-#/etc/init.d/cron start
-cron
 crontab /var/spool/cron/root
-
+/etc/init.d/cron start
 echo "Done."
