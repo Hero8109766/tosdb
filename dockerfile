@@ -48,17 +48,11 @@ RUN mkdir /var/www/base
 
 # crontab
 COPY ./docker/tos.crontab /var/spool/cron/tos
-# copy http server conf
-COPY ./httpserver/http.conf /etc/nginx/conf.d/default.conf
-COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
-RUN /usr/sbin/nginx -g "daemon off;"
-
 # Add non administrative user
 RUN useradd -m tos 
 # Change user id and group id
 RUN groupmod -g ${LOCAL_GID} tos | true
 RUN usermod -u ${LOCAL_UID}  -aG www-data tos
-
 
 RUN usermod -aG tos www-data
 
@@ -100,6 +94,9 @@ RUN pip3 install -r ./tos-reaction/requirements.txt
 WORKDIR /var/www/base
 
 
+# copy http server conf
+COPY ./httpserver/http.conf /etc/nginx/conf.d/default.conf
+COPY ./httpserver/nginx.conf /etc/nginx/nginx.conf
 # expose http server
 EXPOSE 80
 
