@@ -335,7 +335,7 @@ class luaclass:
                 return data[name]
             end
             function GetClassByType(ies_key, id)
-            print(ies_key)
+                
                 local data = ies_by_ClassID[string.lower(ies_key)]
                 return data[math.floor(id)]
             end

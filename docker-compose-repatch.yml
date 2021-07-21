@@ -7,8 +7,6 @@ services:
             dockerfile: dockerfile
             args:
                 - SERVICE_NAME=$SERVICE_NAME
-                - LOCAL_GID=$LOCAL_GID
-                - LOCAL_UID=$LOCAL_UID
         command: /bin/bash /var/www/base/build.sh 1 
         
         volumes:

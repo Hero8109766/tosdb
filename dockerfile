@@ -5,9 +5,6 @@ LABEL author ebisuke
 ENV LANG=en_EN.UTF-8
 ENV PYTHONIOENCODING=utf-8
 ARG SERVICE_NAME
-ARG LOCAL_UID
-ARG LOCAL_GID
-
 
 ENV SERVICE_NAME=/${SERVICE_NAME}
 # avoid apt-get blocking
@@ -28,7 +25,7 @@ RUN apt-get update && apt-get install -y -q nodejs npm python3 \
 # prepare python environment
 RUN pip3 install pillow lupa unicodecsv pydevd-pycharm~=211.7442
 # prepare nodejs environment
-ENV GYP_DEFINES="javalibdir=/usr/lib/jvm/java-1.8.0-openjdk-amd64/lib/server"
+#ENV GYP_DEFINES="javalibdir=/usr/lib/jvm/java-1.8.0-openjdk-amd64/lib/server"
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 RUN npm -g i n yarn && n 16
 RUN npm install -g @angular/cli 

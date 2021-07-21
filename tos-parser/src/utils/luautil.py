@@ -142,6 +142,8 @@ def init_global_data():
     ies_ADD('item', iesutil.load('item_quest.ies'))
     ies_ADD('item_grade', iesutil.load('item_grade.ies'))
     ies_ADD('item_growth', iesutil.load('item_growth.ies'))
+
+    ies_ADD('item_goddess_reinforce', iesutil.load('item_goddess_reinforce.ies'))
     ies_ADD('HiddenAbility_Reinforce', iesutil.load('HiddenAbility_Reinforce.ies'))
 
     ies_ADD('job', iesutil.load('job.ies'))
@@ -239,12 +241,18 @@ def init_global_functions():
                 end
             end
         end
-        
+        function string.starts(String,Start)
+           return string.sub(String,1,string.len(Start))==Start
+        end
         function GetClass(ies_key, name)
             local data = ies_by_ClassName[string.lower(ies_key)]
             return data[name]
         end
         function GetClassByType(ies_key, id)
+            if string.starts(ies_key,"item_goddess_reinforce") then
+                  local data = ies_by_ClassID[string.lower("item_goddess_reinforce")]
+                return data[math.floor(id)]
+            end
             local data = ies_by_ClassID[string.lower(ies_key)]
             return data[math.floor(id)]
         end
