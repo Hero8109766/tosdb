@@ -136,7 +136,7 @@ def invokelua():
                                                     "end"
     if (preverb):
         arg_fn = "return " + preverb + "(context,'" + ies["ClassName"] + "')"
-        result, retval, r2, r3, r4 = lua.exec_lua_encapsulated(ies, context, fn_str, arg_fn, None)
+        result, retval, r2, r3, r4 = lua.exec_lua_encapsulated(ies, context, fn_str, arg_fn, None, None)
     else:
         result, retval, r2, r3, r4 = lua.exec_lua_encapsulated(ies, context, fn_str, None, arg,arg2)
     if result == False:
